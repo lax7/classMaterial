@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERAU Cybersecurity Organizations</title>
+    <style>
+        :root {
+            --erau-blue: #004684;
+            --erau-gold: #ffc425;
+            --wicys-purple: #6a1b9a;
+            --light: #f4f7f6;
+            --dark: #2d3436;
+            --announcement-blue: #0077be;
+            --rtx-red: #da291c;
+            --success-green: #27ae60; /* Added Green Variable */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--light);
+            color: var(--dark);
+            scroll-behavior: smooth;
+        }
+
+        nav {
+            background: var(--erau-blue);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover { color: var(--erau-gold); }
+
+        section {
+            padding: 50px 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            display: flex;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            align-items: center; 
+        }
+
+        .text-area { flex: 1; padding: 40px; min-width: 300px; }
+        
+        .image-area { 
+            flex: 1; 
+            min-width: 350px; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+            padding: 20px; 
+        }
+
+        .image-area img { 
+            width: 100%; 
+            max-width: 450px; 
+            height: auto; 
+            border-radius: 10px; 
+            object-fit: contain; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .image-area a:hover img {
+            transform: scale(1.02);
+        }
+
+        /* UPDATED GREEN PULSE ANIMATION */
+        @keyframes greenGlow {
+            0% { color: var(--success-green); text-shadow: 0 0 0px rgba(39, 174, 96, 0); transform: scale(1); }
+            50% { color: #2ecc71; text-shadow: 0 0 15px rgba(46, 204, 113, 0.6); transform: scale(1.02); }
+            100% { color: var(--success-green); text-shadow: 0 0 0px rgba(39, 174, 96, 0); transform: scale(1); }
+        }
+
+        .prize-alert {
+            display: inline-block;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 15px 0;
+            padding: 10px;
+            border: 2px dashed var(--success-green);
+            border-radius: 8px;
+            animation: greenGlow 2.5s infinite ease-in-out;
+        }
+
+        .announcement-banner {
+            background-color: var(--announcement-blue);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid var(--erau-gold);
+        }
+
+        .event-details {
+            background: #fffef0;
+            border: 2px solid var(--erau-gold);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        h2 { color: var(--erau-blue); margin-top: 0; }
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 30px;
+            background: var(--erau-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover { transform: scale(1.05); }
+
+        .caption {
+            margin-top: 10px;
+            color: #636e72;
+            text-align: center;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        footer { text-align: center; padding: 30px; color: #636e72; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#eagles">White Hat Eagles</a>
+    <a href="#wicys">WiCyS</a>
+    <a href="#competitions">Competitions</a>
+</nav>
+
+<section id="eagles">
+    <div class="card">
+        <div class="text-area">
+            <h2>White Hat Eagles Cybersecurity (WHEC) Club</h2>
+            <p>Interested in cybersecurity, ethical hacking, networking, digital defense, and participating in competitions or conferences? The White Hat Eagles Cybersecurity Club is always welcoming new members!</p>
+            
+            <div class="announcement-banner">
+                <h3>Join discord and go to Announcements</h3>
+                <p><strong>Fill out the When2Meet form so we can coordinate availability.</strong></p>
+            </div>
+
+            <a href="https://discord.gg/XnB65T2S" target="_blank" class="btn">Join Our Discord</a>
+        </div>
+        <div class="image-area">
+            <a href="https://www.ncaecybergames.org/" target="_blank">
+                <img src="https://github.com/lax7/classMaterial/blob/main/Image%20(30).jpg?raw=true" alt="White Hat Eagles Team">
+            </a>
+            <div class="caption">WHEC participating in National 2025 NCAE games</div>
+        </div>
+    </div>
+</section>
+
+<section id="wicys">
+    <div class="card" style="flex-direction: row-reverse;">
+        <div class="text-area">
+            <h2 style="color: var(--wicys-purple);">WiCyS Chapter</h2>
+            <p>Advancing women in the field of cybersecurity. We provide a supportive community, professional networking, and mentorship opportunities.</p>
+            <a href="#" class="btn" style="background: var(--wicys-purple);">Member Registration</a>
+        </div>
+        <div class="image-area">
+            <a href="https://www.wicys.org/" target="_blank">
+                <img src="https://github.com/lax7/classMaterial/blob/main/WiCyS.png?raw=true" alt="WiCyS ERAU Chapter">
+            </a>
+            <div class="caption">Click to visit WiCyS National</div>
+        </div>
+    </div>
+</section>
+
+<section id="competitions">
+    <h2 style="text-align: center;">Upcoming Competitions & Events</h2>
+    
+    <div class="card">
+        <div class="text-area">
+            <h3 style="color: #d63031;">ACI Cyber Rodeo & Capture The Flag</h3>
+            <p><strong>Dates:</strong> February 4-5, 2026</p> 
+            <p><strong>Location:</strong> Student Union Event Center, Daytona Beach, FL</p>
+            
+            <div class="event-details">
+                <p class="prize-alert">🚀 RTX will sponsor $10,000 in prizes for student competitors at the 2026 ACI Cyber Rodeo at Embry‑Riddle!</p>
+                <p><strong>Day 1:</strong> Aviation Cyber Education & Networking Day.</p>
+                <p><strong>Day 2:</strong> Capture-the-Flag Competition.</p>
+            </div>
+            
+            <a href="https://erau2026.vfairs.com/en/registration-form" target="_blank" class="btn" style="background: #d63031;">Register Now (Free)</a>
+        </div>
+        <div class="image-area" style="background: #fff; padding: 20px;"> 
+            <img src="https://github.com/lax7/classMaterial/blob/main/image.png?raw=true" alt="2026 ACI Cyber Rodeo Flyer" style="max-width: 450px; border-radius: 10px;">
+            <div class="caption">2026 ACI Cyber Rodeo Flyer</div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Embry-Riddle Aeronautical University Cybersecurity Student Hub</p>
+</footer>
+
+</body>
+</html>
