@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Digital Forensic Lab: Autopsy & HxD</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #475569;
+            --accent: #2563eb;
+            --success: #059669;
+            --warning: #d97706;
+            --bg: #f1f5f9;
+            --text: #334155;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+        }
+
+        nav {
+            width: 320px;
+            background: var(--primary);
+            height: 100vh;
+            position: fixed;
+            color: white;
+            overflow-y: auto;
+            border-right: 1px solid #334155;
+        }
+
+        .nav-header {
+            padding: 30px 20px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid #334155;
+        }
+
+        nav a {
+            display: block;
+            color: #cbd5e1;
+            padding: 15px 25px;
+            text-decoration: none;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover, nav a.active-link {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        main {
+            margin-left: 320px;
+            padding: 40px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .section {
+            display: none;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .section.active { display: block; animation: fadeIn 0.4s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        h1 { color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-top: 0; }
+        h2 { color: var(--secondary); font-size: 1.2rem; margin-top: 30px; border-left: 4px solid var(--accent); padding-left: 15px; }
+        h3 { font-size: 1rem; color: var(--primary); margin-top: 20px; }
+
+        .step-container {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        input[type="checkbox"] {
+            margin-top: 5px;
+            margin-right: 15px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .step-text { flex: 1; line-height: 1.6; }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .danger-box {
+            background: #fff1f2;
+            border-left: 4px solid #e11d48;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #9f1239;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .hash-box {
+            background: #1e293b;
+            color: #38bdf8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            display: block;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 320px;
+            right: 0;
+            height: 6px;
+            background: #e2e8f0;
+            z-index: 1000;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: 0.4s ease;
+        }
+
+        .footer-nav {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover { background: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar"><div id="progress-fill"></div></div>
+
+    <nav>
+        <div class="nav-header">
+            <h3>Digital Forensic Investigation</h3>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">Autopsy & HxD Tutorial</p>
+        </div>
+        <a href="#" onclick="showSection('p1')" class="nav-link" id="link-p1">1. Station Setup</a>
+        <a href="#" onclick="showSection('p2')" class="nav-link" id="link-p2">2. New Case Setup</a>
+        <a href="#" onclick="showSection('p3')" class="nav-link" id="link-p3">3. Data Source Acquisition</a>
+        <a href="#" onclick="showSection('p4')" class="nav-link" id="link-p4">4. Ingest Modules</a>
+        <a href="#" onclick="showSection('p5')" class="nav-link" id="link-p5">5. Investigation & Analysis</a>
+        <a href="#" onclick="showSection('p6')" class="nav-link" id="link-p6">6. Reporting Results</a>
+    </nav>
+
+    <main>
+        <div id="p1" class="section active">
+            <h1>Part 1: Setting Up & Organizing Case Files</h1>
+            <p><strong>Estimated Time:</strong> 1-2 hours</p>
+            
+            <h2>1. Download and Install Software</h2>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Autopsy:</strong> Go to <a href="https://www.autopsy.com/" target="_blank">autopsy.com</a> and click the "Download" button. Follow the installation instructions for the 64-bit version.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>HxD Hex Editor:</strong> Download from <a href="https://mh-nexus.de/en/hxd/" target="_blank">mh-nexus.de</a>. This provides a more powerful hex editor that integrates directly with Autopsy's interface.</div>
+            </div>
+
+            <h2>2. Organize Case Data Directory</h2>
+            <div class="danger-box"><strong>IMPORTANT:</strong> Do NOT save suspect data on your forensic workstation's C: drive. This avoids cross-contamination and performance issues.</div>
+            
+            
+            
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Create a dedicated <code>Cases</code> folder on a separate drive (D:, E:, or external HDD/USB).</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Create a specific folder for this case using the naming convention: <code>[Case Number]-[Investigation Type]-[Investigator Initials]</code> (Example: <code>001-Hacking-LNK</code>).</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Inside your Case Folder, create these sub-folders:
+                    <ul>
+                        <li><code>docs</code> (for case notes and documentation)</li>
+                        <li><code>images</code> (for storing forensic copies/images of data)</li>
+                        <li><code>temp</code> (for temporary extraction files)</li>
+                        <li><code>autopsy</code> (for the Autopsy case database)</li>
+                        <li><code>reports</code> (for final exported findings)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>3. Case Documentation Initial Step</h2>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">In the <code>docs</code> folder, create <code>[Case Number]-docs.txt</code>. Open it in Notepad and press <strong>F5</strong> to insert a timestamp. Note: "Case started by [Your Name]".</div>
+            </div>
+
+            <div class="footer-nav">
+                <span></span>
+                <button onclick="showSection('p2')">Next: Case Initiation →</button>
+            </div>
+        </div>
+
+        <div id="p2" class="section">
+            <h1>Part 2: Starting a New Case in Autopsy</h1>
+            
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Launch Autopsy and select <strong>"New Case"</strong> from the splash screen.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Case Name:</strong> Enter the name of your case folder (e.g., <code>001-H-XX</code>).</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Base Directory:</strong> Click Browse, navigate to your case folder, and select the <code>autopsy</code> sub-folder as the destination.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Case Type:</strong> Select <strong>"Single User"</strong> and click Next.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Organizations:</strong> Manage Organizations > New > enter "Student Lab". Click OK and select it from the dropdown.</div>
+            </div>
+            
+            <div class="info-box"><strong>Documentation:</strong> Copy the full path to the Autopsy case data directory and paste it into your <code>docs.txt</code> file with a timestamp.</div>
+
+            <div class="footer-nav">
+                <button onclick="showSection('p1')">← Back</button>
+                <button onclick="showSection('p3')">Next: Data Source →</button>
+            </div>
+        </div>
+
+        <div id="p3" class="section">
+            <h1>Part 3: Adding a Data Source</h1>
+            
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Host Name:</strong> Enter the unique exhibit identifier (e.g., <code>Exhibit001</code>).</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Select Source Type:</strong> Select <strong>"Disk Image or VM File"</strong> and browse to your <code>SuspectData.dd</code> file in the <code>images</code> folder.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Settings:</strong> Ensure Time Zone is <code>GMT +00:00 - UTC</code> and Sector Size is <code>Auto Detect</code>.</div>
+            </div>
+            
+            <h3>Integrity Verification (Hash Values)</h3>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Paste these hash values into the "MD5" and "SHA-256" fields to ensure data hasn't been tampered with:
+                    <div class="hash-box">
+                        MD5: 26D81C6C26D68C9F7575306B9A89A986<br>
+                        SHA-256: F39F8090C8B1E919C157EE45929A2624D04C1C40C3ED84C511B45F540E9A98E7
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-nav">
+                <button onclick="showSection('p2')">← Back</button>
+                <button onclick="showSection('p4')">Next: Ingest Configuration →</button>
+            </div>
+        </div>
+
+        <div id="p4" class="section">
+            <h1>Part 4: Configure Ingest Modules</h1>
+            <p>These automated processes extract artifacts while you work.</p>
+
+            <div class="info-box"><strong>Mandatory Modules:</strong> Keep checked: Recent Activity, Hash Lookup (ensure Calculate MD5 is selected), File Type Identification, Extension Mismatch Detector, Embedded File Extractor, Picture Analyzer.</div>
+
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Keyword Search:</strong> Click the module and ensure <strong>"Enable Optical Character Recognition (OCR)"</strong> is checked to find text inside images.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>PhotoRec Carver:</strong> Ensure this is checked. In settings, verify "Carve everything" is selected to recover deleted data.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Performance Optimization:</strong> Uncheck the following to save time: Encryption Detection, Virtual Machine Extractor, ALEAPP, iLEAPP, Plaso, YARA, and Android Analyzer.</div>
+            </div>
+
+            <div class="footer-nav">
+                <button onclick="showSection('p3')">← Back</button>
+                <button onclick="showSection('p5')">Next: Analysis →</button>
+            </div>
+        </div>
+
+        <div id="p5" class="section">
+            <h1>Part 5: Initial Analysis Workflow</h1>
+            
+            <h2>1. Navigation and Viewing</h2>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">In the left "Tree" pane, expand <strong>Data Sources > Exhibit001 > suspectdata.dd</strong>.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Select a file and toggle between bottom pane views: <strong>Application</strong> (standard view), <strong>Hex</strong> (HxD-style raw data), <strong>Text</strong> (Strings), and <strong>Metadata</strong>.</div>
+            </div>
+
+            <h2>2. Forensic Search & Tagging</h2>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Click <strong>Tools > Keyword Search</strong>. Search for <code>cat</code> using <strong>"Exact Match"</strong>. Note the results.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Repeat search for <code>cat</code> using <strong>"Substring Match"</strong> and observe how many more items are found (e.g., words like "catapult" or "category").</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Tagging:</strong> Right-click an interesting file > <strong>Add File Tag</strong>. Tag several files as <code>Bookmark</code>, <code>Notable</code>, or <code>Follow Up</code>. Review these later under the "Tags" section in the left pane.</div>
+            </div>
+
+            <div class="footer-nav">
+                <button onclick="showSection('p4')">← Back</button>
+                <button onclick="showSection('p6')">Next: Reporting →</button>
+            </div>
+        </div>
+
+        <div id="p6" class="section">
+            <h1>Part 6: Generating a Findings Report</h1>
+            
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text">Click <strong>Tools > Generate Report</strong> and choose <strong>"HTML Report"</strong>. Click Next.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Select Data:</strong> Choose <strong>"Specific Tagged Results"</strong>. Check <strong>Bookmarks</strong> and <strong>Notable</strong>. Uncheck "Follow Up" for the final version.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Review:</strong> Click the link to open the report in your browser and verify your tagged files and metadata are visible.</div>
+            </div>
+            <div class="step-container">
+                <input type="checkbox" onchange="updateProgress()">
+                <div class="step-text"><strong>Cleanup:</strong> Move the generated report folder from the <code>autopsy</code> directory to your <code>reports</code> folder. Rename it to <code>Supporting_Evidence_Report</code>.</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; border-top: 2px solid #e2e8f0; padding-top: 30px;">
+                <h2 style="color: var(--success); border: none;">Investigation Concluded</h2>
+                <p>Environment setup, data processing, analysis, and evidence reporting are now complete.</p>
+                <button onclick="location.reload()" style="background: #64748b;">Restart Checklist</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
+            
+            document.getElementById(id).classList.add('active');
+            document.getElementById('link-' + id).classList.add('active-link');
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('input[type="checkbox"]').length;
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const percentage = (checked / total) * 100;
+            document.getElementById('progress-fill').style.width = percentage + '%';
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>
