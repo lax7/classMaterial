@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 428 / CS 538 Applied Cryptography - SPR 2026</title>
+    <style>
+        :root {
+            --header-green: #1b5e20;
+            --bg-body: #f1f8e9;
+            --link-red: #e74c3c;
+            --inst-green: #2e7d32;
+            --lab-teal: #00796b;
+            --discord-blurple: #5865F2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-body);
+        }
+
+        .banner {
+            display: flex;
+            background-color: var(--header-green);
+            color: white;
+            border-radius: 4px 4px 0 0;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .course-tag { background-color: #455a64; padding: 25px 45px; font-weight: bold; font-size: 1.4rem; display: flex; align-items: center; }
+        .welcome-msg { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 500; }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            background: white;
+            border: 1px solid #c8e6c9;
+            border-top: none;
+        }
+
+        .pane { padding: 25px; border-right: 1px solid #e8f5e9; }
+        .pane:last-child { border-right: none; }
+
+        .announcement-text { color: #2e7d32; font-size: 0.95rem; margin-top: 10px; font-weight: 500; text-align: center; line-height: 1.4; }
+
+        .tab-container { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid #c8e6c9; }
+        .tab-btn {
+            flex: 1; padding: 12px 5px; cursor: pointer; border: none;
+            background: #f1f8e9; font-weight: bold; font-size: 0.7rem;
+            text-transform: uppercase; border-radius: 4px 4px 0 0; transition: 0.3s; color: #666;
+        }
+        
+        .tab-btn.active.inst-tab { 
+            background: #e8f5e9; 
+            color: var(--inst-green); 
+            border-bottom: 4px solid var(--inst-green); 
+        }
+        
+        .tab-btn.active.lab-tab { 
+            background: #e0f2f1; 
+            color: var(--lab-teal); 
+            border-bottom: 4px solid var(--lab-teal); 
+        }
+
+        .tab-content { display: none; padding: 10px; animation: fadeIn 0.4s; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .contact-card { text-align: center; line-height: 1.6; padding: 10px; border-radius: 8px; }
+        .inst-theme h4 { color: var(--inst-green); margin: 0 0 10px 0; font-size: 1.1rem; }
+        .lab-theme h4 { color: var(--lab-teal); margin: 0 0 10px 0; font-size: 1.1rem; }
+
+        .office-hours-btn { background-color: var(--header-green); color: white; padding: 5px 15px; border-radius: 3px; font-size: 0.8rem; display: inline-block; margin-bottom: 10px; }
+
+        .links-pane { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        .btn-link { width: 90%; padding: 12px; text-align: center; text-decoration: none; color: white; font-weight: bold; border-radius: 4px; font-size: 0.85rem; transition: 0.2s; }
+        .btn-link:hover { opacity: 0.9; transform: scale(1.02); }
+        
+        .bg-downloads { background-color: #2e7d32; border: 1px solid #1b5e20; }
+        .bg-tutorial { background-color: #388e3c; }
+        .bg-syllabus { background-color: #43a047; }
+        .bg-homework { background-color: #4caf50; }
+
+        .schedule-container { margin-top: 30px; background: white; padding: 20px; border: 1px solid #c8e6c9; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background-color: #e8f5e9; color: #1b5e20; text-align: left; padding: 12px; border-bottom: 2px solid #a5d6a7; }
+        td { padding: 12px; border-bottom: 1px solid #e8f5e9; font-size: 0.85rem; vertical-align: top; }
+        .week-col { font-weight: bold; color: #1b5e20; width: 80px; }
+        .event-note { color: #c62828; font-weight: bold; display: block; margin-top: 4px; }
+        .quiz-note { color: #ef6c00; font-weight: bold; display: block; margin-top: 4px; }
+
+        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="banner">
+        <div class="course-tag">CS 428/538</div>
+        <div class="welcome-msg">Applied Cryptography Spring 2026</div>
+    </header>
+
+    <div class="main-container">
+        <div class="pane" style="display: flex; align-items: center; justify-content: center;">
+            <p class="announcement-text">
+                📢 <strong>IMPORTANT:</strong><br>
+                Be sure to check the Canvas Announcements and Calendar section frequently for updates.
+            </p>
+        </div>
+
+        <div class="pane">
+            <div class="tab-container">
+                <button class="tab-btn active inst-tab" onclick="openTab(event, 'instructor')">Instructor Information</button>
+                <button class="tab-btn lab-tab" onclick="openTab(event, 'lab-managers')">LB 375 Lab Managers</button>
+            </div>
+
+            <div id="instructor" class="tab-content active inst-theme">
+                <div class="contact-card">
+                    <h4>Laxima Niure Kandel</h4>
+                    <p>📧 <a href="mailto:niurekal@erau.edu">niurekal@erau.edu</a></p>
+                    <p>📞 386-226-6323</p>
+                    <p>🏠 LB 354</p>
+                    <div class="office-hours-btn">Office Hours</div>
+                    <p>Tuesday: 2:00 pm - 3:30 pm, LB 354</p>
+                    <p>Thursday: 2:00 pm - 3:30 pm, LB 354</p>
+                    <p style="font-size: 0.85rem;">Friday: Virtual office hours (8:30 am - 10:00 am) 
+                        <br><a href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MTdkOGE5NTMtNTU4Ni00YWU5LWE2NDgtZjYxMTYwYzA0Yjcw%40thread.v2/0?context=%7b%22Tid%22%3a%226931c963-07b7-4156-ab0e-35d1f79035b8%22%2c%22Oid%22%3a%22d95f871e-7f76-4ba1-8e72-a02d26565cbe%22%7d" target="_blank" style="color: var(--inst-green); font-weight: bold;">Join Teams Meeting</a>
+                    </p>
+                </div>
+            </div>
+
+            <div id="lab-managers" class="tab-content lab-theme">
+                <div class="contact-card" style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                    <h4>Anthony Wirsing</h4>
+                    <p>📧 <a href="mailto:WIRSINGA@my.erau.edu">WIRSINGA@my.erau.edu</a></p>
+                    <p>Discord: <span class="discord-tag">tony12man</span></p>
+                </div>
+                <div class="contact-card">
+                    <h4>Justin Villa</h4>
+                    <p>📧 <a href="mailto:VILLAJ@my.erau.edu">VILLAJ@my.erau.edu</a></p>
+                    <p>Discord: <span class="discord-tag">arbinger0310</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pane links-pane">
+            <h3 style="margin-top:0; font-size: 1.1rem; color: var(--header-green);">Course Resources</h3>
+            <a href="https://erau.instructure.com/courses/199480/pages/download-and-supplies" class="btn-link bg-downloads" target="_blank">Downloads & Supplies</a>
+            <a href="https://ryanstutorials.net/linuxtutorial/" class="btn-link bg-tutorial" target="_blank">Linux Tutorial</a>
+            <a href="https://erau.simplesyllabus.com/api2/doc-pdf/r8qcwctuh/Daytona-Prescott-2026-Spring-DB-CS-538-01DB-Applied-Cryptography.pdf?locale=en-US" class="btn-link bg-syllabus" target="_blank">Course Syllabus</a>
+            <a href="https://erau.instructure.com/courses/199480/assignments" class="btn-link bg-homework" target="_blank">Homework</a>
+        </div>
+    </div>
+
+    <section class="schedule-container">
+        <h3 style="border-bottom: 2px solid var(--header-green); color: var(--header-green); padding-bottom: 5px; margin-top: 0;">Applied Cryptography Tentative Schedule - SPR 2026</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Tuesday</th>
+                    <th>Thursday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="week-col">Week 1</td><td>—</td><td>Jan 8: Introduction</td></tr>
+                <tr><td class="week-col">Week 2</td><td>Jan 13: Classical Crypto</td><td>Jan 15: Classical Crypto</td></tr>
+                <tr><td class="week-col">Week 3</td><td>Jan 20: Classical Crypto</td><td>Jan 22: Perfect Secrecy/One-Time Pad (OTP)</td></tr>
+                <tr><td class="week-col">Week 4</td><td>Jan 27: Perfect Secrecy/One-Time Pad (OTP)</td><td>Jan 29: Block Cipher DES</td></tr>
+                <tr><td class="week-col">Week 5</td><td>Feb 3: Block Cipher DES</td><td>Feb 5: ACI Cyber Rodeo (no class) <span class="quiz-note">(Online Quiz)</span></td></tr>
+                <tr><td class="week-col">Week 6</td><td>Feb 10: Block Cipher AES</td><td>Feb 12: Block Cipher AES</td></tr>
+                <tr><td class="week-col">Week 7</td><td>Feb 17: Block Cipher AES</td><td>Feb 19: Block Cipher AES</td></tr>
+                <tr><td class="week-col">Week 8</td><td>Feb 24: Modes of Encryption</td><td>Feb 26: Modes of Encryption</td></tr>
+                <tr><td class="week-col">Week 9</td><td>Mar 3: Message Authentication Codes</td><td>Mar 5: Authenticated Encryption</td></tr>
+                <tr><td class="week-col">Week 10</td><td>Mar 10: Hash Functions</td><td>Mar 12: Hash Functions</td></tr>
+                <tr><td class="week-col">Week 11</td><td>Mar 17: <span class="event-note">Spring Break</span></td><td>Mar 19: <span class="event-note">Spring Break</span></td></tr>
+                <tr><td class="week-col">Week 12</td><td>Mar 24: Number Theory RSA</td><td>Mar 26: Number Theory RSA</td></tr>
+                <tr><td class="week-col">Week 13</td><td>Mar 31: RSA</td><td>Apr 2: RSA</td></tr>
+                <tr><td class="week-col">Week 14</td><td>Apr 7: <span class="quiz-note">(TEST/FINAL EXAM)</span></td><td>Apr 9: Digital Signatures</td></tr>
+                <tr><td class="week-col">Week 15</td><td>Apr 14: Digital Signatures</td><td>Apr 16: Intro to Elliptical Cryptography</td></tr>
+                <tr><td class="week-col">Week 16</td><td>Apr 21: Final Project Presentation</td><td>Apr 23: Final Project Presentation</td></tr>
+                <tr style="background-color: #e8f5e9; font-weight: bold;">
+                    <td>Finals</td>
+                    <td colspan="2">Monday, April 27th (7:15 pm - 9:15 pm) — Project Presentation</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        function openTab(evt, tabId) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { 
+                tabcontent[i].style.display = "none"; 
+                tabcontent[i].classList.remove("active"); 
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) { 
+                tablinks[i].classList.remove("active"); 
+            }
+            document.getElementById(tabId).style.display = "block";
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
