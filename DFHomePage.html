@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 426 Digital Forensics - SPR 2026</title>
+    <style>
+        :root {
+            --header-blue: #003399;
+            --bg-body: #f4f7f6;
+            --link-red: #e74c3c;
+            --link-blue: #3498db;
+            --link-teal: #16a085;
+            --discord-blurple: #5865F2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-body);
+        }
+
+        .banner {
+            display: flex;
+            background-color: var(--header-blue);
+            color: white;
+            border-radius: 4px 4px 0 0;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .course-tag { background-color: #7f8c8d; padding: 25px 45px; font-weight: bold; font-size: 1.4rem; display: flex; align-items: center; }
+        .welcome-msg { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 500; }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .pane { padding: 25px; border-right: 1px solid #eee; }
+        .pane:last-child { border-right: none; }
+
+        .announcement-text { color: #d32f2f; font-size: 0.9rem; margin-top: 10px; font-style: italic; text-align: center; }
+
+        .tab-container { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+        .tab-btn {
+            flex: 1; padding: 12px 5px; cursor: pointer; border: none;
+            background: #f1f1f1; font-weight: bold; font-size: 0.7rem;
+            text-transform: uppercase; border-radius: 4px 4px 0 0; transition: 0.3s; color: #777;
+        }
+        .tab-btn.active.inst-tab { background: white; color: var(--link-blue); border-bottom: 3px solid var(--link-blue); }
+        .tab-btn.active.lab-tab { background: white; color: var(--link-teal); border-bottom: 3px solid var(--link-teal); }
+
+        .tab-content { display: none; padding: 10px; animation: slideIn 0.3s ease-out; }
+        .tab-content.active { display: block; }
+
+        .contact-card { text-align: center; line-height: 1.6; }
+        .contact-card h4 { margin: 0 0 10px 0; font-size: 1.1rem; color: #333; }
+        .office-hours-btn { background-color: #003399; color: white; padding: 5px 15px; border-radius: 3px; font-size: 0.8rem; display: inline-block; margin-bottom: 10px; }
+        .discord-tag { background: #f0f1ff; color: var(--discord-blurple); padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+
+        .links-pane { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        .btn-link { width: 90%; padding: 12px; text-align: center; text-decoration: none; color: white; font-weight: bold; border-radius: 4px; font-size: 0.85rem; }
+        .bg-darkblue { background-color: #0026e6; }
+        .bg-cheat { background-color: #1a1aff; border: 2px solid #ffcc00; }
+        .bg-syllabus { background-color: #0033cc; }
+        .bg-homework { background-color: #002eb8; }
+        .bg-quiz { background-color: #001f7a; }
+
+        .schedule-container { margin-top: 30px; background: white; padding: 20px; border: 1px solid #ddd; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background-color: #f8f9fa; color: #333; text-align: left; padding: 12px; border-bottom: 2px solid #ddd; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.85rem; vertical-align: top; }
+        .week-col { font-weight: bold; color: #2c3e50; width: 80px; }
+        .event-note { color: var(--link-red); font-weight: bold; display: block; margin-top: 4px; }
+        .quiz-note { color: #e67e22; font-weight: bold; display: block; margin-top: 4px; }
+
+        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="banner">
+        <div class="course-tag">CS 426</div>
+        <div class="welcome-msg">Welcome to Digital Forensics</div>
+    </header>
+
+    <div class="main-container">
+        <div class="pane">
+            <img src="https://via.placeholder.com/350x200/2c3e50/ffffff?text=Digital+Forensics+Analysis" alt="Digital Forensics" style="width:100%; border-radius:4px;">
+            <p class="announcement-text">📌 Be sure to check the Canvas Announcements and Calendar section frequently. 📌</p>
+        </div>
+
+        <div class="pane">
+            <div class="tab-container">
+                <button class="tab-btn active inst-tab" onclick="openTab(event, 'instructor')">Instructor Information</button>
+                <button class="tab-btn lab-tab" onclick="openTab(event, 'lab-managers')">LB 375 Lab Managers</button>
+            </div>
+
+            <div id="instructor" class="tab-content active">
+                <div class="contact-card">
+                    <h4>🎓 Laxima Niure Kandel</h4>
+                    <p>📧 <a href="mailto:niurekal@erau.edu">niurekal@erau.edu</a></p>
+                    <p>📞 386-226-6323</p>
+                    <p>🏠 LB 354</p>
+                    <div class="office-hours-btn">⌛ Office Hours</div>
+                    <p>Tuesday: 2:00 pm - 3:30 pm, LB 354</p>
+                    <p>Thursday: 2:00 pm - 3:30 pm, LB 354</p>
+                    <p style="font-size: 0.8rem;">Friday: Virtual hours (8:30 am - 10:00 am) <a href="#">Teams Link</a></p>
+                </div>
+            </div>
+
+            <div id="lab-managers" class="tab-content">
+                <div class="contact-card" style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                    <h4>Anthony Wirsing</h4>
+                    <p>📧 <a href="mailto:WIRSINGA@my.erau.edu">WIRSINGA@my.erau.edu</a></p>
+                    <p>💬 Discord: <span class="discord-tag">tony12man</span></p>
+                </div>
+                <div class="contact-card">
+                    <h4>Justin Villa</h4>
+                    <p>📧 <a href="mailto:VILLAJ@my.erau.edu">VILLAJ@my.erau.edu</a></p>
+                    <p>💬 Discord: <span class="discord-tag">arbinger0310</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pane links-pane">
+            <h3 style="margin-top:0; font-size: 1.1rem;">Course Resources</h3>
+            <a href="#" class="btn-link bg-darkblue" style="color:red; height:50px; display:flex; align-items:center; justify-content:center;">Downloads & Supplies</a>
+            <a href="#" class="btn-link bg-cheat">🤯😵 Linux Cheat-Sheet</a>
+            <a href="#" class="btn-link bg-syllabus">📄 Course Syllabus</a>
+            <a href="#" class="btn-link bg-homework">⛳ Homework</a>
+            <a href="#" class="btn-link bg-quiz">❓ Quizzes</a>
+        </div>
+    </div>
+
+    <section class="schedule-container">
+        <h3 style="border-bottom: 2px solid #2c3e50; padding-bottom: 5px; margin-top: 0;">Weekly Class Schedule - SPR 2026</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Tuesday</th>
+                    <th>Thursday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="week-col">Week 1</td><td>—</td><td>Jan 8: Introduction</td></tr>
+                <tr><td class="week-col">Week 2</td><td>Jan 13: Understanding the Digital Forensics Profession and Investigations</td><td>Jan 15: Understanding the Digital Forensics Profession and Investigations</td></tr>
+                <tr><td class="week-col">Week 3</td><td>Jan 20: The Investigator's Office and Laboratory</td><td>Jan 22: The Investigator's Office and Laboratory</td></tr>
+                <tr><td class="week-col">Week 4</td><td>Jan 27: Data Acquisition</td><td>Jan 29: Data Acquisition</td></tr>
+                <tr><td class="week-col">Week 5</td><td>Feb 3: Processing Crime & Incident Scenes <span class="quiz-note">(Online Quiz)</span></td><td>Feb 5: <span class="event-note">ACI Cyber Rodeo CTF in student union (No Class)</span></td></tr>
+                <tr><td class="week-col">Week 6</td><td>Feb 10: Working with Windows and CLI Systems</td><td>Feb 12: Working with Windows and CLI Systems</td></tr>
+                <tr><td class="week-col">Week 7</td><td>Feb 17: Working with Windows and CLI Systems</td><td>Feb 19: Working with Windows and CLI Systems</td></tr>
+                <tr><td class="week-col">Week 8</td><td>Feb 24: Working with Windows and CLI Systems</td><td>Feb 26: Linux File Systems</td></tr>
+                <tr><td class="week-col">Week 9</td><td>Mar 3: Linux File Systems</td><td>Mar 5: Linux File Systems</td></tr>
+                <tr><td class="week-col">Week 10</td><td>Mar 10: Graphic File Formats</td><td>Mar 12: Graphic File Formats</td></tr>
+                <tr><td class="week-col">Week 11</td><td>Mar 17: <span class="event-note">Spring Break (No Class)</span></td><td>Mar 19: <span class="event-note">Spring Break (No Class)</span></td></tr>
+                <tr><td class="week-col">Week 12</td><td>Mar 24: Digital Forensics Analysis and Validation</td><td>Mar 26: Digital Forensics Analysis and Validation</td></tr>
+                <tr><td class="week-col">Week 13</td><td>Mar 31: Virtual Machine Forensics, Live Acquisitions, and Network Forensics</td><td>Apr 2: <span class="quiz-note">(Test/Exam)</span></td></tr>
+                <tr><td class="week-col">Week 14</td><td>Apr 7: Virtual Machine Forensics, Live Acquisitions, and Network Forensics</td><td>Apr 9: Email Investigations</td></tr>
+                <tr><td class="week-col">Week 15</td><td>Apr 14: Social Media, Mobile Forensics</td><td>Apr 16: Cloud Forensics</td></tr>
+                <tr><td class="week-col">Week 16</td><td>Apr 21: Final Project Presentation</td><td>Apr 23: Final Project Presentation</td></tr>
+                <tr style="background-color: #f9f9f9; font-weight: bold;">
+                    <td>Final Exam</td>
+                    <td colspan="2">April 25th (10:15 am - 12:15 pm) — Presentation (If needed)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        function openTab(evt, tabId) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; tabcontent[i].classList.remove("active"); }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+            document.getElementById(tabId).style.display = "block";
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
