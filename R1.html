@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptography: Perfectly-Secret Encryption   </title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --bg: #f8f9fa;
+            --box-bg: #ffffff;
+            --highlight: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.7;
+            background-color: var(--bg);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        /* New Styles for Key Takeaways */
+        .takeaways {
+            background: #fdfdfd;
+            border: 2px dashed var(--accent);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .takeaways h2 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .takeaway-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .takeaway-item {
+            font-size: 0.95rem;
+            padding-left: 15px;
+            border-left: 3px solid var(--highlight);
+        }
+
+        .content-section {
+            background: var(--box-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--accent);
+        }
+
+        h2 { color: var(--primary); margin-top: 0; }
+        
+        .math {
+            font-family: "Courier New", monospace;
+            background: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .definition {
+            background: #eef7fd;
+            border: 1px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .assessment {
+            background: #fdf2e9;
+            border: 1px solid #e67e22;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .quiz-option:hover { background: #f0f0f0; }
+
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: #e74c3c; }
+
+        @media (max-width: 600px) {
+            .takeaway-grid { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Reading Work (Katz & Lindell)</h1>
+        <p>Chapter 2: Perfectly-Secret Encryption(Read Upto Def 2.1)</p>
+    </header>
+
+    <section class="takeaways">
+        <h2>Key Takeaways</h2>
+        <div class="takeaway-grid">
+            <div class="takeaway-item">
+                <strong>Information-Theoretic Security:</strong> Perfect secrecy doesn't depend on an adversary's computing power; it depends on the lack of information in the ciphertext.
+            </div>
+            <div class="takeaway-item">
+                <strong>Probabilistic Nature:</strong> Modern encryption schemes often use randomness (probabilistic algorithms) to ensure the same message looks different every time.
+            </div>
+            <div class="takeaway-item">
+                <strong>The Core Requirement:</strong> For a scheme to be perfectly secret, observing a ciphertext must provide <em>zero</em> new information about the plaintext.
+            </div>
+            <div class="takeaway-item">
+                <strong>Indistinguishability:</strong> If an adversary cannot distinguish which of two messages was encrypted, the scheme is secure against an eavesdropper.
+            </div>
+        </div>
+    </section>
+
+    <div class="content-section">
+        <h2>1. Definitions and Basic Properties</h2>
+        <p>An encryption scheme is defined by three fundamental algorithms:</p>
+        <ul>
+            <li><strong>Gen:</strong> A probabilistic algorithm that outputs a key <span class="math">k</span> chosen from a key space <span class="math">K</span>.</li>
+            <li><strong>Enc:</strong> Takes a key <span class="math">k</span> and a message <span class="math">m</span> to produce a ciphertext <span class="math">c</span>. Written as <span class="math">c ← Enc<sub>k</sub>(m)</span> when Enc is probabilistic and <span class="math">c:=Enc<sub>k</sub>(m)</span> when Enc is deterministic.</li>
+            <li><strong>Dec:</strong> Takes key <span class="math">k</span> and ciphertext <span class="math">c</span> to recover message <span class="math">m</span>.</li>
+        </ul>
+        <p>We assume schemes are <strong>perfectly correct</strong>, meaning that decrypting a valid ciphertext always returns the original message (<span class="math">Dec<sub>k</sub>(Enc<sub>k</sub>(m)) = m</span>) with probability 1.</p>
+
+        <div class="assessment">
+            <strong>Check Your Knowledge:</strong>
+            <p>If the encryption algorithm is <em>probabilistic</em>, what does that mean for the ciphertext?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> A) The ciphertext is always the same for a given key and message.</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> B) The same message encrypted twice with the same key might result in different ciphertexts.</label>
+            <button onclick="checkAnswer('q1', 'b')">Submit</button>
+            <div id="q1-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>2. Defining Perfect Secrecy</h2>
+        <p>Intuitively, an adversary who observes a ciphertext should learn absolutely nothing about the underlying message. Their "a posteriori" knowledge (after seeing the ciphertext) should be identical to their "a priori" knowledge (before seeing it).</p>
+        
+        <div class="definition">
+            <strong>DEFINITION 2.1:</strong> An encryption scheme is perfectly secret if for every distribution over <span class="math">M</span>, every message <span class="math">m</span>, and every ciphertext <span class="math">c</span>:<br>
+            <center><span class="math">Pr[M = m | C = c] = Pr[M = m]</span></center>
+        </div>
+
+        <div class="assessment">
+            <strong>Check Your Knowledge:</strong>
+            <p>In Definition 2.1, what does <span class="math">Pr[M = m | C = c]</span> represent?</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> A) The probability that the message is <em>m</em> given that ciphertext <em>c</em> was observed.</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> B) The probability that the key is <em>k</em>.</label>
+            <button onclick="checkAnswer('q2', 'a')">Submit</button>
+            <div id="q2-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>3. Perfect Indistinguishability</h2>
+        <p>Lemma 2.3 provides an equivalent formulation: the distribution of ciphertexts must be independent of the plaintext. This is often called <strong>Perfect Indistinguishability</strong>.</p>
+        
+        <p>For every <span class="math">m₀, m₁</span> and every <span class="math">c</span>:</p>
+        <center><span class="math">Pr[C = c | M = m₀] = Pr[C = c | M = m₁]</span></center>
+
+        <div class="assessment">
+            <strong>Check Your Knowledge:</strong>
+            <p>If a scheme is perfectly indistinguishable, how much better than random guessing (1/2) can an adversary do at picking which message was sent?</p>
+            <label class="quiz-option"><input type="radio" name="q3" value="a"> A) They can guess with 100% accuracy.</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="b"> B) They can do no better than 1/2 (random guessing).</label>
+            <button onclick="checkAnswer('q3', 'b')">Submit</button>
+            <div id="q3-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>4. Adversarial Indistinguishability (Experiment PrivK<sup>eav</sup>)</h2>
+        <p>We define a formal experiment, <strong>PrivK<sup>eav</sup></strong>, to test security:</p>
+        <ol>
+            <li>Adversary <span class="math">A</span> chooses two messages <span class="math">m₀, m₁</span>.</li>
+            <li>A random key <span class="math">k</span> is generated and a random bit <span class="math">b ∈ {0,1}</span> is chosen.</li>
+            <li>The ciphertext <span class="math">c ← Enc<sub>k</sub>(m<sub>b</sub>)</span> is given to <span class="math">A</span>.</li>
+            <li><span class="math">A</span> outputs a guess <span class="math">b'</span>. The experiment is successful if <span class="math">b' = b</span>.</li>
+        </ol>
+
+        <div class="definition">
+            <strong>DEFINITION 2.4:</strong> An encryption scheme is perfectly secret if for every adversary <span class="math">A</span>:<br>
+            <center><span class="math">Pr[PrivK<sup>eav</sup><sub>{A,Π}</sub> = 1] = 1/2</span></center>
+        </div>
+
+        <div class="assessment">
+            <strong>Check Your Knowledge:</strong>
+            <p>True or False: Definition 2.4 places a limit on the computational power of the adversary.</p>
+            <label class="quiz-option"><input type="radio" name="q4" value="a"> A) True</label>
+            <label class="quiz-option"><input type="radio" name="q4" value="b"> B) False</label>
+            <button onclick="checkAnswer('q4', 'b')">Submit</button>
+            <div id="q4-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function checkAnswer(questionId, correctValue) {
+        const options = document.getElementsByName(questionId);
+        const feedback = document.getElementById(questionId + '-feedback');
+        let selected = null;
+
+        for (const option of options) {
+            if (option.checked) {
+                selected = option.value;
+                break;
+            }
+        }
+
+        if (!selected) {
+            feedback.innerHTML = "Please select an answer.";
+            feedback.className = "feedback incorrect";
+        } else if (selected === correctValue) {
+            feedback.innerHTML = "Correct!";
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = "Incorrect. Review the section above.";
+            feedback.className = "feedback incorrect";
+        }
+        feedback.style.display = "block";
+    }
+</script>
+
+</body>
+</html>
