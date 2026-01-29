@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP Perfect Secrecy Lab</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: #00ff00; padding: 20px; }
+        .container { max-width: 900px; margin: auto; border: 1px solid #333; padding: 20px; background: #000; }
+        #output { height: 400px; overflow-y: scroll; border: 1px solid #00ff00; padding: 10px; font-family: 'Courier New', monospace; white-space: pre; margin-top: 10px; background: #050505; }
+        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #00cc00; }
+        .stats { margin-top: 10px; color: #888; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>OTP Brute Force Simulator</h2>
+    <p>Target Ciphertext (Hex): <span style="color: white;">1b1815</span></p>
+    <p>This script tries all 3-letter keys (aaa-zzz) to decrypt the code.</p>
+    
+    <button onclick="runBruteForce()">Start Brute Force</button>
+    
+    <div class="stats" id="counter">Combinations tried: 0</div>
+    <div id="output">Results will appear here...</div>
+</div>
+
+<script>
+    async function runBruteForce() {
+        const output = document.getElementById('output');
+        const counter = document.getElementById('counter');
+        const ciphertext = [0x1b, 0x18, 0x15];
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        
+        output.innerHTML = "";
+        let count = 0;
+
+        for (let i = 0; i < alphabet.length; i++) {
+            for (let j = 0; j < alphabet.length; j++) {
+                for (let k = 0; k < alphabet.length; k++) {
+                    const key = alphabet[i] + alphabet[j] + alphabet[k];
+                    
+                    // XOR Decryption
+                    let p1 = String.fromCharCode(ciphertext[0] ^ key.charCodeAt(0));
+                    let p2 = String.fromCharCode(ciphertext[1] ^ key.charCodeAt(1));
+                    let p3 = String.fromCharCode(ciphertext[2] ^ key.charCodeAt(2));
+                    let plaintext = p1 + p2 + p3;
+
+                    // Display every 10th result to keep the UI smooth
+                    if (count % 10 === 0) {
+                        output.textContent += `Key: ${key} | Plaintext: ${plaintext}\n`;
+                        output.scrollTop = output.scrollHeight;
+                        counter.innerText = `Combinations tried: ${count}`;
+                    }
+                    
+                    count++;
+                    // Slight pause to prevent browser freeze
+                    if (count % 1000 === 0) await new Promise(r => setTimeout(r, 1));
+                }
+            }
+        }
+        output.textContent += "\n--- BRUTE FORCE COMPLETE ---";
+    }
+</script>
+
+</body>
+</html>
