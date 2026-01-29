@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Lab: Key Reuse (c1, c2)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: #121212; color: #e0e0e0; padding: 20px;}
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        canvas { border: 1px solid #333; width: 100%; background: #000; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .highlight { border: 2px solid #ff4d4d; padding: 15px; background: #1e1e1e; border-radius: 12px; }
+        h3 { font-size: 14px; color: #4dabff; text-transform: lowercase; letter-spacing: 1px; }
+        #status { color: #00ff88; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Visualizing Key Reuse Problem for One Time Pad (OTP)</h1>
+    <p id="status">Fetching assets from lax7/classMaterial...</p>
+
+    <div class="grid">
+        <div><h3>m1 (plaintext)</h3><canvas id="canvasM1"></canvas></div>
+        <div><h3>m2 (plaintext)</h3><canvas id="canvasM2"></canvas></div>
+        <div><h3>k (shared key)</h3><canvas id="canvasK"></canvas></div>
+
+        <div><h3>c1 (m1 ⊕ k)</h3><canvas id="canvasC1"></canvas></div>
+        <div><h3>c2 (m2 ⊕ k)</h3><canvas id="canvasC2"></canvas></div>
+        
+        <div class="highlight">
+            <h3>revealed (c1 ⊕ c2)</h3>
+            <canvas id="canvasResult"></canvas>
+            <p><small>The key k is eliminated: (m1 ⊕ k) ⊕ (m2 ⊕ k) = m1 ⊕ m2.</small></p>
+        </div>
+    </div>
+
+    <script>
+        const size = 400; 
+        const canvasIds = ['canvasM1', 'canvasM2', 'canvasK', 'canvasC1', 'canvasC2', 'canvasResult'];
+        const ctx = {};
+        
+        canvasIds.forEach(id => {
+            const c = document.getElementById(id);
+            c.width = c.height = size;
+            ctx[id] = c.getContext('2d');
+        });
+
+        const m1Img = new Image();
+        const m2Img = new Image();
+        const kImg = new Image();
+        
+        m1Img.crossOrigin = m2Img.crossOrigin = kImg.crossOrigin = "anonymous";
+
+        m1Img.src = "https://raw.githubusercontent.com/lax7/classMaterial/main/Plaintext.jpeg";
+        m2Img.src = "https://raw.githubusercontent.com/lax7/classMaterial/main/catBandW.webp";
+        kImg.src = "https://raw.githubusercontent.com/lax7/classMaterial/main/RandomKey.png";
+
+        let loadedCount = 0;
+        function checkLoaded() {
+            loadedCount++;
+            if (loadedCount === 3) runXorLab();
+        }
+
+        m1Img.onload = m2Img.onload = kImg.onload = checkLoaded;
+
+        function runXorLab() {
+            document.getElementById('status').innerText = "Vulnerability demonstrated: c1 ⊕ c2 leaked m1 ⊕ m2.";
+
+            ctx.canvasM1.drawImage(m1Img, 0, 0, size, size);
+            ctx.canvasM2.drawImage(m2Img, 0, 0, size, size);
+            ctx.canvasK.drawImage(kImg, 0, 0, size, size);
+
+            const m1Data = ctx.canvasM1.getImageData(0, 0, size, size);
+            const m2Data = ctx.canvasM2.getImageData(0, 0, size, size);
+            const kData = ctx.canvasK.getImageData(0, 0, size, size);
+            
+            const c1 = ctx.canvasC1.createImageData(size, size);
+            const c2 = ctx.canvasC2.createImageData(size, size);
+            const res = ctx.canvasResult.createImageData(size, size);
+
+            for (let i = 0; i < m1Data.data.length; i += 4) {
+                for (let j = 0; j < 3; j++) { 
+                    c1.data[i+j] = m1Data.data[i+j] ^ kData.data[i+j];
+                    c2.data[i+j] = m2Data.data[i+j] ^ kData.data[i+j];
+                    res.data[i+j] = c1.data[i+j] ^ c2.data[i+j];
+                }
+                c1.data[i+3] = c2.data[i+3] = res.data[i+3] = 255; 
+            }
+
+            ctx.canvasC1.putImageData(c1, 0, 0);
+            ctx.canvasC2.putImageData(c2, 0, 0);
+            ctx.canvasResult.putImageData(res, 0, 0);
+        }
+    </script>
+</body>
+</html>
