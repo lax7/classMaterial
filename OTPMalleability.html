@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP Malleability Demo</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-family: monospace; }
+        .hex-display { word-break: break-all; background: #eee; padding: 10px; border-radius: 4px; border: 1px solid #ccc; min-height: 40px; }
+        .highlight { color: #d9534f; font-weight: bold; }
+        h2 { color: #333; border-bottom: 2px solid #333; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>1. Encryption (The Setup)</h2>
+    <p>Enter a message and a secret key of the same length.</p>
+    <label>Plaintext:</label>
+    <input type="text" id="plain" value="SEND CASH" maxlength="10">
+    <label>Key (Must be same length):</label>
+    <input type="text" id="key" value="SECRET KEY" maxlength="10">
+    
+    <p><strong>Ciphertext (Hex):</strong></p>
+    <div id="cipherHex" class="hex-display"></div>
+</div>
+
+<div class="card" style="margin-top: 20px; background: #fff5f5;">
+    <h2>2. The Attack (Malleability)</h2>
+    <p>The attacker <b>intercepts</b> the ciphertext. They don't know the key, but they guess the message says "CASH" at the end and want to change it to "NONE".</p>
+    
+    <label>Bit-Flip Pattern (XOR mask):</label>
+    <input type="text" id="mask" value="0000000000">
+    <small>Tip: To turn "CASH" into "NONE", we XOR the ciphertext with (CASH ⊕ NONE).</small>
+
+    <p><strong>Modified Ciphertext (Hex):</strong></p>
+    <div id="modCipherHex" class="hex-display"></div>
+</div>
+
+<div class="card" style="margin-top: 20px; background: #f5fff5;">
+    <h2>3. Decryption (The Result)</h2>
+    <p>The recipient uses the <b>original key</b> to decrypt the <b>modified ciphertext</b>.</p>
+    <p><strong>Final Decrypted Message:</strong></p>
+    <div id="decryptedResult" class="hex-display" style="font-size: 1.5em; color: green;"></div>
+</div>
+
+<script>
+    const plainIn = document.getElementById('plain');
+    const keyIn = document.getElementById('key');
+    const maskIn = document.getElementById('mask');
+
+    function strToHex(str) {
+        return Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
+    }
+
+    function xor(str1, str2) {
+        let result = [];
+        for (let i = 0; i < Math.min(str1.length, str2.length); i++) {
+            result.push(str1.charCodeAt(i) ^ str2.charCodeAt(i));
+        }
+        return result;
+    }
+
+    function update() {
+        const p = plainIn.value;
+        const k = keyIn.value;
+        const m = maskIn.value;
+
+        // 1. Encrypt
+        const cipherBytes = xor(p, k);
+        document.getElementById('cipherHex').innerText = cipherBytes.map(b => b.toString(16).padStart(2, '0')).join(' ');
+
+        // 2. Apply Malicious Mask
+        // Attack: ModifiedCipher = Cipher ^ Mask
+        const modCipherBytes = [];
+        for(let i=0; i < cipherBytes.length; i++) {
+            let maskChar = m[i] || '\0';
+            modCipherBytes.push(cipherBytes[i] ^ maskChar.charCodeAt(0));
+        }
+        document.getElementById('modCipherHex').innerText = modCipherBytes.map(b => b.toString(16).padStart(2, '0')).join(' ');
+
+        // 3. Decrypt with original key
+        const finalBytes = [];
+        for(let i=0; i < modCipherBytes.length; i++) {
+            let keyChar = k[i] || '\0';
+            finalBytes.push(modCipherBytes[i] ^ keyChar.charCodeAt(0));
+        }
+        
+        const finalStr = finalBytes.map(b => String.fromCharCode(b)).join('');
+        document.getElementById('decryptedResult').innerText = finalStr;
+    }
+
+    [plainIn, keyIn, maskIn].forEach(el => el.addEventListener('input', update));
+    update();
+</script>
+
+</body>
+</html>
