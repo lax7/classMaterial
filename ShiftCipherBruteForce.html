@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher Brute Force</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
+        .result-row { display: flex; border-bottom: 1px solid #eee; padding: 8px 0; font-family: monospace; }
+        .key { width: 60px; font-weight: bold; color: #007bff; }
+        .text { flex: 1; word-break: break-all; }
+        .highlight { background: #e7f3ff; font-weight: bold; }
+        h2 { margin-top: 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🔓 Shift Cipher is Vulnerable to Brute-Force Attack Visualization</h2>
+    <p>Paste your encrypted message using Shift Cipher below to see every possible shift:</p>
+    
+    <textarea id="inputBox" placeholder="Enter encrypted text...">uwdm bw bpm miab ib uqlvqopb. lw vwb ow qvbw bwev, abig qv bpm apilwea.</textarea>
+    
+    <div id="results" style="margin-top: 20px;">
+        </div>
+</div>
+
+<script>
+    const inputBox = document.getElementById('inputBox');
+    const resultsContainer = document.getElementById('results');
+
+    function decrypt(text, shift) {
+        return text.split('').map(char => {
+            const code = char.charCodeAt(0);
+            // Lowercase
+            if (code >= 97 && code <= 122) {
+                return String.fromCharCode(((code - 97 - shift + 26) % 26) + 97);
+            }
+            // Uppercase
+            if (code >= 65 && code <= 90) {
+                return String.fromCharCode(((code - 65 - shift + 26) % 26) + 65);
+            }
+            return char; // Return punctuation/spaces as is
+        }).join('');
+    }
+
+    function updateResults() {
+        const text = inputBox.value;
+        resultsContainer.innerHTML = '';
+        
+        for (let i = 0; i < 26; i++) {
+            const decrypted = decrypt(text, i);
+            const row = document.createElement('div');
+            row.className = 'result-row';
+            // Adding a small check to highlight the likely result for your specific message
+            if (decrypted.includes(" the ")) row.classList.add('highlight');
+            
+            row.innerHTML = `<div class="key">Key ${i}:</div><div class="text">${decrypted}</div>`;
+            resultsContainer.appendChild(row);
+        }
+    }
+
+    inputBox.addEventListener('input', updateResults);
+    updateResults(); // Initial run
+</script>
+
+</body>
+</html>
