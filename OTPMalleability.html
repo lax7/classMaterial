@@ -19,9 +19,9 @@
     <h2>1. Encryption (The Setup)</h2>
     <p>Enter a message and a secret key of the same length.</p>
     <label>Plaintext:</label>
-    <input type="text" id="plain" value="SEND CASH" maxlength="10">
+    <input type="text" id="plain" value="SEND 100" maxlength="10">
     <label>Key (Must be same length):</label>
-    <input type="text" id="key" value="SECRET KEY" maxlength="10">
+    <input type="text" id="key" value="SECR KEY" maxlength="10">
     
     <p><strong>Ciphertext (Hex):</strong></p>
     <div id="cipherHex" class="hex-display"></div>
@@ -29,7 +29,7 @@
 
 <div class="card" style="margin-top: 20px; background: #fff5f5;">
     <h2>2. The Attack (Malleability)</h2>
-    <p>The attacker <b>intercepts</b> the ciphertext. They don't know the key, but they guess the message says "CASH" at the end and want to change it to "NONE".</p>
+    <p>The attacker <b>intercepts</b> the ciphertext. They don't know the key, but they guess the message says "100" at the end and want to change it to "500".</p>
     
     <label>Bit-Flip Pattern (XOR mask):</label>
     <input type="text" id="mask" value="0000000000">
