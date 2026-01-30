@@ -1,100 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>OTP Malleability Demo</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f4f4f9; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-family: monospace; }
-        .hex-display { word-break: break-all; background: #eee; padding: 10px; border-radius: 4px; border: 1px solid #ccc; min-height: 40px; }
-        .highlight { color: #d9534f; font-weight: bold; }
-        h2 { color: #333; border-bottom: 2px solid #333; padding-bottom: 5px; }
-    </style>
-</head>
-<body>
-
-<div class="card">
-    <h2>1. Encryption (The Setup)</h2>
-    <p>Enter a message and a secret key of the same length.</p>
-    <label>Plaintext:</label>
-    <input type="text" id="plain" value="SEND 100" maxlength="10">
-    <label>Key (Must be same length):</label>
-    <input type="text" id="key" value="SECR KEY" maxlength="10">
+<div style="font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: auto; padding: 20px; background-color: #f4f7f6; border-radius: 12px;">
     
-    <p><strong>Ciphertext (Hex):</strong></p>
-    <div id="cipherHex" class="hex-display"></div>
+    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <h2 style="color: #2d3436; margin-top: 0;">1. The Legitimate Message</h2>
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">PLAINTEXT (P):</label><br>
+        <input type="text" id="plain" value="SEND 100" maxlength="8" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: monospace;">
+        
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">SECRET KEY (K):</label><br>
+        <input type="text" id="key" value="MYSECRET" maxlength="8" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: monospace;">
+        
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">ALICE'S CIPHERTEXT (HEX):</label>
+        <div id="cipherHex" style="font-family: monospace; background: #2d3436; color: #fab1a0; padding: 15px; border-radius: 6px; border-left: 5px solid #e17055; margin-top: 5px;"></div>
+    </div>
+
+    <div style="background: #fff5f5; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-top: 5px solid #d63031; margin-bottom: 20px;">
+        <h2 style="color: #2d3436; margin-top: 0;">2. The Attacker's Hex Mask</h2>
+        <p style="font-size: 0.9em; color: #636e72;">Enter Hex bytes (00 to FF) separated by spaces. These are XORed with the ciphertext.</p>
+        <input type="text" id="mask" value="00 00 00 00 00 04 00 00" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: monospace;">
+        
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">TAMPERED CIPHERTEXT (HEX):</label>
+        <div id="modCipherHex" style="font-family: monospace; background: #2d3436; color: #ff7675; padding: 15px; border-radius: 6px; border-left: 5px solid #d63031; margin-top: 5px;"></div>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <h2 style="color: #2d3436; margin-top: 0;">3. Result of Decryption</h2>
+        <div id="decryptedResult" style="font-size: 2.2em; font-weight: bold; color: #00b894; text-align: center; background: #f9f9f9; padding: 15px; border: 3px double #00b894; border-radius: 8px; margin-top: 10px;"></div>
+    </div>
+
+    <div style="background: #dfe6e9; padding: 20px; border-radius: 12px; border-left: 10px solid #0984e3;">
+        <h3 style="margin-top: 0;">🎓 Reasoning: How the Mask works</h3>
+        <p>The One-Time Pad is <b>malleable</b> because bitwise XOR is used. An attacker can change the output without knowing the key using the <b>XOR Delta</b> formula:</p>
+        <div style="text-align: center; font-style: italic; font-size: 1.2em; margin: 15px 0;">Mask (M) = Original Char ⊕ Target Char</div>
+        
+        <p><b>Step-by-Step for '1' to '5':</b></p>
+        <ul style="font-size: 0.9em;">
+            <li>Original '1' is Hex <code>31</code> (Binary <code>0011 0001</code>)</li>
+            <li>Target '5' is Hex <code>35</code> (Binary <code>0011 0101</code>)</li>
+            <li>XORing them gives <code>04</code> (Binary <code>0000 0100</code>)</li>
+        </ul>
+        <p style="font-size: 0.9em;">When the bank decrypts: <code>(Ciphertext ⊕ Mask) ⊕ Key</code> is calculated. The Key cancels out, and the original character is transformed by the mask into the target character. <b>No key required.</b></p>
+        <p style="font-size: 0.9em;"><b>Conclusion:</b> OTP is "perfectly secret" but has zero "integrity." Without a Message Authentication Code (MAC), the message is <b>malleable</b>.</p>
+    </div>
 </div>
+        
+  
 
-<div class="card" style="margin-top: 20px; background: #fff5f5;">
-    <h2>2. The Attack (Malleability)</h2>
-    <p>The attacker <b>intercepts</b> the ciphertext. They don't know the key, but they guess the message says "100" at the end and want to change it to "500".</p>
-    
-    <label>Bit-Flip Pattern (XOR mask):</label>
-    <input type="text" id="mask" value="0000000000">
-    <small>Tip: To turn "CASH" into "NONE", we XOR the ciphertext with (CASH ⊕ NONE).</small>
-
-    <p><strong>Modified Ciphertext (Hex):</strong></p>
-    <div id="modCipherHex" class="hex-display"></div>
-</div>
-
-<div class="card" style="margin-top: 20px; background: #f5fff5;">
-    <h2>3. Decryption (The Result)</h2>
-    <p>The recipient uses the <b>original key</b> to decrypt the <b>modified ciphertext</b>.</p>
-    <p><strong>Final Decrypted Message:</strong></p>
-    <div id="decryptedResult" class="hex-display" style="font-size: 1.5em; color: green;"></div>
+    <div style="background: #fff9db; padding: 20px; border-radius: 12px; border: 2px dashed #f1c40f;">
+        <h3 style="margin-top: 0;">📝 HW: Now You Try (10 points)!</h3>
+        <p><b>👉Task 1:</b> Modify the mask to change <b>SEND</b> to <b>LEND</b>.</p>
+        
+            
+            <li>📌What to submit: mask you will use to change SEND to LEND (show your steps for full points) (5 points).</li>
+        </ul>
+        <p><b>Task 2:</b> 📌What is the <b>Maximum Amount</b> you can make Alice send if the message format is "SEND XXX" (where XXX is 3 digits) (2 points)? Submit the mask that will change 100 to maximum amount (3 points).</p>
+        <p style="font-size: 0.85em; color: #7f8c8d;"><i></i></p>
+    </div>
 </div>
 
 <script>
-    const plainIn = document.getElementById('plain');
-    const keyIn = document.getElementById('key');
-    const maskIn = document.getElementById('mask');
+(function() {
+    const pIn = document.getElementById('plain');
+    const kIn = document.getElementById('key');
+    const mIn = document.getElementById('mask');
 
-    function strToHex(str) {
-        return Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
-    }
+    function updateOTP() {
+        const p = pIn.value;
+        const k = kIn.value;
+        const mRaw = mIn.value;
+        const mBytes = mRaw.trim().split(/\s+/).map(h => parseInt(h, 16) || 0);
 
-    function xor(str1, str2) {
-        let result = [];
-        for (let i = 0; i < Math.min(str1.length, str2.length); i++) {
-            result.push(str1.charCodeAt(i) ^ str2.charCodeAt(i));
+        let cipherBytes = [];
+        for (let i = 0; i < p.length; i++) {
+            cipherBytes.push(p.charCodeAt(i) ^ (k[i] || '\0').charCodeAt(0));
         }
-        return result;
-    }
+        document.getElementById('cipherHex').innerHTML = bytesToHex(cipherBytes);
 
-    function update() {
-        const p = plainIn.value;
-        const k = keyIn.value;
-        const m = maskIn.value;
-
-        // 1. Encrypt
-        const cipherBytes = xor(p, k);
-        document.getElementById('cipherHex').innerText = cipherBytes.map(b => b.toString(16).padStart(2, '0')).join(' ');
-
-        // 2. Apply Malicious Mask
-        // Attack: ModifiedCipher = Cipher ^ Mask
-        const modCipherBytes = [];
-        for(let i=0; i < cipherBytes.length; i++) {
-            let maskChar = m[i] || '\0';
-            modCipherBytes.push(cipherBytes[i] ^ maskChar.charCodeAt(0));
+        let modCipherBytes = [];
+        for (let i = 0; i < cipherBytes.length; i++) {
+            modCipherBytes.push(cipherBytes[i] ^ (mBytes[i] || 0));
         }
-        document.getElementById('modCipherHex').innerText = modCipherBytes.map(b => b.toString(16).padStart(2, '0')).join(' ');
+        document.getElementById('modCipherHex').innerHTML = bytesToHex(modCipherBytes);
 
-        // 3. Decrypt with original key
-        const finalBytes = [];
-        for(let i=0; i < modCipherBytes.length; i++) {
-            let keyChar = k[i] || '\0';
-            finalBytes.push(modCipherBytes[i] ^ keyChar.charCodeAt(0));
+        let finalStr = "";
+        for (let i = 0; i < modCipherBytes.length; i++) {
+            finalStr += String.fromCharCode(modCipherBytes[i] ^ (k[i] || '\0').charCodeAt(0));
         }
-        
-        const finalStr = finalBytes.map(b => String.fromCharCode(b)).join('');
         document.getElementById('decryptedResult').innerText = finalStr;
     }
 
-    [plainIn, keyIn, maskIn].forEach(el => el.addEventListener('input', update));
-    update();
-</script>
+    function bytesToHex(bytes) {
+        return bytes.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' ');
+    }
 
-</body>
-</html>
+    [pIn, kIn, mIn].forEach(el => el.addEventListener('input', updateOTP));
+    updateOTP();
+})();
+</script>
