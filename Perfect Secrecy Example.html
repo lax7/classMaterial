@@ -160,14 +160,21 @@
             <canvas id="logicCanvasP" width="700" height="250" class="c3-canvas"></canvas>
             <div class="c3-grid" id="reasoningBoxesP" style="visibility: hidden;">
                 <div class="c3-card">
-                    <h3>Hypothesis: M = HI</h3>
-                    <p class="c3-math">H + X = E<br>I + Q = Y</p>
-                    <p>Possible! If key was <strong>XQ</strong>.</p>
+                    <h3>Hypothesis: m = HI</h3>
+                    <p class="c3-math" style="font-family: 'Times New Roman', serif; font-size: 1.2em; font-weight: bold; text-align: center;">
+    H (0x48) &oplus; 0x0D = E (0x45)<br>
+    I (0x49) &oplus; 0x10 = Y (0x59)
+</p>
+                    
+                    <p>Possible! If key was <strong>0x0D10 </strong>.</p>
                 </div>
                 <div class="c3-card">
-                    <h3>Hypothesis: M = NO</h3>
-                    <p class="c3-math">N + R = E<br>O + E = Y</p>
-                    <p>Possible! If key was <strong>RE</strong>.</p>
+                    <h3>Hypothesis: m = NO</h3>
+                     <p class="c3-math" style="font-family: 'Times New Roman', serif; font-size: 1.2em; font-weight: bold; text-align: center;">
+    N (0x4E) &oplus; 0x0B = E (0x45)<br>
+    O (0x4F) &oplus; 0x16 = Y (0x59)
+</p>
+                    <p>Possible! If key was <strong>0x4559</strong>.</p>
                 </div>
             </div>
             <center><button id="actionBtnP" class="c3-btn" onclick="startLogicP()">Execute Bayesian Update</button></center>
