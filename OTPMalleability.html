@@ -2,13 +2,13 @@
     
     <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
         <h2 style="color: #2d3436; margin-top: 0;">1. The Legitimate Message</h2>
-        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">PLAINTEXT (P):</label><br>
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">PLAINTEXT (m):</label><br>
         <input type="text" id="plain" value="SEND 100" maxlength="8" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: monospace;">
         
-        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">SECRET KEY (K):</label><br>
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">SECRET KEY (k):</label><br>
         <input type="text" id="key" value="MYSECRET" maxlength="8" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: monospace;">
         
-        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">ALICE'S CIPHERTEXT (HEX):</label>
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">ALICE'S CIPHERTEXT c (HEX):</label>
         <div id="cipherHex" style="font-family: monospace; background: #2d3436; color: #fab1a0; padding: 15px; border-radius: 6px; border-left: 5px solid #e17055; margin-top: 5px;"></div>
     </div>
 
@@ -17,12 +17,12 @@
         <p style="font-size: 0.9em; color: #636e72;">Enter Hex bytes (00 to FF) separated by spaces. These are XORed with the ciphertext.</p>
         <input type="text" id="mask" value="00 00 00 00 00 04 00 00" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: monospace;">
         
-        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">TAMPERED CIPHERTEXT (HEX):</label>
+        <label style="font-weight: bold; font-size: 0.8em; color: #636e72;">TAMPERED CIPHERTEXT c' (HEX):</label>
         <div id="modCipherHex" style="font-family: monospace; background: #2d3436; color: #ff7675; padding: 15px; border-radius: 6px; border-left: 5px solid #d63031; margin-top: 5px;"></div>
     </div>
 
     <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
-        <h2 style="color: #2d3436; margin-top: 0;">3. Result of Decryption</h2>
+        <h2 style="color: #2d3436; margin-top: 0;">3. Result of Decryption m'</h2>
         <div id="decryptedResult" style="font-size: 2.2em; font-weight: bold; color: #00b894; text-align: center; background: #f9f9f9; padding: 15px; border: 3px double #00b894; border-radius: 8px; margin-top: 10px;"></div>
     </div>
 
