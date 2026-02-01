@@ -1,53 +1,199 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hands-on Activity: Manual File Carving</title>
+    <title>Learning Number Systems & File Carving</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 850px; margin: 0 auto; padding: 40px; background-color: #f9f9f9; }
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; margin-top: 0; }
-        h2 { color: #2980b9; margin-top: 30px; }
-        h3 { color: #d35400; font-size: 1.1em; }
+        /* Shared Styles */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: auto; padding: 20px; background-color: #f4f7f6; }
+        header { background: #2c3e50; color: #fff; padding: 2rem; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+        section, .container { background: #fff; padding: 25px; margin-top: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #16a085; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: center; }
+        th { background-color: #3498db; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .example { background: #e8f4fd; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 0 5px 5px 0; }
+        .quiz-container { background: #fff3e0; border: 2px solid #ff9800; padding: 25px; border-radius: 8px; margin-top: 30px; }
+        .quiz-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #ffd8a8; }
+        .code { font-family: 'Courier New', Courier, monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .btn { display: inline-block; background: #e67e22; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 10px; cursor: pointer; border: none; font-size: 1rem; font-weight: bold; }
+        .btn:hover { background: #d35400; }
+        #result { margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
+
+        /* File Carving Specific Styles */
         .concept-box { background-color: #eef7fd; border-left: 5px solid #3498db; padding: 15px; margin: 20px 0; border-radius: 4px; }
         .task-box { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-top: 20px; }
         .tool-box { background-color: #fdfefe; border: 1px dashed #7f8c8d; padding: 20px; border-radius: 8px; margin-top: 30px; }
-        code { background-color: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
         .screenshot-req { color: #c0392b; font-weight: bold; margin-top: 15px; display: block; }
-        ol li, ul li { margin-bottom: 10px; }
         .submission-list { list-style-type: disc; margin-left: 20px; color: #c0392b; }
-        .lab-image { max-width: 100%; height: auto; margin: 15px 0; border: 1px solid #ccc; border-radius: 4px; display: block; }
-        
-        /* Interactive Quiz Styling */
-        .quiz-container { background: #f0f4f8; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #d1d9e6; }
-        .quiz-item { margin-bottom: 15px; }
-        .quiz-item label { display: block; font-weight: bold; margin-bottom: 5px; }
-        .quiz-item input, .quiz-item select { padding: 8px; width: 100%; max-width: 400px; border: 1px solid #ccc; border-radius: 4px; }
-        .quiz-item input[type="text"] { text-transform: uppercase; }
-        .feedback { font-weight: bold; margin-top: 5px; display: block; }
-        .correct { color: #27ae60; }
-        .incorrect { color: #c0392b; }
-        button#check-quiz { background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
-        button#check-quiz:hover { background-color: #2980b9; }
         .info-note { font-size: 0.95em; background-color: #fff9db; padding: 10px; border-radius: 4px; margin: 10px 0; border: 1px solid #ffec99; }
-
-        /* Recording Box Styling */
         .record-box { background-color: #fff9db; border: 2px solid #f1c40f; padding: 15px; margin: 20px 0; border-radius: 8px; }
         .record-box p { margin-top: 0; font-weight: bold; color: #856404; }
         .record-box label { font-weight: bold; margin-right: 10px; }
         .record-box input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-right: 20px; font-family: monospace; width: 150px; }
-
-        /* Locked Section Styling */
-        #task2-section { display: none; margin-top: 40px; border-top: 4px solid #3498db; padding-top: 20px; }
+        .lab-image { max-width: 100%; height: auto; margin: 15px 0; border: 1px solid #ccc; border-radius: 4px; display: block; }
+        .feedback { font-weight: bold; margin-top: 5px; display: block; }
+        .correct { color: #27ae60; }
+        .incorrect { color: #c0392b; }
+        
+        /* Locking Logic */
+        #file-carving-lab, #task2-section { display: none; }
         .lock-message { background-color: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #feb2b2; margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Hands-on Activity: File Carving without a Carving Tool</h1>
+<header>
+    <h1>Digital Foundations</h1>
+    <p>Mastering Number Systems, Encodings, and Timestamps</p>
+</header>
+
+<section>
+    <h2>1. The Big Three Number Systems</h2>
+    <p>In computing, we shift between three primary systems depending on whether we are looking at hardware levels or human-readable data.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>System</th>
+                <th>Base</th>
+                <th>Symbols</th>
+                <th>Primary Use</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Binary</strong></td>
+                <td>2</td>
+                <td>0, 1</td>
+                <td>CPU Operations & Circuits</td>
+            </tr>
+            <tr>
+                <td><strong>Decimal</strong></td>
+                <td>10</td>
+                <td>0 - 9</td>
+                <td>Human Mathematics</td>
+            </tr>
+            <tr>
+                <td><strong>Hexadecimal</strong></td>
+                <td>16</td>
+                <td>0-9, A-F</td>
+                <td>Memory Addressing & Color Codes</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>2. Conversion Examples</h2>
+    <h3>Binary to Decimal</h3>
+    <p>To convert, multiply each digit by 2 raised to the power of its position (starting at 0 from the right).</p>
+    <div class="example">
+        <strong>Binary: 1011</strong><br>
+        (1 × 2³) + (0 × 2²) + (1 × 2¹) + (1 × 2⁰)<br>
+        8 + 0 + 2 + 1 = <strong>11</strong>
+    </div>
+
+    <h3>Hexadecimal to Binary</h3>
+    <p>Each Hex digit represents exactly 4 bits (a "nibble").</p>
+    <div class="example">
+        <strong>Hex: A3</strong><br>
+        A = 1010<br>
+        3 = 0011<br>
+        Result: <strong>10100011</strong>
+    </div>
+</section>
+
+<section>
+    <h2>3. Text and Characters</h2>
+    <p>Computers only understand numbers, so we use "encoding" to map numbers to letters.</p>
+    <ul>
+        <li><strong>ASCII:</strong> Uses 7 bits. Covers English letters, numbers, and basic symbols.</li>
+        <li><strong>UTF-8:</strong> A variable-width encoding that can represent every character in the world. It is backwards compatible with ASCII.</li>
+        <li><strong>Control Characters:</strong> Special codes like <span class="code">0A</span> (Hex) which represents a Newline (<span class="code">\n</span>).</li>
+    </ul>
+</section>
+
+<section>
+    <h2>4. Digital Timestamps (Epochs)</h2>
+    <p>Systems measure time as the number of seconds (or microseconds) passed since a specific "starting point" called an <strong>Epoch</strong>.</p>
+    <ul>
+        <li><strong>Unix Epoch:</strong> January 1, 1970. (Standard for Linux and Web).</li>
+        <li><strong>Mac Epoch (Cocoa):</strong> January 1, 2001. (31-year difference from Unix).</li>
+        <li><strong>WebKit/Chrome:</strong> Microseconds since January 1, 1601.</li>
+    </ul>
+</section>
+
+<section class="quiz-container">
+    <h2>Test Your Knowledge: Hexadecimal & Basics</h2>
+    <form id="quizForm">
+        <div class="quiz-item">
+            <p><strong>1. What is the Hexadecimal symbol for the decimal number 10?</strong></p>
+            <input type="radio" name="q1" value="A"> 9<br>
+            <input type="radio" name="q1" value="B"> A<br>
+            <input type="radio" name="q1" value="C"> B
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>2. What is the Hexadecimal equivalent of the decimal number 15?</strong></p>
+            <input type="radio" name="q2" value="A"> E<br>
+            <input type="radio" name="q2" value="B"> F<br>
+            <input type="radio" name="q2" value="C"> 10
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>3. Convert the Hexadecimal value "10" to Decimal:</strong></p>
+            <input type="radio" name="q3" value="A"> 10<br>
+            <input type="radio" name="q3" value="B"> 16<br>
+            <input type="radio" name="q3" value="C"> 2
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>4. Which of the following is a valid Hexadecimal number?</strong></p>
+            <input type="radio" name="q4" value="A"> 1G4<br>
+            <input type="radio" name="q4" value="B"> 1011<br>
+            <input type="radio" name="q4" value="C"> AF2<br>
+            <input type="radio" name="q4" value="D"> Both B and C
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>5. In Hexadecimal, what comes immediately after the number 9?</strong></p>
+            <input type="radio" name="q5" value="A"> 10<br>
+            <input type="radio" name="q5" value="B"> A<br>
+            <input type="radio" name="q5" value="C"> F
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>6. How many bits are represented by a single Hexadecimal digit?</strong></p>
+            <input type="radio" name="q6" value="A"> 2<br>
+            <input type="radio" name="q6" value="B"> 4<br>
+            <input type="radio" name="q6" value="C"> 8
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>7. What is the Hex value of the binary 1111?</strong></p>
+            <input type="radio" name="q7" value="A"> F<br>
+            <input type="radio" name="q7" value="B"> 15<br>
+            <input type="radio" name="q7" value="C"> A
+        </div>
+
+        <div class="quiz-item">
+            <p><strong>8. The Hex code 0A is commonly used to represent which character?</strong></p>
+            <input type="radio" name="q8" value="A"> Space<br>
+            <input type="radio" name="q8" value="B"> Newline (\n)<br>
+            <input type="radio" name="q8" value="C"> Null
+        </div>
+
+        <button type="button" class="btn" onclick="checkFoundationsQuiz()">Submit Answers & Unlock Lab</button>
+    </form>
+    <p id="result"></p>
+</section>
+
+<div id="file-carving-lab" class="container">
+    <h1>Lab: File Carving without a Carving Tool</h1>
 
     <div class="concept-box">
         <strong>What is File Carving?</strong><br>
@@ -63,28 +209,28 @@
         </ol>
 
         <div class="info-note">
-            <strong>Pro Tip:</strong> For JPG/JPEG files, the essential part is always the same: <code>FF D8</code> (Start of Image (SoI)). The file always ends with the marker: <code>FF D9</code> (End of Image (EoI)).
+            <strong>Pro Tip:</strong> For JPG/JPEG files, the essential part is always the same: <code>FF D8</code> (Start of Image). The file always ends with the marker: <code>FF D9</code> (End of Image).
         </div>
 
-        <div class="quiz-container">
+        <div class="quiz-container" style="background:#eef7fd; border-color:#3498db;">
             <h3>Knowledge Check: Unlock Task 2</h3>
             <p>You must answer all questions correctly to proceed to the manual carving exercise.</p>
             
             <div class="quiz-item">
-                <label>1. What is the standard JPEG Start of Image (SoI) marker?</label>
-                <input type="text" id="quiz-jpg" placeholder="Enter hex values here...">
+                <label>1. What is the standard JPEG Start of Image (SOI) marker?</label>
+                <input type="text" id="quiz-jpg" style="padding:8px; width:100%; max-width:400px;" placeholder="Enter hex values here...">
                 <span id="feedback-jpg" class="feedback"></span>
             </div>
 
             <div class="quiz-item">
                 <label>2. What is the Start of File (Header) for a PDF document?</label>
-                <input type="text" id="quiz-pdf" placeholder="Enter hex values here...">
+                <input type="text" id="quiz-pdf" style="padding:8px; width:100%; max-width:400px;" placeholder="Enter hex values here...">
                 <span id="feedback-pdf" class="feedback"></span>
             </div>
 
             <div class="quiz-item">
                 <label>3. Research Challenge: What is the difference between <code>FF D8 FF EE</code> and <code>FF D8 FF E0</code>?</label>
-                <select id="quiz-research">
+                <select id="quiz-research" style="padding:8px; width:100%; max-width:400px;">
                     <option value="">-- Select an answer --</option>
                     <option value="color">FF D8 FF E0 is for JFIF (standard) and FF D8 FF EE is often used for Adobe color profiles</option>
                     <option value="size">FF D8 FF E0 is for high-res images and FF D8 FF EE is for low-res</option>
@@ -93,7 +239,7 @@
                 <span id="feedback-research" class="feedback"></span>
             </div>
             
-            <button id="check-quiz" onclick="checkTask1()">Verify Answers & Unlock Task 2</button>
+            <button class="btn" style="background-color: #3498db;" onclick="checkSignatureQuiz()">Verify Answers & Unlock Task 2</button>
         </div>
 
         <div id="lock-notice" class="lock-message">
@@ -119,7 +265,6 @@
                 <li>Search for the <strong>File Trailer</strong> offset by searching for the hex value: <code>FFD9</code>.</li>
                 <img src="https://github.com/lax7/classMaterial/raw/main/carve1.jpg" alt="HxD Search Marker" class="lab-image">
                 <img src="https://github.com/lax7/classMaterial/raw/main/carv2.jpg" alt="HxD Trailer Marker" class="lab-image">
-                 <li>Similarly search for the <strong>File Trailer</strong> offset by searching for the hex value: <code>FFD9</code>.</li>
                 <img src="https://github.com/lax7/classMaterial/raw/main/carv3.jpg" alt="HxD Select Block" class="lab-image">
             </ul>
 
@@ -168,51 +313,72 @@
 </div>
 
 <script>
-function checkTask1() {
-    let isJpgCorrect = false;
-    let isPdfCorrect = false;
-    let isResCorrect = false;
-
-    const jpgVal = document.getElementById('quiz-jpg').value.replace(/\s+/g, '').toUpperCase();
-    const jpgFeed = document.getElementById('feedback-jpg');
-    if (jpgVal === "FFD8") {
-        jpgFeed.innerHTML = "✓ Correct";
-        jpgFeed.className = "feedback correct";
-        isJpgCorrect = true;
-    } else {
-        jpgFeed.innerHTML = "✗ Incorrect";
-        jpgFeed.className = "feedback incorrect";
+    // First Quiz Logic
+    function checkFoundationsQuiz() {
+        let score = 0;
+        const answers = { q1: "B", q2: "B", q3: "B", q4: "D", q5: "B", q6: "B", q7: "A", q8: "B" };
+        for (let key in answers) {
+            const selected = document.querySelector(`input[name="${key}"]:checked`);
+            if (selected && selected.value === answers[key]) score++;
+        }
+        const resultDisplay = document.getElementById('result');
+        if (score === 8) {
+            resultDisplay.innerHTML = "Perfect! 8/8. File Carving Lab is now unlocked below.";
+            resultDisplay.style.color = "#27ae60";
+            document.getElementById('file-carving-lab').style.display = 'block';
+            document.getElementById('file-carving-lab').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            resultDisplay.innerHTML = `You scored ${score} out of 8. You need a perfect score to unlock the lab!`;
+            resultDisplay.style.color = "#c0392b";
+        }
     }
 
-    const pdfVal = document.getElementById('quiz-pdf').value.replace(/\s+/g, '').toUpperCase();
-    const pdfFeed = document.getElementById('feedback-pdf');
-    if (pdfVal === "25504446") {
-        pdfFeed.innerHTML = "✓ Correct";
-        pdfFeed.className = "feedback correct";
-        isPdfCorrect = true;
-    } else {
-        pdfFeed.innerHTML = "✗ Incorrect";
-        pdfFeed.className = "feedback incorrect";
-    }
+    // Signature Quiz Logic
+    function checkSignatureQuiz() {
+        let isJpgCorrect = false;
+        let isPdfCorrect = false;
+        let isResCorrect = false;
 
-    const resVal = document.getElementById('quiz-research').value;
-    const resFeed = document.getElementById('feedback-research');
-    if (resVal === "color") {
-        resFeed.innerHTML = "✓ Correct";
-        resFeed.className = "feedback correct";
-        isResCorrect = true;
-    } else {
-        resFeed.innerHTML = "✗ Incorrect";
-        resFeed.className = "feedback incorrect";
-    }
+        const jpgVal = document.getElementById('quiz-jpg').value.replace(/\s+/g, '').toUpperCase();
+        const jpgFeed = document.getElementById('feedback-jpg');
+        if (jpgVal === "FFD8") {
+            jpgFeed.innerHTML = "✓ Correct";
+            jpgFeed.className = "feedback correct";
+            isJpgCorrect = true;
+        } else {
+            jpgFeed.innerHTML = "✗ Incorrect";
+            jpgFeed.className = "feedback incorrect";
+        }
 
-    if (isJpgCorrect && isPdfCorrect && isResCorrect) {
-        document.getElementById('task2-section').style.display = 'block';
-        document.getElementById('lock-notice').style.display = 'none';
-        document.getElementById('task2-section').scrollIntoView({ behavior: 'smooth' });
+        const pdfVal = document.getElementById('quiz-pdf').value.replace(/\s+/g, '').toUpperCase();
+        const pdfFeed = document.getElementById('feedback-pdf');
+        if (pdfVal === "25504446") {
+            pdfFeed.innerHTML = "✓ Correct";
+            pdfFeed.className = "feedback correct";
+            isPdfCorrect = true;
+        } else {
+            pdfFeed.innerHTML = "✗ Incorrect";
+            pdfFeed.className = "feedback incorrect";
+        }
+
+        const resVal = document.getElementById('quiz-research').value;
+        const resFeed = document.getElementById('feedback-research');
+        if (resVal === "color") {
+            resFeed.innerHTML = "✓ Correct";
+            resFeed.className = "feedback correct";
+            isResCorrect = true;
+        } else {
+            resFeed.innerHTML = "✗ Incorrect";
+            resFeed.className = "feedback incorrect";
+        }
+
+        if (isJpgCorrect && isPdfCorrect && isResCorrect) {
+            document.getElementById('task2-section').style.display = 'block';
+            document.getElementById('lock-notice').style.display = 'none';
+            document.getElementById('task2-section').scrollIntoView({ behavior: 'smooth' });
+        }
     }
-}
 </script>
 
 </body>
-</html>-
+</html>
