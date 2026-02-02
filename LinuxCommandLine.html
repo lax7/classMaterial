@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Activity: SIFT Workstation & Linux Basics</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1000px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; text-align: center; }
+        h2 { color: #2980b9; margin-top: 30px; border-left: 5px solid #2980b9; padding-left: 15px; }
+        h3 { color: #0288d1; margin-top: 20px; }
+        .step-box { background: #f8f9fa; border-radius: 8px; padding: 15px; margin: 15px 0; border: 1px solid #e9ecef; }
+        .command { font-family: 'Courier New', Courier, monospace; background: #2c3e50; color: #ecf0f1; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .credentials { background: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 8px; font-weight: bold; margin: 15px 0; text-align: center; }
+        .video-box { background: #e1f5fe; border: 1px solid #03a9f4; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: bold; }
+        .video-box a { color: #01579b; text-decoration: underline; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        th { background-color: #00bcd4; color: white; text-align: left; padding: 12px; text-transform: uppercase; font-size: 14px; }
+        td { border: 1px solid #dee2e6; padding: 12px; vertical-align: top; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+
+        img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; margin: 20px auto; display: block; }
+        
+        .quiz-container, .practice-section { background-color: #e8f4fd; border: 2px solid #3498db; padding: 25px; border-radius: 10px; margin-top: 25px; }
+        .quiz-title { font-weight: bold; color: #2980b9; font-size: 1.1em; margin-bottom: 15px; display: block; }
+        .question-box { background-color: #ffffff; padding: 15px; border-left: 5px solid #0288d1; margin: 15px 0; border-radius: 4px; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Courier New', Courier, monospace; box-sizing: border-box; }
+        
+        button { background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        button:hover { background-color: #2980b9; }
+        
+        .feedback { margin-top: 15px; font-weight: bold; padding: 10px; display: none; border-radius: 4px; }
+        .correct { background-color: #c8e6c9; color: #2e7d32; display: block; }
+        .incorrect { background-color: #ffcdd2; color: #c62828; display: block; }
+        .note { background-color: #e7f3fe; border-left: 6px solid #2196F3; padding: 10px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SIFT Workstation & Linux Essentials</h1>
+
+    <h2>1. Environment Setup</h2>
+    <p>Download the .ova file from <a href="https://www.sans.org/tools/sift-workstation" target="_blank">https://www.sans.org/tools/sift-workstation</a>.</p>
+    
+    <div class="step-box">
+        <strong>Note:</strong> This is already downloaded and is in the network shared folder in LB 374 computers. Follow these steps to configure it in VirtualBox.
+    </div>
+
+    <div class="video-box">
+        🎥 Note: <a href="https://erau.zoom.us/rec/play/Mg5Q96hJjShrGthufkjATk2xp9NT7F-92GC3qsYC8nEZUyXsFOuNWfXQbQEleUvZPg9P2yUVSY35dLce.IomqFJEc_FH5TKo7?eagerLoadZvaPages=sidemenu.billing.plan_management&accessLevel=meeting&canPlayFromShare=true&from=share_recording_detail&continueMode=true&componentName=rec-play&originRequestUrl=https%3A%2F%2Ferau.zoom.us%2Frec%2Fshare%2Fdk_jK4Itj2wVYq-x5OG8-Vhj5zW3QElfx6Po_Vkqh2s-cF2amw5wuc7TsG5xBHY6.K50Zt3tumd9Ml73i%3Ffrom%3Dhub&autoplay=true&startTime=1770048349000" target="_blank">Watch this video to set it up in Virtual Box Manager</a>
+    </div>
+    
+    
+
+    <div class="credentials">
+        Login: <span style="color:#d35400">sansforensics</span> &nbsp;&nbsp; Password: <span style="color:#d35400">forensics</span>
+    </div>
+
+    <div class="quiz-container">
+        <span class="quiz-title">Knowledge Check: Setup</span>
+        <div class="input-group">
+            <label>What is the password to log in?</label>
+            <input type="text" id="q_setup" placeholder="Enter password...">
+            <button onclick="checkSimple('q_setup', 'forensics', 'f_setup')">Submit</button>
+            <div id="f_setup" class="feedback"></div>
+        </div>
+    </div>
+
+    <h2>2. Working with the Terminal</h2>
+    <p>Open the terminal using the following methods:</p>
+    <ul>
+        <li><strong>Shortcut:</strong> <span class="command">ctrl+alt+t</span></li>
+        <li><strong>Clear Screen:</strong> To clear, type <span class="command">clear</span> or enter <span class="command">ctrl+L</span></li>
+    </ul>
+
+    
+
+    <div class="quiz-container">
+        <span class="quiz-title">Knowledge Check: Terminal</span>
+        <div class="input-group">
+            <label>What command or shortcut clears the terminal screen?</label>
+            <input type="text" id="q_term" placeholder="Type command or ctrl+key">
+            <button onclick="checkTerminal()">Submit</button>
+            <div id="f_term" class="feedback"></div>
+        </div>
+    </div>
+
+    <h2>3. Linux Configuration Files</h2>
+    <p>Linux has a number of configuration files for customizing the environment:</p>
+    <table>
+        <tr>
+            <th>File</th>
+            <th>Description & Usage</th>
+        </tr>
+        <tr>
+            <td><span class="command">~/.bash_profile</span></td>
+            <td>Used for commands that should be run only once, such as customizing environmental variables (e.g., <code>$PATH</code>).</td>
+        </tr>
+        <tr>
+            <td><span class="command">~/.bashrc</span></td>
+            <td>For commands that should run for every new shell, for example, <strong>aliases</strong>.</td>
+        </tr>
+    </table>
+
+    <div class="quiz-container">
+        <span class="quiz-title">Knowledge Check: Config</span>
+        <div class="input-group">
+            <label>Where should you place permanent command aliases?</label>
+            <input type="text" id="q_config" placeholder="Enter filename">
+            <button onclick="checkSimple('q_config', '.bashrc', 'f_config')">Submit</button>
+            <div id="f_config" class="feedback"></div>
+        </div>
+    </div>
+
+    <h2>4. Inode & File System</h2>
+    <div class="note">
+        <strong>What is an inode?</strong><br>
+        Inode is an ID of a file or folder. It’s a unique number. Inode is a data structure of a file. You store your information in a file, and the operating system stores the information/metadata about a file in an inode. The inode points to the content of a file.
+    </div>
+    <p><strong>Accessing a file:</strong> File name &rArr; Inode ID &rArr; File Content.</p>
+    
+    <h3>Commands:</h3>
+    <ul>
+        <li><span class="command">ls -ia</span> : Show inode numbers of files.</li>
+        <li><span class="command">df -i</span> : Show disk free information for inodes.</li>
+        <li><span class="command">ls /</span> : Show linux file system from root.</li>
+        <li><span class="command">pwd</span> : Print working directory.</li>
+    </ul>
+
+    
+
+    <div class="quiz-container">
+        <span class="quiz-title">Knowledge Check: Inodes</span>
+        <div class="input-group">
+            <label>Does an Inode store the metadata or the actual file content?</label>
+            <input type="text" id="q_inode" placeholder="Metadata or Content?">
+            <button onclick="checkSimple('q_inode', 'metadata', 'f_inode')">Submit</button>
+            <div id="f_inode" class="feedback"></div>
+        </div>
+    </div>
+
+    <h2>5. Linux Path Reference Guide</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Symbol / Command</th>
+                <th>Meaning</th>
+                <th>Key Indicator</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Absolute</strong></td>
+                <td>Root directory</td>
+                <td>Starts with <code>/</code></td>
+                <td><code>/home/kali</code></td>
+            </tr>
+            <tr>
+                <td><strong>Relative</strong></td>
+                <td>Current location</td>
+                <td>Does NOT start with <code>/</code></td>
+                <td><code>Documents/file.txt</code></td>
+            </tr>
+            <tr>
+                <td><code>.</code></td>
+                <td>Current Directory</td>
+                <td>The folder you are in right now</td>
+                <td><code>./script.sh</code></td>
+            </tr>
+            <tr>
+                <td><code>..</code></td>
+                <td>Parent Directory</td>
+                <td>Move up one level</td>
+                <td><code>cd ..</code></td>
+            </tr>
+            <tr>
+                <td><code>sudo</code></td>
+                <td>SuperUser (admin)</td>
+                <td>Run a single command with root privileges</td>
+                <td><code>sudo apt update</code></td>
+            </tr>
+            <tr>
+                <td><code>sudo su</code></td>
+                <td>Switch User (Root)</td>
+                <td>Start a persistent root session</td>
+                <td><code>sudo su</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="practice-section">
+        <h3>Now You Try: Path Practice</h3>
+        <img src="https://github.com/lax7/classMaterial/blob/main/LinuxFileH.png?raw=true" alt="Linux File Hierarchy">
+
+        <div class="question-box">
+            <strong>Question 1:</strong> You are currently inside the folder <code>Alice</code>. You want to access the file <code>project.txt</code>.
+        </div>
+        <div class="input-group">
+            <label>Absolute Path:</label>
+            <input type="text" id="absPath1" placeholder="Enter path...">
+        </div>
+        <div class="input-group">
+            <label>Relative Path:</label>
+            <input type="text" id="relPath1" placeholder="Enter path...">
+        </div>
+        <button onclick="checkQ1()">Check Question 1</button>
+        <div id="feedbackP1" class="feedback"></div>
+
+        <div class="question-box">
+            <strong>Question 2:</strong> You are currently inside the folder <code>CS426</code>. Write the paths to access <code>image.dd</code>.
+        </div>
+        <div class="input-group">
+            <label>Absolute Path:</label>
+            <input type="text" id="absPath2" placeholder="Enter path...">
+        </div>
+        <div class="input-group">
+            <label>Relative Path:</label>
+            <input type="text" id="relPath2" placeholder="Enter path...">
+        </div>
+        <button onclick="checkQ2()">Check Question 2</button>
+        <div id="feedbackP2" class="feedback"></div>
+    </div>
+
+    <h2>6. Linux File Permission (Chmod)</h2>
+    <p>Permissions are calculated using <strong>Read (4)</strong>, <strong>Write (2)</strong>, and <strong>Execute (1)</strong>.</p>
+    
+    <img src="https://github.com/lax7/classMaterial/blob/main/filePermissions.png?raw=true" alt="File Permissions Map">
+    
+
+    <div class="note">
+        <strong>Pro Tip:</strong> You can also use symbolic mode directly, for example: <span class="command">chmod ugo+r filename</span> to give everyone read access.
+    </div>
+
+    <div class="quiz-container">
+        <span class="quiz-title">Knowledge Check: Permissions</span>
+        <div class="input-group">
+            <label>What numeric code (e.g., 777) gives the Owner Read/Write (4+2), and everyone else nothing?</label>
+            <input type="text" id="q_chmod" placeholder="Enter 3 numbers">
+            <button onclick="checkSimple('q_chmod', '600', 'f_chmod')">Submit</button>
+            <div id="f_chmod" class="feedback"></div>
+        </div>
+    </div>
+
+    <h2>7. History Commands</h2>
+    <ul>
+        <li><span class="command">history</span> : List all previous commands.</li>
+        <li><span class="command">!!</span> : Rerun the last command.</li>
+        <li><span class="command">!linenumber</span> : Rerun a specific command from the history list.</li>
+    </ul>
+
+    <div class="quiz-container">
+        <span class="quiz-title">Knowledge Check: History</span>
+        <div class="input-group">
+            <label>How do you rerun the most recent command quickly?</label>
+            <input type="text" id="q_hist" placeholder="Enter symbols">
+            <button onclick="checkSimple('q_hist', '!!', 'f_hist')">Submit</button>
+            <div id="f_hist" class="feedback"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkSimple(inputId, correct, feedbackId) {
+        const val = document.getElementById(inputId).value.toLowerCase().trim();
+        const fb = document.getElementById(feedbackId);
+        fb.style.display = "block";
+        if(val === correct.toLowerCase()) {
+            fb.innerHTML = "Correct!"; fb.className = "feedback correct";
+        } else {
+            fb.innerHTML = "Try again!"; fb.className = "feedback incorrect";
+        }
+    }
+
+    function checkTerminal() {
+        const val = document.getElementById('q_term').value.toLowerCase().trim();
+        const fb = document.getElementById('f_term');
+        fb.style.display = "block";
+        if(val === 'clear' || val === 'ctrl+l') {
+            fb.innerHTML = "Correct!"; fb.className = "feedback correct";
+        } else {
+            fb.innerHTML = "Try again! (Hint: clear or ctrl+L)"; fb.className = "feedback incorrect";
+        }
+    }
+
+    function checkQ1() {
+        const abs = document.getElementById('absPath1').value.trim();
+        const rel = document.getElementById('relPath1').value.trim();
+        const fb = document.getElementById('feedbackP1');
+        const cAbs = "/home/kali/CS428/Projects/project.txt";
+        const cRel = "../home/kali/CS428/Projects/project.txt";
+        fb.style.display = "block";
+        if (abs === cAbs && rel === cRel) {
+            fb.innerHTML = "Correct!"; fb.className = "feedback correct";
+        } else {
+            fb.innerHTML = "Incorrect. Check your logic (Absolute starts with /)."; fb.className = "feedback incorrect";
+        }
+    }
+
+    function checkQ2() {
+        const abs = document.getElementById('absPath2').value.trim();
+        const rel = document.getElementById('relPath2').value.trim();
+        const fb = document.getElementById('feedbackP2');
+        const cAbs = "/home/kali/CS426/cases/image.dd";
+        const cRel = "cases/image.dd";
+        fb.style.display = "block";
+        if (abs === cAbs && rel === cRel) {
+            fb.innerHTML = "Correct!"; fb.className = "feedback correct";
+        } else {
+            fb.innerHTML = "Incorrect. Relative paths don't start with /."; fb.className = "feedback incorrect";
+        }
+    }
+</script>
+
+</body>
+</html>
