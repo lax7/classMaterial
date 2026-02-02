@@ -92,26 +92,7 @@
             </div>
         </div>
 
-        <div class="step">
-            <input type="checkbox"> <strong>Image Acquisition:</strong> Create <code>usb1.dd</code> and <code>usb2.dd</code>.
-            <div class="command-block">
-                dd if=/dev/[device] of=usb1.dd<br>
-                dcfldd if=/dev/[device] of=usb2.dd
-            </div>
-        </div>
-
-        <div class="step">
-            <input type="checkbox"> <strong>Final Audit:</strong> Compare hashes of the drive vs. the image.
-            <div class="command-block">
-                md5sum /dev/[device] && md5sum usb1.dd<br>
-                shasum /dev/[device] && shasum usb1.dd
-            </div>
-            <div class="record-box">
-                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Matching MD5/SHA1 for drive and image</span>
-            </div>
-            <textarea class="notes-area" placeholder="Confirm matching results..."></textarea>
-        </div>
-    </div>
+       
 
     <div class="card" style="border-top-color: #f1c40f;">
         <h2>4. Extra Credit</h2>
