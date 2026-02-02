@@ -36,6 +36,15 @@
             <div class="command-block">sudo fdisk -l</div>
             <img src="https://raw.githubusercontent.com/lax7/classMaterial/main/usb_sdb1.png" class="fdisk-img" alt="fdisk reference">
             <div class="record-box">
+                 <div class="step">
+            <input type="checkbox"> <strong>Verify Mount:</strong> Check the USB connection.
+            <div class="command-block">mount</div>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Mount output highlighting the USB device</span>
+            </div>
+        </div>
+
+       
                 <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>fdisk output showing device path (e.g., /dev/sdb1)</span>
             </div>
         </div>
@@ -82,14 +91,6 @@
         <div class="step">
             <input type="checkbox"> <strong>Zero Fill:</strong> Create <code>zero.dd</code>.
             <div class="command-block">dd if=/dev/zero of=zero.dd bs=512 count=1</div>
-        </div>
-
-        <div class="step">
-            <input type="checkbox"> <strong>Verify Mount:</strong> Check the USB connection.
-            <div class="command-block">mount</div>
-            <div class="record-box">
-                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Mount output highlighting the USB device</span>
-            </div>
         </div>
 
        
