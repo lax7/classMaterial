@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Path Practice</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    th {
+        background-color: #00bcd4;
+        color: white;
+        text-align: left;
+        padding: 15px;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+    td {
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        vertical-align: top;
+    }
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    code {
+        background-color: #f1f1f1;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+        color: #d63384;
+        font-weight: bold;
+    }
+    .practice-section {
+        margin-top: 40px;
+        padding: 30px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        border: 2px solid #00bcd4;
+    }
+    .practice-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+    }
+    .question-box {
+        background-color: #e1f5fe;
+        padding: 20px;
+        border-left: 5px solid #0288d1;
+        margin: 20px 0;
+    }
+    .input-group {
+        margin-bottom: 15px;
+    }
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #00bcd4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .feedback {
+        margin-top: 15px;
+        font-weight: bold;
+        padding: 10px;
+        display: none;
+        border-radius: 4px;
+    }
+    .correct { background-color: #c8e6c9; color: #2e7d32; display: block; }
+    .incorrect { background-color: #ffcdd2; color: #c62828; display: block; }
+</style>
+</head>
+<body>
+
+<h2>Linux Path Reference Guide</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Symbol / Command</th>
+            <th>Meaning</th>
+            <th>Key Indicator</th>
+            <th>Example</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Absolute</strong></td>
+            <td>Root directory</td>
+            <td>Starts with <code>/</code></td>
+            <td><code>/home/kali</code></td>
+        </tr>
+        <tr>
+            <td><strong>Relative</strong></td>
+            <td>Current location</td>
+            <td>Does NOT start with <code>/</code></td>
+            <td><code>Documents/file.txt</code></td>
+        </tr>
+        <tr>
+            <td><code>.</code></td>
+            <td>Current Directory</td>
+            <td>The folder you are in right now</td>
+            <td><code>./script.sh</code></td>
+        </tr>
+        <tr>
+            <td><code>..</code></td>
+            <td>Parent Directory</td>
+            <td>Move up one level</td>
+            <td><code>cd ..</code></td>
+        </tr>
+        <tr>
+            <td><code>sudo</code></td>
+            <td>SuperUser DO</td>
+            <td>Run a single command with root privileges</td>
+            <td><code>sudo apt update</code></td>
+        </tr>
+        <tr>
+            <td><code>sudo su</code></td>
+            <td>Switch User (Root)</td>
+            <td>Start a persistent root session</td>
+            <td><code>sudo su</code></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="practice-section">
+    <h2>Now You Try</h2>
+    
+    <img src="https://github.com/lax7/classMaterial/blob/main/LinuxFileH.png?raw=true" alt="Linux File Hierarchy" class="practice-image">
+
+    <div class="question-box">
+        <strong>Question 1:</strong> You are currently inside the folder <code>Alice</code>. You want to access the file <code>project.txt</code>.
+    </div>
+    <div class="input-group">
+        <label>Absolute Path:</label>
+        <input type="text" id="absPath1" placeholder="Enter path...">
+    </div>
+    <div class="input-group">
+        <label>Relative Path:</label>
+        <input type="text" id="relPath1" placeholder="Enter path...">
+    </div>
+    <button onclick="checkQ1()">Check Question 1</button>
+    <div id="feedback1" class="feedback"></div>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+    <div class="question-box">
+        <strong>Question 2:</strong> You are currently inside the folder <code>CS426</code>. Write the paths to access <code>image.dd</code>.
+    </div>
+    <div class="input-group">
+        <label>Absolute Path:</label>
+        <input type="text" id="absPath2" placeholder="Enter path...">
+    </div>
+    <div class="input-group">
+        <label>Relative Path:</label>
+        <input type="text" id="relPath2" placeholder="Enter path...">
+    </div>
+    <button onclick="checkQ2()">Check Question 2</button>
+    <div id="feedback2" class="feedback"></div>
+</div>
+
+<script>
+function checkQ1() {
+    const abs = document.getElementById('absPath1').value.trim();
+    const rel = document.getElementById('relPath1').value.trim();
+    const fb = document.getElementById('feedback1');
+    
+    const cAbs = "/home/kali/CS428/Projects/project.txt";
+    const cRel = "../home/kali/CS428/Projects/project.txt";
+
+    if (abs === cAbs && rel === cRel) {
+        fb.innerHTML = "Correct!";
+        fb.className = "feedback correct";
+    } else {
+        fb.innerHTML = "Incorrect. Check your path logic.";
+        fb.className = "feedback incorrect";
+    }
+    fb.style.display = "block";
+}
+
+function checkQ2() {
+    const abs = document.getElementById('absPath2').value.trim();
+    const rel = document.getElementById('relPath2').value.trim();
+    const fb = document.getElementById('feedback2');
+    
+    const cAbs = "/home/kali/CS426/cases/image.dd";
+    const cRel = "cases/image.dd";
+
+    if (abs === cAbs && rel === cRel) {
+        fb.innerHTML = "Correct!";
+        fb.className = "feedback correct";
+    } else {
+        fb.innerHTML = "Incorrect. Check your path logic.";
+        fb.className = "feedback incorrect";
+    }
+    fb.style.display = "block";
+}
+</script>
+
+</body>
+</html>
