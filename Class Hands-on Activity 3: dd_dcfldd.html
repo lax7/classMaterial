@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensics Lab Tracker</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2d3436; max-width: 900px; margin: 0 auto; padding: 30px; background-color: #f0f2f5; }
+        h1 { color: #2980b9; border-bottom: 3px solid #2980b9; padding-bottom: 10px; }
+        h2 { color: #2c3e50; margin-top: 30px; display: flex; align-items: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 25px; border-top: 5px solid #3498db; }
+        .step { margin-bottom: 20px; padding: 15px; border-radius: 8px; background: #f8f9fa; border: 1px solid #e9ecef; position: relative; }
+        .command-block { background: #1e272e; color: #00d8ff; padding: 15px; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 0.95em; margin: 10px 0; border-left: 5px solid #0fbcf9; }
+        .record-box { margin-top: 15px; padding: 10px; background: #fff; border: 1px dashed #3498db; border-radius: 6px; display: flex; align-items: center; }
+        .record-label { font-weight: bold; color: #2980b9; margin-right: 10px; font-size: 0.9em; }
+        .notes-area { width: 100%; height: 50px; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; resize: vertical; box-sizing: border-box; }
+        input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; margin-right: 12px; }
+        .badge { background: #34495e; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.7em; text-transform: uppercase; margin-left: 10px; }
+        .warning { color: #c0392b; font-weight: bold; font-size: 0.85em; background: #fee; padding: 5px 10px; border-radius: 4px; display: block; margin: 10px 0; }
+        .fdisk-img { max-width: 100%; border-radius: 6px; margin: 10px 0; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+    <h1>Digital Forensics: Data Acquisition Tracker</h1>
+    <p>Use this interactive checklist to manage your forensic tasks. Ensure you record a screenshot for each step indicated for your Word document submission.</p>
+
+    <div class="card" style="border-top-color: #2ecc71;">
+        <h2>1. Environment Setup</h2>
+        <div class="step">
+            <input type="checkbox"> <strong>Launch SIFT Workstation:</strong> Start your VM and open the terminal.
+        </div>
+
+        <div class="step">
+            <input type="checkbox"> <strong>Disk Identification:</strong> Identify your physical USB path.
+            <div class="command-block">sudo fdisk -l</div>
+            <img src="https://raw.githubusercontent.com/lax7/classMaterial/main/usb_sdb1.png" class="fdisk-img" alt="fdisk reference">
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>fdisk output showing device path (e.g., /dev/sdb1)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>2. Initial Hashing & File Copying</h2>
+        
+        <div class="step">
+            <input type="checkbox"> <strong>Physical Drive Integrity Check:</strong> Calculate hashes of the raw USB device.
+            <div class="command-block">
+                sudo md5sum /dev/sdb1 > usbHash1.txt<br>
+                sudo sha256sum /dev/sdb1 > usbHash2.txt
+            </div>
+            <span class="warning">Note: This will take time. Duration increases with the size of the USB drive.</span>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>MD5 and SHA256 results for the physical drive</span>
+            </div>
+            <textarea class="notes-area" placeholder="Notes on hash comparison..."></textarea>
+        </div>
+
+        <div class="step">
+            <input type="checkbox"> <strong>Copy Operations:</strong> Use <code>dd</code> and <code>dcfldd</code> for file duplication.
+            <div class="command-block">
+                dd if=[source] of=copy1.dd<br>
+                dcfldd if=[source] of=copy2.dd
+            </div>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Execution of dd and dcfldd commands and output of ls -l</span>
+            </div>
+        </div>
+
+        <div class="step">
+            <input type="checkbox"> <strong>Verify File Integrity:</strong> Store hashes in log files.
+            <div class="command-block">md5sum copy1.dd > copyHash1M.txt <br> sha256sum copy1.dd > copyHash1S.txt <br> md5sum copy2.dd > copyHash2M.txt <br> sha256sum copy2.dd > copyHash2S.txt</div>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Logs showing copyHash1M.txt same as copyHash2M.txt. Also, this hash should be same as usbHash1.txt</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. Drive Imaging</h2>
+        <div class="step">
+            <input type="checkbox"> <strong>Zero Fill:</strong> Create <code>zero.dd</code>.
+            <div class="command-block">dd if=/dev/zero of=zero.dd bs=512 count=1</div>
+        </div>
+
+        <div class="step">
+            <input type="checkbox"> <strong>Verify Mount:</strong> Check the USB connection.
+            <div class="command-block">mount</div>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Mount output highlighting the USB device</span>
+            </div>
+        </div>
+
+        <div class="step">
+            <input type="checkbox"> <strong>Image Acquisition:</strong> Create <code>usb1.dd</code> and <code>usb2.dd</code>.
+            <div class="command-block">
+                dd if=/dev/[device] of=usb1.dd<br>
+                dcfldd if=/dev/[device] of=usb2.dd
+            </div>
+        </div>
+
+        <div class="step">
+            <input type="checkbox"> <strong>Final Audit:</strong> Compare hashes of the drive vs. the image.
+            <div class="command-block">
+                md5sum /dev/[device] && md5sum usb1.dd<br>
+                shasum /dev/[device] && shasum usb1.dd
+            </div>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Matching MD5/SHA1 for drive and image</span>
+            </div>
+            <textarea class="notes-area" placeholder="Confirm matching results..."></textarea>
+        </div>
+    </div>
+
+    <div class="card" style="border-top-color: #f1c40f;">
+        <h2>4. Extra Credit</h2>
+        <div class="step">
+            <input type="checkbox"> <strong>Segmented Acquisition:</strong> 30MB splits.
+            <div class="command-block">
+                dcfldd if=/dev/[device] of=usb_split.dd split=30M hash=md5<br>
+                cat usb_split.dd.* | md5sum
+            </div>
+            <div class="record-box">
+                <span class="record-label">📸 RECORD SCREENSHOT:</span> <span>Segmented files and final piped hash</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
