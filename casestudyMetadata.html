@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensics: Case File Training</title>
+    <style>
+        :root {
+            --dark-blue: #0f1a2a;
+            --light-blue: #3498db;
+            --text-light: #ecf0f1;
+            --accent-red: #e74c3c;
+            --panel-bg: #1c2c3c;
+            --border-color: #2c3e50;
+            --neon-green: #39ff14;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-blue);
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            margin: 20px auto;
+        }
+
+        .hidden { display: none; }
+        h1 { color: var(--light-blue); text-align: center; border-bottom: 2px solid var(--light-blue); padding-bottom: 15px; }
+        h2 { color: var(--light-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        h3 { color: var(--text-light); }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #23374d;
+            border-left: 5px solid var(--light-blue);
+            border-radius: 4px;
+        }
+
+        .document-view {
+            background-color: #fff;
+            color: #333;
+            padding: 20px;
+            border: 1px dashed var(--accent-red);
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+        }
+
+        .metadata-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .metadata-table th, .metadata-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .metadata-table th { background-color: var(--dark-blue); color: var(--light-blue); width: 40%; }
+        .metadata-table td { background-color: var(--panel-bg); }
+
+        .highlight { color: var(--light-blue); font-weight: bold; }
+        .warning { color: var(--accent-red); font-weight: bold; }
+
+        .btn {
+            background: var(--light-blue);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .btn:hover { background: #2980b9; }
+
+        input, textarea {
+            width: 97%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #111;
+            color: #0f0;
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
+        
+        .locked {
+            background-color: #1a1a1a;
+            color: #555;
+            text-align: center;
+            padding: 50px;
+            border: 2px dashed #444;
+        }
+
+        .btk-theme { border-left-color: var(--neon-green) !important; }
+        .btk-text { color: var(--neon-green) !important; }
+        
+        .resource-link {
+            color: var(--light-blue);
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .resource-link:hover { text-decoration: underline; color: var(--neon-green); }
+    </style>
+</head>
+<body>
+
+<div id="case1" class="container">
+    <h1>CASE STUDY 1: THE HIDDEN TRUTH</h1>
+    <p>In digital forensics, what you see on the surface is rarely the full story. Every digital file holds secrets – pieces of data about itself – known as <span class="highlight">metadata</span>.</p>
+
+    <div class="section">
+        <h2>SCENARIO: The "Suspicious Document"</h2>
+        <p>Your team intercepts a file named <span class="highlight">"Project_Notes.docx"</span>. On the surface, it looks like a typical note, but the contents are a severe threat:</p>
+        
+        <div class="document-view">
+            <p><strong>SUBJECT: Project "Thunderbolt" Initiation</strong></p>
+            <p>Components required for assembly phase I:</p>
+            <ul>
+                <li><span class="warning">Potassium Nitrate (KNO₃)</span> - 1.5 kg</li>
+                <li><span class="warning">Sulfur (S)</span> - 0.5 kg</li>
+                <li><span class="warning">Charcoal (C)</span> - 0.25 kg</li>
+            </ul>
+            <p>Assembly sequence is critical. <span class="warning">Maintain strict operational security.</span></p>
+        </div>
+    </div>
+
+    
+
+    <div class="section">
+        <h2>Forensic Metadata Extraction</h2>
+        <p>Using specialized tools, we delve into the digital soul of the document to find out <strong>who</strong> really created it.</p>
+        
+        <table class="metadata-table">
+            <thead>
+                <tr><th>Metadata Field</th><th>Extracted Value</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Original File Name</td><td>Project_Thunderbolt_Manifesto.docx</td></tr>
+                <tr><td>Creation Date</td><td><span class="highlight">2023-10-26 14:35:01 UTC</span></td></tr>
+                <tr><td>Last Modified Date</td><td>2023-10-26 15:10:45 UTC</td></tr>
+                <tr><td>Last Saved By</td><td><span class="warning">A. Smith</span></td></tr>
+                <tr><td>Author</td><td>"PhantomUser"</td></tr>
+                <tr><td>Company / Organization</td><td><span class="highlight">Secure Solutions Inc.</span></td></tr>
+                <tr><td>Total Editing Time</td><td>25 minutes</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" style="border-left-color: #f1c40f;">
+        <h2 style="color: #f1c40f;">[QUIZ] Unlock Case Study 2</h2>
+        <p>Verify your findings to gain security clearance for the BTK Dossier.</p>
+        
+        <p><strong>1. What was the incriminating original name of this file?</strong></p>
+        <input type="text" id="q1" placeholder="Enter original file name...">
+        
+        <p><strong>2. Which organization is linked to the suspect's computer?</strong></p>
+        <input type="text" id="q2" placeholder="Enter company name...">
+
+        <p><strong>3. Who was the last person to edit/save the file?</strong></p>
+        <input type="text" id="q3" placeholder="Enter name...">
+        
+        <button class="btn" onclick="unlockCase2()">VERIFY & ACCESS CLASSIFIED FILES</button>
+    </div>
+</div>
+
+<div id="locked-notice" class="container locked">
+    <h2>LOCKED: SECURITY CLEARANCE REQUIRED</h2>
+    <p>Complete the Case 1 investigation to unlock the BTK serial killer case study.</p>
+</div>
+
+<div id="case2" class="container hidden">
+    <h1 class="btk-text" style="border-bottom-color: var(--neon-green);">CASE STUDY 2: THE BTK KILLER (DENNIS RADER)</h1>
+    
+    <div class="section btk-theme">
+        <h2 class="btk-text">Background: A 30-Year Cold Case</h2>
+        <p>Dennis Rader, known as the BTK (Bind, Torture, Kill) killer, murdered ten people in Wichita, Kansas, between 1974 and 1991. He famously taunted the police with letters but went silent for over a decade. In 2004, he resurfaced, desperate for the media attention he once enjoyed.</p>
+    </div>
+
+    <div class="section btk-theme">
+        <h2 class="btk-text">The Psychological Trap</h2>
+        <p>Rader’s downfall was his ego and his lack of technological knowledge. He wanted to send larger "packages" of information to the police via digital media rather than paper. He famously asked the police in a letter: <strong>"Can I communicate with Floppy [disk] and not be traced to a computer? Be honest."</strong></p>
+        <p>The Wichita Police Department consulted digital forensic experts and replied with a "coded" ad in the Wichita Eagle: <strong>"Rex, it will be OK."</strong> This successfully deceived Rader into believing the technology was anonymous.</p>
+    </div>
+
+    
+
+    <div class="section btk-theme">
+        <h2 class="btk-text">Digital Forensics: The Smoking Gun</h2>
+        <p>On February 16, 2005, a 1.44MB purple Memorex floppy disk arrived at KSAS-TV. Forensic Investigator <strong>Randy Stone</strong> utilized <strong>EnCase</strong> forensic software to image the disk. While the visible file was a simple taunt, Stone examined the <strong>unallocated space</strong> (space where deleted files reside).</p>
+        
+        <h3>Recovered Artifacts:</h3>
+        <p>The software recovered a deleted Microsoft Word document. By examining the <strong>OLE (Object Linking and Embedding) metadata</strong>, investigators found:</p>
+        
+        <table class="metadata-table">
+            <tr><th class="btk-text">Metadata Field</th><th class="btk-text">Recovered Value</th></tr>
+            <tr><td><strong>Last Saved By:</strong></td><td>Dennis</td></tr>
+            <tr><td><strong>Organization:</strong></td><td>Christ Lutheran Church</td></tr>
+            <tr><td><strong>Date:</strong></td><td>Jan 19, 2005</td></tr>
+        </table>
+        
+        <p>A simple Google search of "Christ Lutheran Church Wichita Dennis" immediately identified <strong>Dennis Rader</strong>, the Church Council President. This gave police the probable cause needed to obtain a DNA warrant, leading to his arrest on February 25, 2005.</p>
+    </div>
+
+    <div class="section btk-theme">
+        <h2 class="btk-text">Further Reading & Resources</h2>
+        <p>Explore the technical and historical nuances of this case through these verified sources:</p>
+        <a href="https://www.fbi.gov/history/famous-cases/btk-strangler" target="_blank" class="resource-link">→ FBI Famous Cases: The BTK Strangler</a>
+        <a href="https://www.digital-forensics-archives.com/btk-killer-case" target="_blank" class="resource-link">→ Digital Forensics Archive: The Floppy Disk Analysis</a>
+        <a href="https://www.nytimes.com/2005/03/06/us/the-btk-case-the-man-next-door.html" target="_blank" class="resource-link">→ NY Times: The Man Behind the Metadata</a>
+    </div>
+
+    <div class="section btk-theme">
+        <h2 class="btk-text">Analytical Reflection</h2>
+        <p><strong>Q: Based on Case Study 1 and Case Study 2, explain the danger of "Unallocated Space" for a criminal trying to hide their tracks.</strong></p>
+        <textarea placeholder="Discuss file deletion, slack space, and metadata persistence..."></textarea>
+        <button class="btn" style="background: var(--neon-green); color: black;" onclick="alert('Submission received. Great work, Investigator.')">SUBMIT FINAL REPORT</button>
+    </div>
+</div>
+
+<script>
+    function unlockCase2() {
+        const a1 = document.getElementById('q1').value.toLowerCase();
+        const a2 = document.getElementById('q2').value.toLowerCase();
+        const a3 = document.getElementById('q3').value.toLowerCase();
+
+        if (a1.includes('manifesto') && a2.includes('secure solutions') && (a3.includes('smith'))) {
+            document.getElementById('case1').classList.add('hidden');
+            document.getElementById('locked-notice').classList.add('hidden');
+            document.getElementById('case2').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        } else {
+            alert("ACCESS DENIED: Evidence report is inaccurate. Re-examine Case 1 metadata.");
+        }
+    }
+</script>
+
+</body>
+</html>
