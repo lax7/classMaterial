@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XOR, Modulo 2, and the One-Time Pad</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 40px; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        .app-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 720px; text-align: center; border-top: 5px solid #007bff; margin-top: 20px; }
+        
+        /* Table Styles */
+        .proof-section { display: flex; justify-content: space-around; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+        table { border-collapse: collapse; background: #fff; margin-top: 10px; }
+        th, td { border: 1px solid #333; padding: 8px 15px; font-family: 'Times New Roman', serif; font-size: 1.1rem; }
+        .table-title { font-size: 0.95rem; color: #007bff; font-weight: bold; }
+        
+        /* Interactive Toggle Styles */
+        .bit-toggle { width: 70px; height: 70px; font-size: 1.8rem; font-weight: bold; border: 2px solid #007bff; border-radius: 12px; background: #e7f3ff; color: #007bff; cursor: pointer; transition: 0.3s; }
+        .bit-toggle.active { background: #007bff; color: white; transform: scale(1.05); box-shadow: 0 0 15px rgba(0,123,255,0.4); }
+        
+        /* Quiz Section */
+        .quiz-section { background: #eef2ff; padding: 20px; border-radius: 10px; border-left: 5px solid #6366f1; text-align: left; margin-bottom: 20px;}
+        .quiz-input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ced4da; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        
+        /* THE STAND-OUT SCENARIO SECTION */
+        .scenario-box { 
+            background: #1a1a2e; 
+            color: #ffffff;
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 2px solid #fab005; 
+            text-align: left;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .scenario-box h3 { color: #fab005; margin-top: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .highlight-stat {
+            background: rgba(250, 176, 5, 0.1);
+            border: 1px dashed #fab005;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            color: #ffd43b;
+            font-size: 0.95rem;
+        }
+        .scenario-box p { line-height: 1.6; color: #e0e0e0; }
+        .check-btn-gold { 
+            background: #fab005; 
+            color: #1a1a2e; 
+            padding: 15px; 
+            width: 100%; 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .check-btn-gold:hover { background: #ffd43b; transform: translateY(-2px); }
+
+        .feedback { font-weight: bold; display: none; margin-top: 20px; padding: 15px; border-radius: 10px; border-left: 5px solid; }
+        .correct { color: #d4edda; background-color: rgba(40, 167, 69, 0.2); border-color: #28a745; }
+        .wrong { color: #f8d7da; background-color: rgba(220, 53, 69, 0.2); border-color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>Mathematical Equivalence</h2>
+    <div class="proof-section">
+        <div><div class="table-title">Arithmetic (Modulo 2)</div>
+            <table><tr><th>mi</th><th>ki</th><th>ci = mi + ki mod 2</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+        </div>
+        <div><div class="table-title">Logical (XOR)</div>
+            <table><tr><th>mi</th><th>ki</th><th>ci</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+        </div>
+    </div>
+</div>
+
+<div class="app-container">
+    <h2>The One-Time Pad Challenge</h2>
+    <div class="quiz-section">
+        <label>1. Write the <b>Encryption</b> equation for ci:</label>
+        <input type="text" id="q1" class="quiz-input" placeholder="ci = ...">
+        <div id="f1" class="feedback"></div>
+        <br><br>
+        <label>2. Write the <b>Decryption</b> equation for mi:</label>
+        <input type="text" id="q2" class="quiz-input" placeholder="mi = ...">
+        <div id="f2" class="feedback"></div>
+        <button class="check-btn-gold" style="background:#6366f1; color:white;" onclick="checkQuiz()">Check Equations</button>
+    </div>
+
+    <div class="scenario-box">
+        <h3>🚨 Unconditional Security/Perfect Secrecy (OTP)</h3>
+        <p>Alice encrypts 10,000 bits using a One-Time Pad. Remember, OTP is <strong>perfectly secure</strong>, which means an attacker with infinite computational resources cannot break it.</p>
+        
+        <p>We can assume that the attacker has <strong>2<sup>10,000</sup></strong> computers and each computer can check exactly one key. This will take only one time step.</p>
+        
+        <div class="highlight-stat">
+            <strong>The Scale of Impossible:</strong><br>
+            There is no way 2<sup>10,000</sup> computers can exist. It is estimated that there are "only" about <strong>2<sup>266</sup> atoms</strong> in the known universe.
+        </div>
+        
+        <p><strong>Question: Can the attacker find Alice's message?</strong></p>
+        
+        <select id="scenarioAnswer" class="quiz-input" style="background: #2a2a40; color: white; border-color: #444;">
+            <option value="">-- Select Your Conclusion --</option>
+            <option value="yes">Yes - They calculated every possibility, so the answer is there.</option>
+            <option value="no">No - Even with the correct answer, they are still "blind."</option>
+        </select>
+        
+        <div id="scenarioFeedback" class="feedback"></div>
+        
+        <button class="check-btn-gold" onclick="checkScenario()">REVEAL THE TRUTH</button>
+    </div>
+</div>
+
+<script>
+    function checkQuiz() {
+        const q1 = document.getElementById('q1').value.toLowerCase().replace(/\s+/g, '');
+        const q2 = document.getElementById('q2').value.toLowerCase().replace(/\s+/g, '');
+        const f1 = document.getElementById('f1');
+        const f2 = document.getElementById('f2');
+        if (q1 === 'ci=mixorki' || q1 === 'ci=mi+kimod2') { f1.innerHTML = "✓ Correct!"; f1.className = "feedback correct"; }
+        else { f1.innerHTML = "× Use 'ci = mi xor ki' or 'ci = mi + ki mod 2'."; f1.className = "feedback wrong"; }
+        if (q2 === 'mi=cixorki' || q2 === 'mi=ci+kimod2') { f2.innerHTML = "✓ Correct!"; f2.className = "feedback correct"; }
+        else { f2.innerHTML = "× Use 'mi = ci xor ki' or 'mi = ci + ki mod 2'."; f2.className = "feedback wrong"; }
+        f1.style.display = "block"; f2.style.display = "block";
+    }
+
+    function checkScenario() {
+        const ans = document.getElementById('scenarioAnswer').value;
+        const feedback = document.getElementById('scenarioFeedback');
+        if (ans === 'no') {
+            feedback.innerHTML = "<strong>Correct!</strong> Here is the intuition: When the attacker tries every key, they generate <strong>EVERY POSSIBLE</strong> 10,000-bit message. <br><br>They will see Alice's real message, but they will also see every other possible text: a fake confession, a shopping list, and the works of Shakespeare. Because every key is equally likely, the attacker has <strong>no way to know</strong> which of the 2<sup>10,000</sup> results is the real one. In cryptography, having all possible answers is the same as having no answer at all.";
+            feedback.className = "feedback correct";
+        } else if (ans === 'yes') {
+            feedback.innerHTML = "<strong>Incorrect.</strong> Even though they 'found' the message, they also 'found' every other possible message. Imagine looking for a specific grain of sand while someone dumps the entire Sahara Desert on your head. You have the grain, but you can't identify it. That is perfect security.";
+            feedback.className = "feedback wrong";
+        }
+        feedback.style.display = "block";
+    }
+</script>
+</body>
+</html>
