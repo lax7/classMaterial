@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXIFTOOL Investigation Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #e9ecef;
+        }
+        header {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        h1 { margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        h2 { color: #2c3e50; border-bottom: 3px solid #fdbb2d; padding-bottom: 5px; margin-top: 0; }
+        h3 { color: #d35400; margin-top: 25px; font-weight: 700; }
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .intro-box {
+            background-color: #f0fff4;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 6px solid #38a169;
+        }
+        .task-box {
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-left: 6px solid #3182ce;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pts {
+            color: #c0392b;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .highlight {
+            background-color: #ffff00;
+            padding: 2px 4px;
+            font-weight: bold;
+            border-radius: 3px;
+            color: #000;
+        }
+        .download-btn {
+            display: inline-block;
+            background-color: #3182ce;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .download-btn:hover {
+            background-color: #2c5282;
+            text-decoration: none;
+        }
+        code {
+            background-color: #edf2f7;
+            color: #2d3748;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        pre {
+            background-color: #1a202c;
+            color: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid #4a5568;
+        }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        .setup-list { list-style-type: none; padding: 0; }
+        .setup-list > li { 
+            background: #f8fafc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        hr { border: 0; height: 1px; background: #cbd5e0; margin: 30px 0; }
+        footer {
+            text-align: center;
+            font-size: 1em;
+            color: #4a5568;
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .ta-name { color: #b21f1f; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Using ExifTool for Metadata Analysis</h1>
+</header>
+
+<section>
+    <div class="intro-box">
+        <h2>What is ExifTool?</h2>
+        <p><strong>EXIFTOOL</strong> is a free and open-source command-line application used to read, write and manipulate metadata of various file types, including images, videos, PDFs and documents. It supports a wide range of metadata formats such as EXIF, IPTC, XMP, ID3, and many others.</p>
+        <p>Developed by <span class="highlight">Phil Harvey</span>, ExifTool is widely used in fields such as:</p>
+        <ul>
+            <li>Digital Forensics</li>
+            <li>Cybersecurity</li>
+            <li>Photography</li>
+            <li>eDiscovery</li>
+            <li>Reverse Engineering</li>
+        </ul>
+    </div>
+
+    <h2>Case Scenario</h2>
+    <p>You are a <strong>digital forensics investigator</strong> working with ERAU campus police to investigate a <strong>cyberbullying case</strong>. A student, Ernie, has been receiving threatening messages and having doctored photos posted to a fake social media account impersonating them.</p>
+    <p>Campus police has seized multiple files from the fake account before they were taken down. Your task is to analyze the metadata in these files to help identify the source of the cyberbullying and build a timeline of events.</p>
+
+    <hr>
+
+    <h2>Getting Started</h2>
+    <ul class="setup-list">
+        <li>🚀 <strong>1. Ensure exiftool is installed on your system</strong>
+            <ul style="margin-top: 10px;">
+                <li>Mac/Windows: Download from <a href="https://exiftool.org/">https://exiftool.org/</a></li>
+                <li>Ubuntu/Debian: <code>sudo apt-get install libimage-exiftool-perl</code></li>
+            </ul>
+        </li>
+        <li>📂 <strong>2. Download and Extract Evidence Files</strong>
+            <p>All seized files are contained in the ZIP archive available on Canvas:</p>
+            <a href="https://erau.instructure.com/courses/199476/files/46467971?module_item_id=12603399" class="download-btn" target="_blank">⬇️ Download evidence.zip</a>
+        </li>
+    </ul>
+
+    <h2>Evidence Files</h2>
+    <p>You have been provided with the following files:</p>
+    <ul>
+        <li><code>photo1.jpg</code></li>
+        <li><code>photo2.jpg</code></li>
+        <li><code>photo3.jpg</code></li>
+    </ul>
+</section>
+
+<section>
+    <h2>Investigation Tasks</h2>
+
+    <div class="task-box">
+        <h3>Task 1: Basic Metadata Extraction</h3>
+        <p>Extract and document the complete metadata for one image from the evidence files.</p>
+        
+        <p><strong>Commands:</strong></p>
+<pre># Extract all metadata from a single image
+exiftool [Source File]
+
+# Extract specific metadata tags
+exiftool -Make -Model -Software [Source File]
+
+# Export all metadata organized by tag group to a text File
+exiftool -a -G1 -s [Source File] > [OutputFile].txt</pre>
+
+        <p><strong>What to document:</strong></p>
+        <ul>
+            <li>Camera make and model <span class="pts">[2 points]</span></li>
+            <li>Software used to create/edit the image <span class="pts">[2 points]</span></li>
+            <li>Image dimensions <span class="pts">[2 points]</span></li>
+            
+        </ul>
+    </div>
+
+    <div class="task-box">
+        <h3>Task 2: Timeline Analysis</h3>
+        <p>Construct a comprehensive timeline of events.</p>
+
+        <p><strong>Commands:</strong></p>
+<pre># Extract all metadata relating to date/time
+exiftool -time:all *.jpg
+
+# Check for any discrepancies in the date
+exiftool -CreateData -ModifyDate [Source File]</pre>
+
+        <p><strong>What to document:</strong></p>
+        <ul>
+            <li>Create a timeline of events for when the images were created and modified <span class="pts">[2 points]</span></li>
+            <li>Any discrepancies between creation and modification dates <span class="pts">[2 points]</span></li>
+            
+        </ul>
+    </div>
+
+    <div class="task-box">
+        <h3>Task 3: Detecting Manipulated Images</h3>
+        <p>Identify which files have been manipulated and what software was used.</p>
+
+        <p><strong>Commands:</strong></p>
+<pre># Check for any editing softwares used
+exiftool -Software -ProcessingSoftware [Source File]
+
+# Look for editing markers
+exiftool -History -Comment [Source File]</pre>
+
+        <p><strong>What to document:</strong></p>
+        <ul>
+            <li>Which files show signs of manipulation? <span class="pts">[2 points]</span></li>
+            <li>What software was used to manipulate the images? <span class="pts">[2 points]</span></li>
+            
+        </ul>
+    </div>
+
+    <div class="task-box">
+        <h3>Task 4: GPS/Location Data</h3>
+        <p>Extract and analyze GPS coordinates to determine locations.</p>
+
+        <p><strong>Commands:</strong></p>
+<pre># Extract GPS data from all files
+exiftool -GPS:all *.jpg
+
+# Get decimal GPS coordinates
+exiftool -n -GPS:GPSLatitude -GPS:GPSLongitude [Source File]</pre>
+
+        <p><strong>What to document:</strong></p>
+        <ul>
+            <li>Which photos contain GPS data? <span class="pts">[2 points]</span></li>
+            <li>What are the exact coordinates? <span class="pts">[2 points]</span></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Report Conclusion</h2><span class="pts">[5 points]</span>
+    <p>Create a comprehensive report, answer: <strong>What have you found from the investigation? What had happened?</strong> Provide your conclusion based on the evidence following these 5 points:</p>
+    <ul>
+        <li><strong>1. Identification:</strong> Which device(s) were used to capture the original images? </li>
+        <li><strong>2. Manipulation:</strong> Which specific files were doctored, and what software confirms this? </li>
+        <li><strong>3. Timeline:</strong> Reconstruct the sequence of events—when were the photos taken vs. when were they edited? </li>
+        <li><strong>4. Attribution:</strong> Based on GPS and software tags, where were the photos edited? </li>
+        <li><strong>5. Verdict:</strong> Summarize your final forensic opinion on the source of the cyberbullying. </li>
+    </ul>
+</section>
+
+<footer>
+    <p>Created by: <span class="ta-name">Tyler Lofton (TA)</span></p>
+</footer>
+
+</body>
+</html>
