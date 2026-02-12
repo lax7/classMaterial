@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DES Educational Laboratory</title>
+    <style>
+        :root { --primary: #1e40af; --bg: #f8fafc; --success: #16a34a; --error: #dc2626; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 20px; max-width: 1000px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h1 { color: var(--primary); text-align: center; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; }
+        input { width: 80%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; }
+        
+        /* Status Feedback */
+        .status { font-weight: bold; margin-left: 10px; display: none; }
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+        
+        table { border-collapse: collapse; width: 100%; font-size: 0.8em; margin: 15px 0; table-layout: fixed; }
+        td, th { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+        th { background: #f1f5f9; color: #475569; }
+        .code { background: #1e293b; color: #38bdf8; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; width: 100%; cursor: pointer; font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+        #summary { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; text-align: center; font-size: 1.2em; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>DES Knowledge Check</h1>
+
+    <div class="card">
+        <h2>1. DES Basics</h2>
+        <div class="grid">
+            <div class="input-group">
+                <label>DES Full Name:</label>
+                <input type="text" id="t1"> <span id="s1" class="status"></span>
+            </div>
+            <div class="input-group">
+                <label>Symmetric or Asymmetric?</label>
+                <input type="text" id="t2"> <span id="s2" class="status"></span>
+            </div>
+            <div class="input-group">
+                <label>Block Length (bits):</label>
+                <input type="text" id="t3"> <span id="s3" class="status"></span>
+            </div>
+            <div class="input-group">
+                <label>Key Length (effective bits):</label>
+                <input type="text" id="t4"> <span id="s4" class="status"></span>
+            </div>
+            <div class="input-group">
+                <label>Number of Rounds:</label>
+                <input type="text" id="t5"> <span id="s5" class="status"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>2. Initial Permutation (IP)</h2>
+        <p>Challenge: Input Hex is <span class="code">0088008800113300</span>.</p>
+        <p>Compute the <strong>first 8 bits</strong> of the output block using the full table below:</p>
+        
+        <table>
+            <tr><th>58</th><th>50</th><th>42</th><th>34</th><th>26</th><th>18</th><th>10</th><th>2</th></tr>
+            <tr><th>60</th><th>52</th><th>44</th><th>36</th><th>28</th><th>20</th><th>12</th><th>4</th></tr>
+            <tr><th>62</th><th>54</th><th>46</th><th>38</th><th>30</th><th>22</th><th>14</th><th>6</th></tr>
+            <tr><th>64</th><th>56</th><th>48</th><th>40</th><th>32</th><th>24</th><th>16</th><th>8</th></tr>
+            <tr><th>57</th><th>49</th><th>41</th><th>33</th><th>25</th><th>17</th><th>9</th><th>1</th></tr>
+            <tr><th>59</th><th>51</th><th>43</th><th>35</th><th>27</th><th>19</th><th>11</th><th>3</th></tr>
+            <tr><th>61</th><th>53</th><th>45</th><th>37</th><th>29</th><th>21</th><th>13</th><th>5</th></tr>
+            <tr><th>63</th><th>55</th><th>47</th><th>39</th><th>31</th><th>23</th><th>15</th><th>7</th></tr>
+        </table>
+        
+        <div class="input-group">
+            <label>Output Bits (e.g., 11110000):</label>
+            <input type="text" id="t6"> <span id="s6" class="status"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. S-Box 1 (S1) Substitution</h2>
+        
+        <table>
+            <tr><th>R \ C</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th></tr>
+            <tr><th>0</th><td>14</td><td>4</td><td>13</td><td>1</td><td>2</td><td>15</td><td>11</td><td>8</td><td>3</td><td>10</td><td>6</td><td>12</td><td>5</td><td>9</td><td>0</td><td>7</td></tr>
+            <tr><th>1</th><td>0</td><td>15</td><td>7</td><td>4</td><td>14</td><td>2</td><td>13</td><td>1</td><td>10</td><td>6</td><td>12</td><td>11</td><td>9</td><td>5</td><td>3</td><td>8</td></tr>
+            <tr><th>2</th><td>4</td><td>1</td><td>14</td><td>8</td><td>13</td><td>6</td><td>2</td><td>11</td><td>15</td><td>12</td><td>9</td><td>7</td><td>3</td><td>10</td><td>5</td><td>0</td></tr>
+            <tr><th>3</th><td>15</td><td>12</td><td>8</td><td>2</td><td>4</td><td>9</td><td>1</td><td>7</td><td>5</td><td>11</td><td>3</td><td>14</td><td>10</td><td>0</td><td>6</td><td>13</td></tr>
+        </table>
+        
+        <div class="grid">
+            <div class="input-group">
+                <label>a) Binary Input <span class="code">011011</span>:</label>
+                <input type="text" id="t7"> <span id="s7" class="status"></span>
+            </div>
+            <div class="input-group">
+                <label>b) Decimal Input <span class="code">33</span>:</label>
+                <input type="text" id="t8"> <span id="s8" class="status"></span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn" onclick="grade()">Grade My Work</button>
+    <div id="summary"></div>
+
+    <script>
+        function grade() {
+            const answers = {
+                t1: "data encryption standard",
+                t2: "symmetric",
+                t3: "64",
+                t4: "56",
+                t5: "16",
+                t6: "00001010",
+                t7: "5",
+                t8: "15"
+            };
+
+            let score = 0;
+            const total = Object.keys(answers).length;
+
+            for (let id in answers) {
+                const userVal = document.getElementById(id).value.toLowerCase().trim();
+                const statusSpan = document.getElementById('s' + id.slice(1));
+                statusSpan.style.display = "inline";
+
+                // Special check for DES full name to allow minor variations
+                let isCorrect = (id === "t1") ? userVal.includes("data encryption standard") : userVal === answers[id];
+
+                if (isCorrect) {
+                    statusSpan.innerHTML = "✔";
+                    statusSpan.className = "status correct";
+                    score++;
+                } else {
+                    statusSpan.innerHTML = "✘";
+                    statusSpan.className = "status incorrect";
+                }
+            }
+
+            const summary = document.getElementById('summary');
+            summary.style.display = "block";
+            summary.style.background = score === total ? "#dcfce7" : "#fee2e2";
+            summary.innerHTML = `Final Score: ${score} / ${total}`;
+        }
+    </script>
+</body>
+</html>
