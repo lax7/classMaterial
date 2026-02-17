@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensics Lab: MBR & File Systems</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1100px; margin: 0 auto; padding: 40px; background-color: #f4f7f6; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; text-align: center; }
+        h2 { color: #2980b9; margin-top: 40px; border-left: 5px solid #2980b9; padding: 10px 15px; background: #fff; border-radius: 0 8px 8px 0; }
+        .section-container { background: #ffffff; padding: 25px; border-radius: 8px; border: 1px solid #e1e8ed; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .quiz-question { margin-bottom: 25px; padding: 15px; background: #f9f9f9; border-radius: 5px; border-left: 4px solid #3498db; }
+        .points { color: #e74c3c; font-weight: bold; float: right; }
+        .screenshot-req { background: #fff3cd; color: #856404; padding: 10px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px; font-size: 0.9em; font-weight: bold; }
+        .image-container { background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 30px; text-align: center; }
+        .image-container img { max-width: 100%; height: auto; border-radius: 4px; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 25px; background: white; }
+        th, td { border: 1px solid #bdc3c7; padding: 12px; text-align: left; }
+        th { background-color: #34495e; color: white; }
+        .highlight { color: #e74c3c; font-weight: bold; }
+        textarea { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[type="text"] { width: 100%; padding: 5px; box-sizing: border-box; border: 1px solid #ccc; }
+        .important-note { background: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 4px; border: 1px solid #bee5eb; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>Digital Forensics Hands-On Activity</h1>
+
+    <section>
+        <h2>Section 1: Test Your Knowledge</h2>
+        <div class="section-container">
+            <p>Answer the following questions to demonstrate your understanding of disk storage concepts.</p>
+            
+            <div class="quiz-question">
+                <span class="points">2 pts</span>
+                <label><strong>1. What is a sector?</strong></label>
+                <textarea rows="2"></textarea>
+            </div>
+
+            <div class="quiz-question">
+                <span class="points">2 pts</span>
+                <label><strong>2. What is a cluster?</strong></label>
+                <textarea rows="2"></textarea>
+            </div>
+
+            <div class="quiz-question">
+                <span class="points">2 pts</span>
+                <label><strong>3. What is slack space?</strong></label>
+                <textarea rows="2"></textarea>
+            </div>
+
+            <div class="quiz-question">
+                <span class="points">2 pts</span>
+                <label><strong>4. Why is slack space important for Digital Forensics?</strong></label>
+                <textarea rows="3"></textarea>
+            </div>
+
+            <div class="quiz-question">
+                <span class="points">2 pts</span>
+                <label><strong>5. If a cluster is a group of 3 sectors (512 bytes each) and the file size is 1400 bytes, what is the size of the slack space?</strong></label>
+                <textarea rows="2"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Section 2: MBR Analysis</h2>
+        <div class="section-container">
+            <p>Analyze the provided hex dump to map the drive layout. Locate the partition table starting at offset <span class="highlight">0x1BE</span>.</p>
+
+            <div class="image-container">
+                <h3>Reference: MBR Structure Cheat Sheet</h3>
+                <img src="https://github.com/lax7/classMaterial/blob/main/MBR1.png?raw=true" alt="MBR Structure">
+            </div>
+
+            <div class="image-container">
+                <h3>Task: Analyze this MBR Hex Dump</h3>
+                <img src="https://raw.githubusercontent.com/lax7/classMaterial/main/MBRanalysis2.png" alt="MBR for Analysis">
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Boot ind</th>
+                        <th>Sys ID</th>
+                        <th>Relative Sectors (decimal)</th>
+                        <th>Size in GB (Little Endian)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    <tr><td>2</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    <tr><td>3</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    <tr><td>4</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section>
+        <h2>Section 3: USB Formatting Analysis (FTK Imager)</h2>
+        <div class="section-container">
+            <p>In this activity, you will use **FTK Imager** to see how data persists or is destroyed depending on the format method used.</p>
+            
+            <div class="important-note">
+                <strong>Pre-Lab Setup:</strong> Before starting, insert a USB drive and copy at least one recognizable file (e.g., a Word document or a JPG image) onto it.
+            </div>
+
+            <div class="quiz-question">
+                <h3>Step 1: Quick Format vs. Full Format Comparison</h3>
+                <ol>
+                    <li><strong>Quick Format:</strong> With your file already on the drive, perform a "Quick Format" (FAT32 or NTFS). Open the drive in FTK Imager (File > Add Evidence Item > Physical Drive). Explore the sectors. Can you still find the hex data of your document?</li>
+                    <li><strong>Full Format:</strong> Copy the file back onto the drive. Now, perform a "Full Format" (this will take longer). Refresh FTK Imager and inspect the sectors again.</li>
+                </ol>
+                
+                <label><strong>Question: What difference did you find between the Quick Format and the Full Format at the hex/sector level regarding the file you placed on the drive?</strong></label>
+                <textarea rows="4" placeholder="Explain your findings regarding data persistence..."></textarea>
+                
+                <div class="screenshot-req">📸 SUBMISSION: Screenshot of FTK Imager showing the sectors after a Quick Format vs. after a Full Format.</div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
