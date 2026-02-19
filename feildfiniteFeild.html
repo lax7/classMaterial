@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Theory Exercises</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 950px; margin: 20px auto; padding: 20px; background-color: #f8f9fa; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 3px solid #f1c40f; padding-bottom: 10px; }
+        h2 { color: #d35400; margin-top: 40px; border-left: 5px solid #f1c40f; padding-left: 15px; }
+        .axiom-box { background: #fffde7; padding: 20px; border-radius: 5px; margin-bottom: 25px; border: 1px solid #fff9c4; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #fff; }
+        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: left; }
+        th { background-color: #f1c40f; color: #2c3e50; }
+        tr:nth-child(even) { background-color: #fffdf2; }
+        .pass { color: #27ae60; font-weight: bold; text-transform: uppercase; }
+        .fail { color: #c0392b; font-weight: bold; text-transform: uppercase; }
+        .summary-box { font-weight: bold; padding: 15px; border-radius: 4px; display: block; margin-top: 10px; text-align: center; }
+        .is-field { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .not-field { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Field & Finite Field Exercises</h1>
+    <p>A <strong>Field</strong> is a set with two operations (<strong>+</strong> and <strong>&times;</strong>) that satisfies all 11 axioms of arithmetic:</p>
+    
+    <div class="axiom-box">
+        <strong>1. Additive Abelian Group:</strong> Closure, Assoc, Identity(0), Inverse(-), Commutative.<br>
+        <strong>2. Multiplicative Abelian Group (Excluding 0):</strong> Closure, Assoc, Identity(1), <strong>Inverse(1/x)</strong>, Commutative.<br>
+        <strong>3. Distributivity:</strong> <em>a(b + c) = ab + ac</em>.
+    </div>
+
+    <h2>1. Rational Numbers (&rationals;)</h2>
+    <p>All numbers that can be written as a fraction <em>p/q</em>.</p>
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Reasoning</th></tr>
+        <tr><td>Abelian Group (+)</td><td class="pass">Passed</td><td>0 is a fraction; every fraction has a negative.</td></tr>
+        <tr><td>Abelian Group (&times;)</td><td class="pass">Passed</td><td>1 is a fraction; the inverse of <em>p/q</em> is <em>q/p</em> (both are fractions).</td></tr>
+        <tr><td>Distributivity</td><td class="pass">Passed</td><td>Holds for all rational arithmetic.</td></tr>
+    </table>
+    <div class="summary-box is-field">RESULT: This is an INFINITE FIELD.</div>
+
+    <h2>2. Integers (&integers;)</h2>
+    <p>Whole numbers {..., -1, 0, 1, ...}</p>
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Reasoning</th></tr>
+        <tr><td>Abelian Group (+)</td><td class="pass">Passed</td><td>Standard integer addition properties.</td></tr>
+        <tr><td>Multiplicative Inverse</td><td class="fail">Failed</td><td>The inverse of 2 is 1/2, which is NOT an integer.</td></tr>
+    </table>
+    <div class="summary-box not-field">RESULT: This is a RING, but NOT a Field.</div>
+
+    <h2>3. Finite Field Modulo 5 (&integers;₅)</h2>
+    <p>Set: {0, 1, 2, 3, 4} | Operations: Modulo 5 Addition & Multiplication.</p>
+
+    
+
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Reasoning</th></tr>
+        <tr><td>Abelian Group (+)</td><td class="pass">Passed</td><td>Forms a complete additive group mod 5.</td></tr>
+        <tr><td>Multiplicative Inverse</td><td class="pass">Passed</td><td>Every non-zero element has an inverse: 1&times;1=1, 2&times;3=1, 4&times;4=1 (mod 5).</td></tr>
+    </table>
+    <div class="summary-box is-field">RESULT: This is a FINITE FIELD (Galois Field GF(5)).</div>
+
+    <h2>4. Integers Modulo 4 (&integers;₄)</h2>
+    <p>Set: {0, 1, 2, 3} | Operations: Modulo 4 Addition & Multiplication.</p>
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Reasoning</th></tr>
+        <tr><td>Abelian Group (+)</td><td class="pass">Passed</td><td>Forms a group mod 4.</td></tr>
+        <tr><td>Multiplicative Inverse</td><td class="fail">Failed</td><td>2 &times; 1 = 2, 2 &times; 2 = 0, 2 &times; 3 = 2. <strong>2 has no inverse</strong> that results in 1.</td></tr>
+    </table>
+    <div class="summary-box not-field">RESULT: NOT a Field (Modulo must be prime to be a field).</div>
+</div>
+
+</body>
+</html>
