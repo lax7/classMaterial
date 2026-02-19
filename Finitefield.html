@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theorem: Order of Finite Fields</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 950px; margin: 20px auto; padding: 20px; background-color: #f4f7f9; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 3px solid #f39c12; padding-bottom: 10px; }
+        .theorem-box { background: #fff9db; padding: 25px; border: 2px solid #f1c40f; border-radius: 10px; margin: 20px 0; font-style: italic; font-size: 1.1em; position: relative; }
+        .theorem-box::before { content: "Theorem 4.3.1"; position: absolute; top: -12px; left: 20px; background: #f1c40f; color: #fff; padding: 2px 10px; font-weight: bold; font-style: normal; border-radius: 5px; font-size: 0.8em; }
+        h2 { color: #e67e22; margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: left; }
+        th { background-color: #f39c12; color: white; }
+        tr:nth-child(even) { background-color: #fdfaf0; }
+        .valid { color: #27ae60; font-weight: bold; }
+        .invalid { color: #c0392b; font-weight: bold; }
+        .characteristic { color: #8e44ad; font-weight: bold; font-family: monospace; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Finite Field (Galois) Existence</h1>
+    
+    <div class="theorem-box">
+        A finite field (also called Galois field) with order(cardinality) <strong>m</strong> only exists if <strong>m</strong> is a prime power, i.e., <strong>m = p<sup>n</sup></strong>, for some positive integer <strong>n</strong> and prime integer <strong>p</strong>. <strong>p</strong> is called the <strong>characteristic</strong> of the finite field.
+    </div>
+
+    <h2>Examples of Valid Orders (m = p<sup>n</sup>)</h2>
+    <p>These sizes allow for the construction of a field (GF(m)).</p>
+    <table>
+        <tr>
+            <th>Order (m)</th>
+            <th>Prime Power Form</th>
+            <th>Characteristic (p)</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>2<sup>1</sup></td>
+            <td class="characteristic">2</td>
+            <td class="valid">EXISTS </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>3<sup>1</sup></td>
+            <td class="characteristic">3</td>
+            <td class="valid">EXISTS</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>2<sup>2</sup></td>
+            <td class="characteristic">2</td>
+            <td class="valid">EXISTS </td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>5<sup>1</sup></td>
+            <td class="characteristic">5</td>
+            <td class="valid">EXISTS</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>2<sup>3</sup></td>
+            <td class="characteristic">2</td>
+            <td class="valid">EXISTS</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>3<sup>2</sup></td>
+            <td class="characteristic">3</td>
+            <td class="valid">EXISTS</td>
+        </tr>
+        <tr>
+            <td>25</td>
+            <td>5<sup>2</sup></td>
+            <td class="characteristic">5</td>
+            <td class="valid">EXISTS</td>
+        </tr>
+    </table>
+
+    <h2>Examples of Forbidden Orders</h2>
+    <p>According to Theorem 4.3.1, these sizes <strong>cannot</strong> form a field because they are not prime powers.</p>
+    <table>
+        <tr>
+            <th>Order (m)</th>
+            <th>Prime Factorization</th>
+            <th>Reasoning</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>2 &times; 3</td>
+            <td>Not a power of a <em>single</em> prime.</td>
+            <td class="invalid">NOT A FIELD</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>2 &times; 5</td>
+            <td>Not a prime power.</td>
+            <td class="invalid">NOT A FIELD</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>2<sup>2</sup> &times; 3</td>
+            <td>Involves two different primes.</td>
+            <td class="invalid">NOT A FIELD</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>2 &times; 7</td>
+            <td>Not a prime power.</td>
+            <td class="invalid">NOT A FIELD</td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td>3 &times; 5</td>
+            <td>Not a prime power.</td>
+            <td class="invalid">NOT A FIELD</td>
+        </tr>
+    </table>
+
+  
+    </ul>
+</div>
+
+</body>
+</html>
