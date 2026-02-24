@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finite Field Checker (Advanced)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f0f2f5; color: #1a1a1a; display: flex; justify-content: center; padding: 40px; }
+        .card { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 550px; width: 100%; }
+        h2 { color: #1e3a8a; margin-bottom: 1rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+        input { width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 1.1rem; margin-bottom: 1rem; transition: border-color 0.2s; }
+        input:focus { border-color: #3b82f6; outline: none; }
+        button { width: 100%; padding: 14px; background-color: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; }
+        button:hover { background-color: #1d4ed8; }
+        #result { margin-top: 1.5rem; padding: 1.5rem; border-radius: 8px; display: none; border-left: 5px solid; }
+        .is-field { background-color: #ecfdf5; border-color: #10b981; color: #065f46; }
+        .not-field { background-color: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .math { font-family: "Times New Roman", Times, serif; font-style: italic; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Finite Field Validator</h2>
+    <p>Does a finite field exist with <strong>n</strong> elements?</p>
+    
+    <input type="number" id="numInput" placeholder="Enter order (e.g. 81)" min="1">
+    <button onclick="validateField()">Analyze Set Size</button>
+
+    <div id="result">
+        <h3 id="statusHeading" style="margin-top:0"></h3>
+        <p id="explanationText"></p>
+    </div>
+</div>
+
+<script>
+    function getPrimePower(n) {
+        if (n < 2) return null;
+        
+        // Check if n is prime itself (p^1)
+        let isPrime = true;
+        for (let i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i === 0) {
+                isPrime = false;
+                break;
+            }
+        }
+        if (isPrime) return { p: n, k: 1 };
+
+        // Check if n is p^k
+        for (let p = 2; p <= Math.sqrt(n); p++) {
+            // Check if p is prime
+            let pIsPrime = true;
+            for (let j = 2; j <= Math.sqrt(p); j++) {
+                if (p % j === 0) { pIsPrime = false; break; }
+            }
+            
+            if (pIsPrime) {
+                let temp = n;
+                let k = 0;
+                while (temp % p === 0) {
+                    temp /= p;
+                    k++;
+                }
+                if (temp === 1) return { p: p, k: k };
+            }
+        }
+        return null;
+    }
+
+    function validateField() {
+        const n = parseInt(document.getElementById('numInput').value);
+        const resultDiv = document.getElementById('result');
+        const statusHeading = document.getElementById('statusHeading');
+        const explanationText = document.getElementById('explanationText');
+
+        if (isNaN(n) || n < 1) return;
+
+        resultDiv.style.display = "block";
+        const power = getPrimePower(n);
+
+        if (power) {
+            resultDiv.className = "is-field";
+            statusHeading.innerText = "✅ Valid Finite Field";
+            explanationText.innerHTML = `A field exists because ${n} is a prime power: <span class="math">${power.p}<sup>${power.k}</sup></span>. 
+            This is known as <span class="math">GF(${n})</span>.`;
+        } else {
+            resultDiv.className = "not-field";
+            statusHeading.innerText = "❌ Not a Finite Field";
+            explanationText.innerHTML = `${n} is not a power of a single prime. Finite fields only exist for orders <span class="math">p<sup>k</sup></span>.`;
+        }
+    }
+</script>
+
+</body>
+</html>
