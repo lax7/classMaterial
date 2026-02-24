@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polynomial Arithmetic (General)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .poly-font { font-family: 'Cambria', 'Times New Roman', serif; font-style: italic; }
+        .bracket { border-left: 3px solid #1e293b; border-top: 3px solid #1e293b; padding: 15px; border-top-left-radius: 12px; position: relative; margin-top: 20px; }
+        .sub-line { border-bottom: 2px solid #64748b; margin: 4px 0; width: 100%; }
+        
+        /* Frame Styling */
+        .result-frame { 
+            @apply border-4 border-slate-300 rounded-3xl bg-white p-8 shadow-inner relative;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .frame-label {
+            @apply absolute -top-4 left-6 bg-slate-800 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-md;
+        }
+
+        .tab-active { @apply bg-blue-600 text-white shadow-lg scale-105 ring-4 ring-blue-200 z-10; }
+        .tab-inactive { @apply bg-slate-200 text-slate-600 hover:bg-slate-300 cursor-pointer; }
+        .step-card { @apply bg-blue-50 border-l-4 border-blue-500 p-4 mb-4 rounded-r-lg; }
+    </style>
+</head>
+<body class="bg-slate-100 p-4 min-h-screen">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden mt-6 border border-slate-200">
+        <div class="bg-slate-800 p-8 text-white">
+            <h1 class="text-3xl font-black">Polynomial Arithmetic (General)</h1>
+            <p class="text-slate-400">Interactive Calculation & Step-by-Step Logic</p>
+        </div>
+
+        <div class="p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <label class="text-xs font-black uppercase text-slate-500 tracking-widest">Dividend / Poly A</label>
+                    <input id="polyA" type="text" value="-10x^4 - 6x^3 + 2x^2 + 8x + 3" class="w-full text-xl p-4 border-2 rounded-xl outline-none focus:border-blue-500 poly-font">
+                </div>
+                <div>
+                    <label class="text-xs font-black uppercase text-slate-500 tracking-widest">Divisor / Poly B</label>
+                    <input id="polyB" type="text" value="2x^2 + 2x + 2" class="w-full text-xl p-4 border-2 rounded-xl outline-none focus:border-blue-500 poly-font">
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 mb-10">
+                <button onclick="setMode('add')" id="btnAdd" class="px-8 py-3 rounded-full font-bold transition-all tab-inactive">Addition</button>
+                <button onclick="setMode('mul')" id="btnMul" class="px-8 py-3 rounded-full font-bold transition-all tab-inactive">Multiplication</button>
+                <button onclick="setMode('div')" id="btnDiv" class="px-8 py-3 rounded-full font-bold transition-all tab-inactive">Division</button>
+            </div>
+
+            <div class="result-frame">
+                <div id="frameTitle" class="frame-label">Processing...</div>
+                
+                <div id="explanationArea" class="mb-8 hidden">
+                    <h3 class="text-sm font-black text-slate-400 uppercase mb-4 flex items-center">
+                        Step-by-Step Breakdown
+                    </h3>
+                    <div id="explanationContent" class="space-y-3"></div>
+                </div>
+
+                <div id="visualArea" class="min-h-[200px] overflow-x-auto flex flex-col justify-center"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let currentMode = 'div';
+
+    function parse(str) {
+        let poly = {};
+        let cleaned = str.replace(/\s+/g, '').replace(/-/g, '+-');
+        cleaned.split('+').forEach(term => {
+            if (!term) return;
+            let c, e;
+            if (term.includes('x')) {
+                let p = term.split('x');
+                c = p[0] === "" ? 1 : (p[0] === "-" ? -1 : parseFloat(p[0]));
+                e = p[1]?.startsWith('^') ? parseInt(p[1].substring(1)) : 1;
+            } else { c = parseFloat(term); e = 0; }
+            if (!isNaN(c)) poly[e] = (poly[e] || 0) + c;
+        });
+        return poly;
+    }
+
+    function format(poly, forcePlus = false) {
+        let exps = Object.keys(poly).map(Number).sort((a, b) => b - a);
+        let active = exps.filter(e => Math.abs(poly[e]) > 0.001);
+        if (active.length === 0) return "0";
+        let res = "";
+        active.forEach((e, i) => {
+            let c = poly[e];
+            let sign = c > 0 ? (i === 0 && !forcePlus ? "" : " + ") : (i === 0 && !forcePlus ? "-" : " - ");
+            let absC = Math.abs(c);
+            let cStr = (absC === 1 && e !== 0) ? "" : Number(absC.toFixed(2));
+            let xStr = e === 0 ? "" : (e === 1 ? "x" : `x<sup>${e}</sup>`);
+            res += sign + cStr + xStr;
+        });
+        return res;
+    }
+
+    function setMode(m) {
+        currentMode = m;
+        document.querySelectorAll('button[id^="btn"]').forEach(b => {
+            b.classList.remove('tab-active');
+            b.classList.add('tab-inactive');
+        });
+        const activeBtn = document.getElementById('btn' + m.charAt(0).toUpperCase() + m.slice(1));
+        if (activeBtn) activeBtn.classList.add('tab-active');
+        
+        // Update Frame Label
+        const labels = { 'add': 'Addition Result', 'mul': 'Multiplication Result', 'div': 'Long Division Result' };
+        document.getElementById('frameTitle').innerText = labels[m];
+        
+        calculate();
+    }
+
+    function calculate() {
+        const a = parse(document.getElementById('polyA').value);
+        const b = parse(document.getElementById('polyB').value);
+        const area = document.getElementById('visualArea');
+        const expArea = document.getElementById('explanationArea');
+        const expContent = document.getElementById('explanationContent');
+        
+        area.innerHTML = "";
+        expContent.innerHTML = "";
+        expArea.classList.remove('hidden');
+
+        if (currentMode === 'add') {
+            let res = {...a};
+            let allExps = new Set([...Object.keys(a), ...Object.keys(b)].map(Number));
+            [...allExps].sort((x, y) => y - x).forEach(e => {
+                let valA = a[e] || 0;
+                let valB = b[e] || 0;
+                res[e] = valA + valB;
+                expContent.innerHTML += `<div class="step-card">Grouped <b>x<sup>${e}</sup></b>: (${valA}) + (${valB}) = <b>${valA + valB}</b></div>`;
+            });
+            area.innerHTML = `<div class="text-4xl poly-font text-blue-600 text-center">${format(res)}</div>`;
+        }
+
+        if (currentMode === 'mul') {
+            let res = {};
+            for (let eA in a) {
+                let stepStr = `Distributing <b>${a[eA]}x<sup>${eA}</sup></b>: `;
+                for (let eB in b) {
+                    let ne = parseInt(eA) + parseInt(eB);
+                    let nc = a[eA] * b[eB];
+                    res[ne] = (res[ne] || 0) + nc;
+                    stepStr += `[${nc}x<sup>${ne}</sup>] `;
+                }
+                expContent.innerHTML += `<div class="step-card">${stepStr}</div>`;
+            }
+            area.innerHTML = `<div class="text-4xl poly-font text-blue-600 text-center">${format(res)}</div>`;
+        }
+
+        if (currentMode === 'div') {
+            let dividend = {...a};
+            let divisor = b;
+            let quotient = {};
+            let visual = [];
+            let degDivisor = Math.max(...Object.keys(divisor).map(Number));
+
+            while (true) {
+                let degCurr = Object.keys(dividend).filter(k => Math.abs(dividend[k]) > 0.001).map(Number);
+                if (degCurr.length === 0 || Math.max(...degCurr) < degDivisor) break;
+                
+                let dMax = Math.max(...degCurr);
+                let qC = dividend[dMax] / divisor[degDivisor];
+                let qE = dMax - degDivisor;
+                quotient[qE] = qC;
+
+                let sub = {};
+                for (let e in divisor) sub[parseInt(e) + qE] = divisor[e] * qC;
+                
+                expContent.innerHTML += `<div class="step-card"><b>Divide:</b> ${dividend[dMax]}x<sup>${dMax}</sup> / ${divisor[degDivisor]}x<sup>${degDivisor}</sup> = <b>${qC}x<sup>${qE}</sup></b>.</div>`;
+                
+                visual.push({ div: {...dividend}, sub: sub });
+                for (let e in sub) dividend[e] = (dividend[e] || 0) - sub[e];
+            }
+
+            let html = `<div class="poly-font text-xl flex flex-col items-center">`;
+            html += `<div class="flex justify-end w-full max-w-2xl text-blue-600 font-bold mb-1 pr-4">Quotient: ${format(quotient)}</div>`;
+            html += `<div class="flex items-start w-full max-w-2xl">`;
+            html += `<div class="pr-4 pt-10 text-slate-500">${format(divisor)}</div>`;
+            html += `<div class="bracket flex-1">`;
+            visual.forEach((step, i) => {
+                let indent = i * 24;
+                html += `<div style="margin-left: ${indent}px" class="mb-1">${format(step.div, i !== 0)}</div>`;
+                html += `<div style="margin-left: ${indent}px" class="text-red-500 opacity-80 font-bold">`;
+                html += `<span class="absolute left-0 ml-[-20px]">—</span>(${format(step.sub)})<div class="sub-line"></div></div>`;
+            });
+            html += `<div style="margin-left: ${visual.length * 24}px" class="text-green-600 font-bold mt-2">Remainder: ${format(dividend)}</div>`;
+            html += `</div></div></div>`;
+            area.innerHTML = html;
+        }
+    }
+
+    document.getElementById('polyA').addEventListener('input', calculate);
+    document.getElementById('polyB').addEventListener('input', calculate);
+    setMode('div');
+</script>
+</body>
+</html>
