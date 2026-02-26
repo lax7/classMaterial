@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrected Finite Fields: Z3, Z5, and Z7</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --accent: #059669;
+            --bg: #f1f5f9;
+        }
+        body { font-family: system-ui, sans-serif; background: var(--bg); padding: 20px; color: #1e293b; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 40px; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 40px; }
+        h2 { border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; color: #334155; }
+        .grid { display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; table-layout: fixed; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: center; }
+        th { background: #f8fafc; font-weight: bold; }
+        
+        .highlight-one { background: #dcfce7; font-weight: bold; color: #166534; border: 2px solid #16a34a; }
+        .inverse-list { list-style: none; padding: 0; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; }
+        .inverse-list li { padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+        .tag { display: inline-block; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-bottom: 15px; font-weight: bold; }
+        
+        .math-note { margin-top:15px; padding:12px; background:#f0f9ff; border-left:4px solid var(--primary); font-size: 0.9em; }
+        @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Corrected Finite Fields (Z<sub>p</sub>)</h1>
+
+    <div class="card">
+        <div class="tag">Prime p=3</div>
+        <h2>The Field Z<sub>3</sub></h2>
+        <div class="grid">
+            <table>
+                <tr><th>&times; mod 3</th><th>0</th><th>1</th><th>2</th></tr>
+                <tr><th>0</th><td>0</td><td>0</td><td>0</td></tr>
+                <tr><th>1</th><td>0</td><td class="highlight-one">1</td><td>2</td></tr>
+                <tr><th>2</th><td>0</td><td>2</td><td class="highlight-one">1</td></tr>
+            </table>
+            <div>
+                <h3>Multiplicative Inverses</h3>
+                <ul class="inverse-list">
+                    <li>(1 &times; 1) mod 3 = 1</li>
+                    <li>(2 &times; 2) mod 3 = 1</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="tag">Prime p=5</div>
+        <h2>The Field Z<sub>5</sub></h2>
+        <div class="grid">
+            <table>
+                <tr><th>&times; mod 5</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+                <tr><th>0</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><th>1</th><td>0</td><td class="highlight-one">1</td><td>2</td><td>3</td><td>4</td></tr>
+                <tr><th>2</th><td>0</td><td>2</td><td>4</td><td class="highlight-one">1</td><td>3</td></tr>
+                <tr><th>3</th><td>0</td><td>3</td><td class="highlight-one">1</td><td>4</td><td>2</td></tr>
+                <tr><th>4</th><td>0</td><td>4</td><td>3</td><td>2</td><td class="highlight-one">1</td></tr>
+            </table>
+            <div>
+                <h3>Multiplicative Inverses</h3>
+                <ul class="inverse-list">
+                    <li>(1 &times; 1) mod 5 = 1</li>
+                    <li>(2 &times; 3) mod 5 = 1</li>
+                    <li>(3 &times; 2) mod 5 = 1</li>
+                    <li>(4 &times; 4) mod 5 = 1</li>
+                </ul>
+                <div class="math-note">Fixed: (2 &times; 3) = 6, and 6 mod 5 = 1.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="tag">Prime p=7</div>
+        <h2>The Field Z<sub>7</sub></h2>
+        <div class="grid">
+            <div style="overflow-x: auto;">
+                <table>
+                    <tr><th>&times; mod 7</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+                    <tr><th>0</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><th>1</th><td>0</td><td class="highlight-one">1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+                    <tr><th>2</th><td>0</td><td>2</td><td>4</td><td>6</td><td class="highlight-one">1</td><td>3</td><td>5</td></tr>
+                    <tr><th>3</th><td>0</td><td>3</td><td>6</td><td>2</td><td>5</td><td class="highlight-one">1</td><td>4</td></tr>
+                    <tr><th>4</th><td>0</td><td>4</td><td class="highlight-one">1</td><td>5</td><td>2</td><td>6</td><td>3</td></tr>
+                    <tr><th>5</th><td>0</td><td>5</td><td>3</td><td class="highlight-one">1</td><td>6</td><td>4</td><td>2</td></tr>
+                    <tr><th>6</th><td>0</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td class="highlight-one">1</td></tr>
+                </table>
+            </div>
+            <div>
+                <h3>Multiplicative Inverses</h3>
+                <ul class="inverse-list">
+                    <li>(1 &times; 1) mod 7 = 1</li>
+                    <li>(2 &times; 4) mod 7 = 1</li>
+                    <li>(3 &times; 5) mod 7 = 1</li>
+                    <li>(4 &times; 2) mod 7 = 1</li>
+                    <li>(5 &times; 3) mod 7 = 1</li>
+                    <li>(6 &times; 6) mod 7 = 1</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
