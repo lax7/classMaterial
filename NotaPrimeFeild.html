@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Z6 is not a Field</title>
+    <style>
+        :root {
+            --error: #dc2626;
+            --success: #16a34a;
+            --bg: #f1f5f9;
+            --panel: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        
+        .explanation {
+            background: var(--panel);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            text-align: center;
+        }
+        th { background: #e2e8f0; font-weight: bold; }
+        
+        .is-zero { background: #fee2e2; color: var(--error); font-weight: bold; }
+        .no-inverse { background: #fef3c7; border: 2px solid #f59e0b; }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .box { width: 16px; height: 16px; border: 1px solid #000; }
+
+        .analysis {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-left: 5px solid var(--error);
+        }
+        .highlight-text { color: var(--error); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Example of NOT A FEILD Z<sub>6</sub></h1>
+        <p>Why Z<sub>6</sub> fails the Field Axioms </p>
+    </header>
+
+    <div class="explanation">
+        <h3>1. The Requirement</h3>
+        <p>For a set to be a <strong>Field</strong>, every element (except 0) must have a <strong>multiplicative inverse</strong>. This means for every a ≠ 0, there must exist some b such that:</p>
+        <p style="text-align:center; font-size: 1.2em;">(a x b) mod6 = 1 </p>
+        
+        <h3>2. Multiplication Table modulo 6</h3>
+        <p>Observe the table below. To have an inverse, a row <strong>must</strong> contain the number <strong>1</strong>.</p>
+        
+        <table id="mult-table">
+            <thead>
+                <tr id="header-row"></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+
+        <div class="legend">
+            <div class="legend-item"><div class="box" style="background:#fee2e2"></div> Result is 0 (Zero Divisor)</div>
+            <div class="legend-item"><div class="box" style="background:#fef3c7"></div> Row has no inverse</div>
+        </div>
+    </div>
+
+    <div class="analysis" id="analysis-box">
+        <h3>3.Failure Analysis</h3>
+        <ul id="failure-list"></ul>
+    </div>
+</div>
+
+<script>
+    const size = 6;
+    const headerRow = document.getElementById('header-row');
+    const tableBody = document.getElementById('table-body');
+    const failureList = document.getElementById('failure-list');
+
+    // Create Headers
+    headerRow.innerHTML = '<th>×</th>' + Array.from({length: size}, (_, i) => `<th>${i}</th>`).join('');
+
+    let failures = [];
+
+    for (let i = 0; i < size; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<th>${i}</th>`;
+        
+        let hasOne = false;
+
+        for (let j = 0; j < size; j++) {
+            const result = (i * j) % size;
+            const cell = document.createElement('td');
+            cell.innerText = result;
+            
+            if (result === 1) hasOne = true;
+            if (result === 0 && i !== 0 && j !== 0) {
+                cell.className = 'is-zero';
+            }
+            row.appendChild(cell);
+        }
+
+        if (!hasOne && i !== 0) {
+            row.classList.add('no-inverse');
+            failures.push(i);
+        }
+        tableBody.appendChild(row);
+    }
+
+    // Populate Analysis
+    failures.forEach(num => {
+        const li = document.createElement('li');
+        li.innerHTML = `Element <span class="highlight-text">${num}</span> has no multiplicative inverse. There is no number you can multiply by ${num} such that result mod 6 is 1 .`;
+        failureList.appendChild(li);
+    });
+
+    const finalNote = document.createElement('p');
+    finalNote.innerHTML = `<strong>Conclusion:</strong> Because elements <strong>${failures.join(', ')}</strong> do not have inverses, the structure is a "Ring" but not a "Field". This happens because 6 is composite (2 × 3). In a field, a x b = 0 implies a=0 or b=0. Here, 2 x 3 = 0, violating the (a x inverse of a ) mod 6 = 1.`;
+    document.getElementById('analysis-box').appendChild(finalNote);
+</script>
+
+</body>
+</html>
