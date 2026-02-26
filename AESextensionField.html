@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GF(2^8) Polynomial Explorer</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            margin: 0;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        /* Modal/Display Area */
+        .display-panel {
+            position: sticky;
+            top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--primary);
+            min-height: 120px;
+            z-index: 100;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .card:hover {
+            background: #eff6ff;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        .card.active {
+            border-color: var(--accent);
+            background: #fffbeb;
+        }
+
+        .dec { font-weight: bold; display: block; }
+        .bin { font-size: 0.75rem; color: #64748b; font-family: monospace; }
+
+        /* Calculation Styling */
+        .process-step { font-family: monospace; margin-top: 10px; font-size: 0.95rem; }
+        .poly-result { 
+            font-size: 1.4rem; 
+            color: var(--primary); 
+            font-weight: bold; 
+            margin-top: 5px;
+        }
+        .highlight { color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 20px;">
+        <h1>GF(2^8) Polynomial Explorer</h1>
+        <p>Click any number to see its polynomial representation</p>
+    </header>
+
+    <div class="display-panel" id="output">
+        <div id="instruction">Click an element below to begin...</div>
+        <div id="calc-content" style="display:none;">
+            <div id="binary-breakdown" class="process-step"></div>
+            <div id="polynomial-output" class="poly-result"></div>
+        </div>
+    </div>
+
+    <div class="grid" id="field-grid"></div>
+</div>
+
+<script>
+    const grid = document.getElementById('field-grid');
+    const output = document.getElementById('output');
+    const calcContent = document.getElementById('calc-content');
+    const instruction = document.getElementById('instruction');
+    const binaryBreakdown = document.getElementById('binary-breakdown');
+    const polyOutput = document.getElementById('polynomial-output');
+
+    // Generate 256 elements
+    for (let i = 0; i < 256; i++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const bin = i.toString(2).padStart(8, '0');
+        
+        card.innerHTML = `
+            <span class="dec">${i}</span>
+            <span class="bin">${bin}</span>
+        `;
+        
+        card.onclick = () => showPolynomial(i, bin, card);
+        grid.appendChild(card);
+    }
+
+    function showPolynomial(val, bin, element) {
+        // UI updates
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+        instruction.style.display = 'none';
+        calcContent.style.display = 'block';
+
+        // Logic
+        let terms = [];
+        let breakdownHTML = `Binary ${bin} → `;
+        
+        // Loop through bits from left (x^7) to right (x^0)
+        for (let j = 0; j < 8; j++) {
+            let power = 7 - j;
+            if (bin[j] === '1') {
+                let term = (power === 0) ? "1" : (power === 1 ? "x" : `x^${power}`);
+                terms.push(term);
+                breakdownHTML += `<span class="highlight">1</span>(x^${power}) + `;
+            } else {
+                breakdownHTML += `0(x^${power}) + `;
+            }
+        }
+
+        // Clean up display strings
+        breakdownHTML = breakdownHTML.slice(0, -3); // Remove last '+'
+        let finalPoly = terms.length > 0 ? terms.join(" + ") : "0";
+
+        // Render
+        binaryBreakdown.innerHTML = breakdownHTML;
+        polyOutput.innerHTML = `P(x) = ${finalPoly}`;
+    }
+</script>
+
+</body>
+</html>
