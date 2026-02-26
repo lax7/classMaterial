@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Z8 Rings to GF(2^3) Extension Fields</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); padding: 20px; color: var(--text); line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 30px; }
+        h2 { color: #334155; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; margin-top: 0; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; font-size: 0.9em; }
+        th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: center; }
+        th { background: #f8fafc; font-weight: bold; }
+        
+        .no-inv-row { background: #fff1f2; }
+        .val-one { background: #dcfce7 !important; color: #166534; font-weight: bold; border: 2px solid var(--success); }
+        .val-zero { color: var(--danger); font-weight: bold; }
+        
+        .poly-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 20px 0; }
+        .poly-item { background: #eff6ff; padding: 12px; border-radius: 8px; text-align: center; font-family: monospace; border: 1px solid #dbeafe; font-weight: bold; color: var(--primary); }
+        
+        .math-box { font-family: 'Courier New', monospace; background: #fdfdfd; padding: 8px; border-radius: 4px; border: 1px solid #eee; display: inline-block; text-align: left; font-size: 0.85em; }
+        .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold; color: white; }
+        .bg-fail { background: var(--danger); }
+        .bg-pass { background: var(--success); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Exploring 2^3=8,  Prime (Z_8) vs Extension Field GF(2^3)</h1>
+
+    <div class="card">
+        <h2>1. Why Standard Integers Modulo 8 Fail</h2>
+        <p>If we use 8 as a simple modulus, 2, 4, and 6 have no inverses. They are "trapped" because they share factors with 8.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>&times; mod 8</th>
+                    <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th>
+                    <th>Field Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-inv-row"><th>2</th><td>0</td><td>2</td><td>4</td><td>6</td><td class="val-zero">0</td><td>2</td><td>4</td><td>6</td><td><span class="status-badge bg-fail">Fails</span></td></tr>
+                <tr><th>3</th><td>0</td><td>3</td><td>6</td><td class="val-one">1</td><td>4</td><td>7</td><td>2</td><td>5</td><td><span class="status-badge bg-pass">Valid</span></td></tr>
+                <tr class="no-inv-row"><th>4</th><td>0</td><td>4</td><td class="val-zero">0</td><td>4</td><td class="val-zero">0</td><td>4</td><td class="val-zero">0</td><td>4</td><td><span class="status-badge bg-fail">Fails</span></td></tr>
+                <tr class="no-inv-row"><th>6</th><td>0</td><td>6</td><td>4</td><td>2</td><td class="val-zero">0</td><td>6</td><td>4</td><td>2</td><td><span class="status-badge bg-fail">Fails</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>2. Mapping Elements to Polynomials</h2>
+        <p>In extension field, we view these 8 elements as polynomials.</p>
+        <div class="poly-grid">
+            <div class="poly-item">0: 0</div>
+            <div class="poly-item">1: 1</div>
+            <div class="poly-item">2: x</div>
+            <div class="poly-item">3: x + 1</div>
+            <div class="poly-item">4: x<sup>2</sup></div>
+            <div class="poly-item">5: x<sup>2</sup> + 1</div>
+            <div class="poly-item">6: x<sup>2</sup> + x</div>
+            <div class="poly-item">7: x<sup>2</sup> + x + 1</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. Complete Multiplicative Inverses in GF(2^3)</h2>
+        <p>Using the irreducible polynomial P(x) = x^3 + x + 1, every element now successfully reaches 1.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Num</th>
+                    <th>Polynomial (A)</th>
+                    <th>Inverse (B)</th>
+                    <th>Calculation (A &times; B) mod $P(x)$</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>1</td><td class="val-one">1</td><td>1 &times; 1 = 1</td></tr>
+                <tr><td>2</td><td>x</td><td class="val-one">5 (x<sup>2</sup> + 1</div> )</td><td><div class="math-box">x(x²+1) = x³+x mod (x³+x+1) = 1 </div></td></tr>
+                <tr><td>3</td><td>x+1</td><td class="val-one">6 (x<sup>2</sup> + 1</div>) </td><td><div class="math-box">(x+1)(x²+x) = x³+2x²+x = x³+x mod (x³+x+1)= 1</div></td></tr>
+                <tr><td>4</td><td>x<sup>2</sup></td><td class="val-one">7 (x<sup>2</sup> + x + 1</div>)</td><td><div class="math-box">x²(x²+x+1) = x⁴+x³+x² <br> mod (x³+x+1)= 1</div></td></tr>
+                <tr><td>5</td><td>x<sup>2</sup>+1</td><td class="val-one">2 (x</div>)</td><td><div class="math-box">(x²+1)x = x³+x mod (x³+x+1)= 1</div></td></tr>
+                <tr><td>6</td><td>x<sup>2</sup>+x</td><td class="val-one">3 (x + 1</div>)</td><td><div class="math-box">(x²+x)(x+1) = x³+2x²+x mod (x³+x+1)= 1</div></td></tr>
+                <tr><td>7</td><td>x<sup>2</sup>+x+1</td><td class="val-one">4 (x<sup>2</sup></div>)</td><td><div class="math-box">(x²+x+1)x² = x⁴+x³+x²mod (x³+x+1)= 1</div></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
