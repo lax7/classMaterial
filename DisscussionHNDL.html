@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Now, Decrypt Later: The Quantum Threat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0b0d10;
+            --surface: rgba(21, 26, 33, 0.9);
+            --text-main: #e9eef5;
+            --accent-cyan: #40e0ff;
+            --accent-mint: #a8e6cf;
+            --border: #273140;
+            --error: #f87171;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            line-height: 1.8;
+            background-image: radial-gradient(circle at 20% 20%, rgba(64, 224, 255, 0.05) 0%, transparent 40%);
+        }
+
+        .container { max-width: 850px; margin: 0 auto; padding: 60px 20px; }
+
+        header { margin-bottom: 50px; border-bottom: 1px solid var(--border); padding-bottom: 20px; text-align: center; }
+        
+        h1 { font-size: 2.5rem; letter-spacing: -1px; background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        h2 { color: var(--accent-mint); font-size: 1.6rem; margin-top: 30px; border-left: 4px solid var(--accent-cyan); padding-left: 15px; }
+        p { font-family: 'Lora', serif; font-size: 1.15rem; color: #cbd5e1; }
+
+        .lock-notice {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid var(--error);
+            padding: 15px;
+            border-radius: 12px;
+            color: var(--error);
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .content-card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 40px;
+            display: none; 
+            animation: slideIn 0.6s ease-out forwards;
+            position: relative;
+        }
+
+        .content-card.active { display: block; }
+
+        .voice-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .voice-btn {
+            background: rgba(64, 224, 255, 0.2);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .voice-btn:hover { background: var(--accent-cyan); color: var(--bg-deep); }
+        .stop-btn { border-color: var(--error); color: var(--error); background: rgba(248, 113, 113, 0.1); display: none; }
+
+        .quiz-zone {
+            background: rgba(0,0,0,0.4);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--accent-cyan);
+            margin-top: 30px;
+        }
+
+        .quiz-option { margin: 10px 0; padding: 10px; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+        .quiz-option:hover { background: rgba(255,255,255,0.05); }
+
+        .btn-next {
+            background: var(--accent-cyan);
+            color: var(--bg-deep);
+            padding: 12px 35px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; 
+        }
+
+        .feedback { margin-top: 15px; font-weight: bold; font-size: 1rem; min-height: 24px; }
+        .success-msg { color: var(--accent-mint); }
+        .error-msg { color: var(--error); }
+        
+        .link-tag {
+            display: inline-block;
+            background: rgba(64, 224, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 2px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin: 8px 0;
+            border: 1px solid var(--accent-cyan);
+        }
+
+        .link-tag:hover { background: var(--accent-cyan); color: var(--bg-deep); }
+
+        .ref-section { background: rgba(255,255,255,0.03); padding: 30px; border-radius: 16px; margin-bottom: 30px; border: 1px solid var(--border); }
+        .ref-item { margin-bottom: 12px; font-size: 1rem; }
+        
+        /* UPDATED: Link color for the reference section */
+        .ref-section a { 
+            color: var(--accent-mint); 
+            text-decoration: underline; 
+            transition: color 0.3s;
+        }
+        .ref-section a:hover { 
+            color: var(--accent-cyan); 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Harvest Now, Decrypt Later</h1>
+        <p style="color: var(--accent-mint)">Module: Preparing for Quantum Computing Threats</p>
+    </header>
+
+    <div id="master-notice" class="lock-notice">
+        🔒 ACCESS RESTRICTED: Complete section checkpoints to unlock Discussion Questions and References.
+    </div>
+
+    <section id="section-1" class="content-card active">
+        <div class="voice-controls">
+            <button class="voice-btn stop-btn" id="stop-1" onclick="stopSpeech()">⏹ Stop</button>
+            <button class="voice-btn" onclick="readText('section-1', 1)">🔊 Read Card</button>
+        </div>
+        <h2>Setting the stage</h2>
+        <div class="read-content">
+            <p>It begins at night. A black van rolls to a stop outside a data center, its cargo doors already open. But no one rushes in with drills or explosives. Instead, a silent team of specialists lifts out an enormous safe: <strong>your safe</strong>. They don’t crack it. They don’t even try. They just take the whole thing and vanish into the dark. Their plan? Wait. Wait for the day when the lock, once unbreakable, opens with a whisper.</p>
+            <p>That’s the essence of ‘harvest now, decrypt later’ (HNDL). In cybersecurity terms, this cinematic heist plays out as HNDL: adversaries capturing encrypted data today, knowing that tomorrow’s quantum computers may effortlessly unlock it. The implications are profound, and urgent.</p>
+        </div>
+        
+        <div class="quiz-zone">
+            <p><strong>Checkpoint:</strong> According to the text, what is the primary method of an HNDL heist?</p>
+            <div class="quiz-option"><input type="radio" name="q1" value="w"> Cracking the safe immediately with explosives.</div>
+            <div class="quiz-option"><input type="radio" name="q1" value="c"> Capturing encrypted data now to unlock it later with quantum computers.</div>
+            <button class="btn-next" id="btn-1" onclick="showNext('section-2')">Unlock: Understanding HNDL</button>
+            <div id="f-1" class="feedback"></div>
+        </div>
+    </section>
+
+    <section id="section-2" class="content-card">
+        <div class="voice-controls">
+            <button class="voice-btn stop-btn" id="stop-2" onclick="stopSpeech()">⏹ Stop</button>
+            <button class="voice-btn" onclick="readText('section-2', 2)">🔊 Read Card</button>
+        </div>
+        <h2>Understanding Harvest Now, Decrypt Later</h2>
+        <div class="read-content">
+            <p>To understand the real risk, we need to examine how HNDL plays out in practice. Attackers exploit current cryptographic vulnerabilities. Malicious actors intercept encrypted communications, store them indefinitely, and wait patiently for quantum advancements to render encryption obsolete. This might raise a natural question: why would someone care about decrypting data a decade from now?</p>
+            <p>The answer lies in the long tail of value. Not all secrets have a short shelf life. We’re not talking about session cookies or temporary tokens; this is about strategic corporate blueprints, state secrets, private health records, legal contracts, and decades-long R&D. Data doesn’t need to be immediately useful to be valuable later. A breakthrough drug formula, intercepted today, could redefine a market ten years from now. A leaked diplomatic cable might destabilize regions retroactively. Information has memory and attackers are betting on that.</p>
+        </div>
+        
+        <div class="quiz-zone">
+            <p><strong>Checkpoint:</strong> What does the text mean by "the long tail of value"?</p>
+            <div class="quiz-option"><input type="radio" name="q2" value="c"> Certain data, like R&D and state secrets, remains valuable for decades.</div>
+            <div class="quiz-option"><input type="radio" name="q2" value="w"> Data increases in value the more it is encrypted.</div>
+            <button class="btn-next" id="btn-2" onclick="showNext('section-3')">Unlock: Q-Day & Algorithms</button>
+            <div id="f-2" class="feedback"></div>
+        </div>
+    </section>
+
+    <section id="section-3" class="content-card">
+        <div class="voice-controls">
+            <button class="voice-btn stop-btn" id="stop-3" onclick="stopSpeech()">⏹ Stop</button>
+            <button class="voice-btn" onclick="readText('section-3', 3)">🔊 Read Card</button>
+        </div>
+        <h2>Q-Day: The Algorithms at Risk</h2>
+        <div class="read-content">
+            <p>“Q-Day” refers to the hypothetical moment when quantum computers will be capable of breaking widely-used cryptographic systems. Although quantum computers capable of this aren’t here yet (and may still be a decade or more away) the cryptographic algorithms they threaten are very real, time-tested, and foundational to today’s digital security.</p>
+            <p>At the heart of the threat are two categories of encryption: symmetric and asymmetric. Symmetric encryption relies on a single key that both encrypts and decrypts data. This key must be shared securely between parties, which introduces logistical and security challenges.</p>
+            <p>Asymmetric encryption, on the other hand, uses a mathematically linked key pair (a public key for encryption and a private key for decryption) eliminating the need for secure key sharing. This distinction becomes critical in the quantum context. Symmetric encryption is weakened by Grover’s algorithm, a quantum method that offers a quadratic speedup for brute-force attacks. This effectively halves the security level, making AES-256 behave more like AES-128 under quantum conditions. Still, this kind of encryption can be reinforced with longer keys, such as AES-512.</p>
+            <p>Asymmetric encryption, however, faces a more severe threat. Shor’s algorithm (an efficient quantum method for factoring large numbers) breaks the mathematical backbone of algorithms like RSA and ECC. These algorithms aren’t theoretical; they’re well-understood and real. What’s missing is the hardware. What’s missing is quantum hardware powerful enough to run them at scale. Once it arrives, asymmetric cryptography as we know it becomes obsolete.</p>
+            <p>Although predicting Q-Day’s exact arrival is difficult, most estimates put it between 2030 and 2040. Some researchers suggest it may come later, while others warn that a breakthrough could pull it much closer. In any case, the prudent stance is to treat it as inevitable and prepare now.</p>
+        </div>
+        
+        <div class="quiz-zone">
+            <p><strong>Checkpoint:</strong> Which algorithm breaks the mathematical backbone of algorithms like RSA and ECC?</p>
+            <div class="quiz-option"><input type="radio" name="q3" value="w"> Grover's algorithm</div>
+            <div class="quiz-option"><input type="radio" name="q3" value="c"> Shor's algorithm</div>
+            <button class="btn-next" id="btn-3" onclick="showNext('section-4')">Unlock: Real-World Indicators</button>
+            <div id="f-3" class="feedback"></div>
+        </div>
+    </section>
+
+    <section id="section-4" class="content-card">
+        <div class="voice-controls">
+            <button class="voice-btn stop-btn" id="stop-4" onclick="stopSpeech()">⏹ Stop</button>
+            <button class="voice-btn" onclick="readText('section-4', 4)">🔊 Read Card</button>
+        </div>
+        <h2>Real-World Indicators of the Threat</h2>
+        <div class="read-content">
+            <p>NSAs Utah Data Center seizes and stores all encrypted data (trying to hack the cryptographic keys) for national security purpose including the ambitious goal to break the 256-bit AES encryption. Exact details of the Utah Data Center's operations and capabilities are classified. You can google search and explore publicly available sources to learn more about it.</p>
+            <p><a href="https://nsa.gov1.info/utah-data-center/" class="link-tag" target="_blank">🔗 Explore: Utah Data Center Sources</a></p>
+            <p>While quantum decryption capabilities remain on the horizon, real-world incidents already suggest that some actors are preparing. For example: In 2016, internet traffic from Canada to South Korea was rerouted through China. And in 2020, data from Google, Amazon, and other services was funneled through Russian servers. While these reroutes didn’t necessarily involve quantum decryption, they exemplify the kind of passive data harvesting associated with HNDL, and raise red flags about who’s building stockpiles of encrypted data for future use.</p>
+            <p><a href="https://www.securityweek.com/russian-telco-hijacked-internet-traffic-major-networks-accident-or-malicious-action/" class="link-tag" target="_blank">🔗 Incident Report: Russian Telco Traffic Hijack</a></p>
+        </div>
+
+        <div class="quiz-zone">
+            <p><strong>Checkpoint:</strong> What exemplified passive data harvesting in the 2016 and 2020 incidents?</p>
+            <div class="quiz-option"><input type="radio" name="q4" value="c"> Rerouting traffic through international servers (China/Russia).</div>
+            <div class="quiz-option"><input type="radio" name="q4" value="w"> Physical theft of hardware from Google's headquarters.</div>
+            <button class="btn-next" id="btn-4" onclick="showNext('section-5')">Unlock: Mitigation & References</button>
+            <div id="f-4" class="feedback"></div>
+        </div>
+    </section>
+
+    <section id="section-5" class="content-card">
+        <div class="voice-controls">
+            <button class="voice-btn stop-btn" id="stop-5" onclick="stopSpeech()">⏹ Stop</button>
+            <button class="voice-btn" onclick="readText('section-5', 5)">🔊 Read Card</button>
+        </div>
+        <div class="read-content">
+            <h2>Assessing Risk and Impact</h2>
+            <p>Risk assessment must begin with a clear understanding of the longevity of both the data and the systems in which it resides. Information requiring confidentiality beyond the advent of quantum computing (such as legal contracts, health records, or trade secrets) demands urgent scrutiny. Similarly, systems expected to remain operational for decades, including those in industrial control or government infrastructure, must be evaluated for quantum resistance from their design phase.</p>
+            <p>These dual lifespans (of data and infrastructure) form the basis of strategic decision-making. The longer either must remain secure or functional, the higher the urgency to adopt quantum-safe practices today. Considering the typical timeline of cryptographic transitions, such as the migration from SHA-1 to SHA-256, which took more than five years in many cases, it becomes evident that immediate action is essential to ensure continuity and resilience.</p>
+
+            <h2>Mitigation Strategies and Preparedness</h2>
+            <p>Organizations can mitigate risks associated with quantum threats by adopting quantum-resistant algorithms, such as lattice-based or code-based cryptography. These algorithms rely on mathematical problems that remain difficult to solve, even with the power of quantum computers, thereby safeguarding data and communications against future cryptographic attacks.</p>
+            <p>The National Institute of Standards and Technology (NIST) has been leading an effort to evaluate and standardize post-quantum cryptographic solutions, with several candidate algorithms in the final stages of approval (e.g., CRYSTALS-Kyber for key exchange and CRYSTALS-Dilithium for digital signatures).</p>
+            <p>Equally important is embracing crypto agility: the ability to quickly switch between cryptographic algorithms. By integrating a crypto-agile framework, organizations can seamlessly adapt as new quantum-resistant methods are approved or when vulnerabilities are discovered, ensuring that sensitive information remains protected in the long term. Quantum safety isn’t a future problem. It’s a migration challenge that starts now.</p>
+        </div>
+
+        <hr style="border:0; border-top:1px solid var(--border); margin:40px 0;">
+
+        <h2>Furthe Reading/Exploring References</h2>
+        <div class="ref-section">
+            <div class="ref-item"><strong>PQC Migration Handbook:</strong> <a href="https://english.aivd.nl/documents/2024/12/3/the-pqc-migration-handbook" target="_blank">The PQC Migration Handbook</a></div>
+            <div class="ref-item"><strong>RFC 8784:</strong> <a href="https://www.rfc-editor.org/rfc/rfc8784" target="_blank">RFC 8784</a></div>
+            <div class="ref-item"><strong>NIST PQC Project:</strong> <a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank">NIST PQC Project</a></div>
+            <div class="ref-item"><strong>Grover, L.K. (1996):</strong> <a href="https://dl.acm.org/doi/pdf/10.1145/237814.237866" target="_blank">“A Fast Quantum Mechanical Algorithm for Database Search.”</a></div>
+            <div class="ref-item"><strong>Shor, P.W. (1994):</strong> <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=365700" target="_blank">“Algorithms for Quantum Computation: Discrete Logarithms and Factoring.”</a></div>
+        </div>
+
+        <h2>Discussion Questions:</h2>
+        <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px;">
+            <p><strong>1. [5 points]</strong> If you are the CTO of a startup with a limited budget, do you spend your money on PQC (Post-Quantum Cryptography) preparedness now, even though the threat is a decade away or do you spend it on features that grow your business today? At what exact point does "waiting" become "negligence"?</p>
+            <p><strong>2. [5 points]</strong> Imagine a NSA successfully cracks AES-256 using a quantum breakthrough. Should they keep this discovery a secret to catch criminals and terrorists, or are they ethically obligated to inform the public so that banks, hospitals, and power grids can move to a new standard? If they keep it secret and a hostile nation discovers the same breakthrough, who is responsible for the resulting chaos?</p>
+            <p><strong>3. [2 points]</strong> Read any reply to one other peer post</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    const answers = { q1: 'c', q2: 'c', q3: 'c', q4: 'c' };
+    let synth = window.speechSynthesis;
+
+    function stopSpeech() {
+        synth.cancel();
+        document.querySelectorAll('.stop-btn').forEach(b => b.style.display = 'none');
+    }
+
+    function readText(sectionId, num) {
+        stopSpeech();
+        const section = document.getElementById(sectionId);
+        const text = section.querySelector('.read-content').innerText;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.25; 
+        
+        const voices = synth.getVoices();
+        const femaleVoice = voices.find(v => 
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('google uk english female') ||
+            v.name.toLowerCase().includes('samantha') ||
+            v.name.toLowerCase().includes('zira')
+        );
+        if (femaleVoice) utterance.voice = femaleVoice;
+
+        utterance.onstart = () => { document.getElementById('stop-' + num).style.display = 'inline-block'; };
+        utterance.onend = () => { document.getElementById('stop-' + num).style.display = 'none'; };
+        synth.speak(utterance);
+    }
+
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const qNum = this.name.slice(-1);
+            const feedback = document.getElementById('f-' + qNum);
+            const button = document.getElementById('btn-' + qNum);
+            if (this.value === answers[this.name]) {
+                feedback.innerHTML = "✅ Access Granted.";
+                feedback.className = "feedback success-msg";
+                button.style.display = "inline-block";
+            } else {
+                feedback.innerHTML = "❌ Review section and try again.";
+                feedback.className = "feedback error-msg";
+                button.style.display = "none";
+            }
+        });
+    });
+
+    function showNext(nextId) {
+        stopSpeech();
+        const target = document.getElementById(nextId);
+        target.classList.add('active');
+        if(nextId === 'section-5') document.getElementById('master-notice').style.display = 'none';
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.speechSynthesis.onvoiceschanged = () => { synth.getVoices(); };
+</script>
+
+</body>
+</html>
