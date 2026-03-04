@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensics & The Autonomous AI Risk Era</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: auto; padding: 20px; background-color: #f0f2f5; }
+        header { background: #1a2a6c; color: #fff; padding: 2.5rem; text-align: center; border-radius: 10px; margin-bottom: 25px; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h2 { color: #1a2a6c; border-bottom: 3px solid #f39c12; display: inline-block; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #d9534f; margin-top: 25px; }
+        
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .risk-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fafafa; border-top: 5px solid #e74c3c; transition: transform 0.3s; }
+        .risk-card:hover { transform: translateY(-5px); }
+        .highlight { font-weight: bold; color: #c0392b; }
+
+        .exploit-steps { background: #f9f9f9; border-left: 5px solid #d9534f; padding: 15px 25px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .warning-box { background: #fcf8e3; border: 1px solid #faebcc; padding: 15px; border-radius: 8px; margin: 20px 0; font-weight: bold; color: #8a6d3b; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+
+        .stat-section { background: #1a2a6c; color: white; padding: 40px 20px; border-radius: 8px; text-align: center; margin-top: 30px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+        .stat-val { font-size: 3rem; font-weight: bold; color: #f39c12; display: block; }
+        .stat-desc { font-size: 1rem; opacity: 0.9; }
+
+        .link-box { text-align: center; margin: 25px 0; padding: 15px; background: #e8f0fe; border-radius: 8px; border: 1px dashed #1a2a6c; }
+        
+        .resources-area { margin-top: 20px; background: #fff; padding: 20px 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .resources-list { list-style: none; padding: 0; }
+        .resources-list li { margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+        /* Quiz Section */
+        .quiz-area { margin-top: 20px; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #f39c12; }
+        .quiz-question { margin-bottom: 25px; padding: 10px; border-radius: 5px; background: #fdfdfd; }
+        .quiz-question p { font-weight: bold; margin-bottom: 10px; }
+        .unlock-btn { background: #1a2a6c; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; }
+        .unlock-btn:hover { background: #f39c12; color: #1a2a6c; }
+
+        /* Hidden Assignment Section */
+        #assignment-area { display: none; margin-top: 40px; background: #fff; padding: 30px; border-radius: 10px; border-left: 10px solid #2ecc71; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .points { font-weight: bold; color: #27ae60; }
+
+        a { color: #1a2a6c; font-weight: bold; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>The Autonomous AI Risk Era</h1>
+    <p>Understanding "OpenClaw" and the Future of Digital Forensics</p>
+</header>
+
+<div class="container">
+    <section>
+        <h2>The Evolution of AI Risk</h2>
+        <p>AI is no longer just generating text; it is executing operational tasks. Agents like <strong>OpenClaw</strong> browse websites, run terminal commands, and manage credentials independently. The risk has shifted from "hallucinations" to <strong>excessive privilege combined with autonomy.</strong></p>
+        
+        <div class="link-box">
+            <strong>Official Project Link:</strong> <a href="https://openclaw" target="_blank">https://openclaw</a>
+        </div>
+    </section>
+
+    <section>
+        <h2>Technical Case Study: CVE-2026-25253 ("ClawJacked")</h2>
+        <p>OpenClaw is an autonomous agent designed to run locally on a user's machine. It possesses "hands"—the ability to execute shell commands, read files, and manage APIs.</p>
+        
+        
+        <div class="exploit-steps">
+            <h4>How the 1-Click RCE Works:</h4>
+            <ol>
+                <li><strong>The Trap:</strong> A user visits a malicious website while OpenClaw is running.</li>
+                <li><strong>The Connection:</strong> JavaScript on the site opens a WebSocket to <code>localhost:18789</code>, bypassing origin validation.</li>
+                <li><strong>Token Theft:</strong> The site extracts the user's authentication token from the local instance.</li>
+                <li><strong>Full Takeover:</strong> The attacker uses the token to command the AI to exfiltrate files, steal credentials, or install "malicious skills."</li>
+            </ol>
+        </div>
+
+        <div class="warning-box">
+            Mitigation: Update to version 2026.1.29 or later to enforce strict origin validation.
+        </div>
+    </section>
+
+    <section>
+        <h2>Forensic Red Flags</h2>
+        <div class="risk-grid">
+            <div class="risk-card">
+                <h3>Data Exposure</h3>
+                <p>OpenClaw stores <span class="highlight">passwords, API keys, and credit card info</span> in <strong>plain text files</strong>, making any file-level compromise catastrophic.</p>
+            </div>
+            <div class="risk-card">
+                <h3>Persistent Memory</h3>
+                <p>The agent retains every conversation and session, creating a detailed "treasure map" for forensic investigators—and attackers—to see internal secrets.</p>
+            </div>
+            <div class="risk-card">
+                <h3>ClawHub Risks</h3>
+                <p>OpenClaw can autonomously download "skills" from community marketplaces. Researchers have identified credential stealers disguised as legitimate tools.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stat-section">
+        <div class="stat-grid">
+            <div>
+                <span class="stat-val" data-target="87">0</span>
+                <p class="stat-desc">% of Global Orgs hit by AI-enabled attacks (2025)</p>
+            </div>
+            <div>
+                <span class="stat-val" data-target="42000">0</span>
+                <p class="stat-desc">Exposed OpenClaw instances on the public web</p>
+            </div>
+            <div>
+                <span class="stat-val" data-target="22">0</span>
+                <p class="stat-desc">% of employees using unauthorized "Shadow AI"</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="resources-area">
+    <h2>Additional Resources</h2>
+    <ul class="resources-list">
+        <li>📚 <strong>Vulnerability Database:</strong> <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-25253" target="_blank">NVD - CVE-2026-25253 Detail</a></li>
+        <li>📰 <strong>Security News:</strong> <a href="https://www.securityweek.com/openclaw-security-issues-continue-as-secureclaw-open-source-tool-debuts/" target="_blank">SecurityWeek: OpenClaw Issues & SecureClaw Debut</a></li>
+        <li>🛠️ <strong>Security Best Practices:</strong> <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank">OWASP Top 10 for LLM Applications</a></li>
+    </ul>
+</div>
+
+<div class="quiz-area">
+    <h2>Unlock Discussion: Knowledge Check</h2>
+    <p>Select the correct answers based on the material to reveal your assignment:</p>
+    
+    <div class="quiz-question">
+        <p>1. Which vulnerability allows an attacker to perform the "ClawJacked" 1-click RCE?</p>
+        <input type="radio" name="q1" value="a"> A) SQL Injection in the local database<br>
+        <input type="radio" name="q1" value="b"> B) WebSocket Origin Bypass (CVE-2026-25253)<br>
+        <input type="radio" name="q1" value="c"> C) Buffer Overflow in the memory module
+    </div>
+
+    <div class="quiz-question">
+        <p>2. How does OpenClaw store sensitive data like API keys and passwords?</p>
+        <input type="radio" name="q2" value="a"> A) In an AES-256 encrypted vault<br>
+        <input type="radio" name="q2" value="b"> B) Using hashed salted tokens<br>
+        <input type="radio" name="q2" value="c"> C) In insecure plain text files
+    </div>
+
+    <div class="quiz-question">
+        <p>3. Is OpenClaw restricted to only one specific Large Language Model (LLM) provider?</p>
+        <input type="radio" name="q3" value="a"> A) True (It only works with OpenAI)<br>
+        <input type="radio" name="q3" value="b"> B) False (It is LLM-agnostic and works with various providers)
+    </div>
+
+    <button class="unlock-btn" onclick="unlockAssignment()">Submit & Unlock Discussion</button>
+</div>
+
+
+<div id="assignment-area">
+    <h2>Time to Discuss</h2>
+    <p>Please complete the following tasks based on the lesson above:</p>
+    <ol>
+        <li><span class="points">[5 points]</span> Discuss challenges of digital forensics in the age of autonomous AI. <em>(Focus on who is the forensic "subject"? Is the human user liable for the actions of their autonomous agent? Evidence fragility in plain-text logs, chain of custody, etc).</em></li>
+        <li><span class="points">[3 points]</span> Read and respond to at least one peer post with a constructive critique or a follow-up question.</li>
+    </ol>
+</div>
+
+<script>
+    const counters = document.querySelectorAll('.stat-val');
+    const speed = 150;
+
+    const startCounters = () => {
+        counters.forEach(counter => {
+            const animate = () => {
+                const target = +counter.getAttribute('data-target');
+                const current = +counter.innerText.replace(/,/g, '');
+                const increment = target / speed;
+
+                if (current < target) {
+                    counter.innerText = Math.ceil(current + increment).toLocaleString();
+                    setTimeout(animate, 20);
+                } else {
+                    counter.innerText = target.toLocaleString() + (target < 100 ? "%" : "");
+                }
+            }
+            animate();
+        });
+    }
+
+    window.onload = startCounters;
+
+    function unlockAssignment() {
+        const q1 = document.querySelector('input[name="q1"]:checked')?.value;
+        const q2 = document.querySelector('input[name="q2"]:checked')?.value;
+        const q3 = document.querySelector('input[name="q3"]:checked')?.value;
+
+        if(q1 === 'b' && q2 === 'c' && q3 === 'b') {
+            document.getElementById('assignment-area').style.display = 'block';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            alert("All answers correct! Discussion section unlocked.");
+        } else {
+            alert("Some answers are incorrect. Please review the material and try again.");
+        }
+    }
+</script>
+
+</body>
+</html>
