@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Presentation Schedule & Guidelines</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --secondary-blue: #34495e;
+            --accent-blue: #2980b9;
+            --tuesday-color: #e8f4fd;
+            --thursday-color: #fef9e7;
+            --warning-red: #c0392b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            border-bottom: 3px solid var(--accent-blue);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .guidelines-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+        .guidelines-box h2 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .timer-warning {
+            color: var(--warning-red);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 850px) {
+            .schedule-grid { grid-template-columns: 1fr; }
+        }
+        .day-column h2 {
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            color: var(--primary-blue);
+        }
+        .tuesday-h { background-color: #d1ecf1; border: 1px solid #bee5eb; }
+        .thursday-h { background-color: #d4edda; border: 1px solid #c3e6cb; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            vertical-align: top;
+        }
+        th {
+            background-color: var(--secondary-blue);
+            color: white;
+        }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        .order-num { font-weight: bold; color: var(--accent-blue); width: 30px; }
+        
+        .outline-section {
+            background: #fdfdfd;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .outline-step {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            border-left: 3px solid var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>CS 426 Final Project Presentation Schedule</h1>
+
+    <div class="guidelines-box">
+        <h2>Presentation Rules & Outline</h2>
+        <p><strong>⏱️Time Limit:</strong> 6 Minutes Total. <span class="timer-warning">If you go beyond 6 minutes, 10 points will be deducted. </span></p>
+        <div style="background-color: #fff3cd; border-left: 6px solid #ffc107; padding: 15px; margin: 20px 0; font-family: sans-serif;">
+  <strong style="color: #856404; font-size: 1.2em;">⚠️ Presentation Grading:</strong>
+  <p style="margin-top: 5px; color: #533f03;">
+    Your grades will be based on the performance on <strong>Part 1 — Part 4</strong>.
+  </p>
+</div>
+        
+        <div class="outline-section">
+            <div class="outline-step">
+                <strong>Part 1: Context (1 Slide / ~1 Mins)</strong><br>
+                Slide 1: Intro. Creat a Image/visual that explain your whole project. (no bullets allowed)
+            </div>
+            <div class="outline-step">
+                <strong>Part 2: The "Deep Dive" (Live Environment / ~3 Mins)</strong><br>
+              <ul>
+  <li><strong>No slides.</strong></li>
+  <li>The goal is to show your completed project in the best way possible.</li>
+  <li>Switch to your <strong>Live Environment</strong>. Show data sources (CSV, Database, API), Virtual Machines, or code logic.</li>
+  <li>Show the <strong>"brain"</strong> of the project.</li>
+  <li>Use a <strong>Live Demo</strong> or a <strong>Pre-recorded Video</strong> to showcase functionality.</li>
+  <li>Get everything ready beforehand. Have all code, tabs, and assets loaded before you step up.</li>
+  <li>Do not waste time on technical setups.</li>
+</ul>
+            </div>
+            <div class="outline-step">
+                <strong>Part 3: Conclusion (1 Slide ~ 1 min)</strong><br>
+                What is your conclusion? Summarize what you learned that you didn't know at the start. If you could redo, what would you do differently.
+            </div>
+            <div class="outline-step">
+                <strong>Part 4: Question and Answer ( ~ 1 min) </strong><br>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="schedule-grid">
+        
+        <div class="day-column">
+            <h2 class="tuesday-h">Tuesday, April 21st</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student(s)</th>
+                        <th>Project Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="order-num">1</td><td>Anthony Wirsing, EJ Bailey</td><td>Cross-Platform Log-Based Digital Forensics Investigation Using TryHackMe</td></tr>
+                    <tr><td class="order-num">3</td><td>Jared Burn, Josh Radjavitch</td><td>Morris Worm Virus Investigation</td></tr>
+                    <tr><td class="order-num">5</td><td>Alec C.</td><td>Detecting Prompt Injection and Data Exfiltration in LLM Logs</td></tr>
+                    <tr><td class="order-num">7</td><td>Brielle Heron</td><td>Steganography</td></tr>
+                    <tr><td class="order-num">9</td><td>Stella Hyatt</td><td>Forensic Analysis of UAV Artifacts Using NIST CFReDS</td></tr>
+                    <tr><td class="order-num">11</td><td>Tatum Kelley</td><td>Comparative Evaluation of Steganography Detection Tools</td></tr>
+                    <tr><td class="order-num">12</td><td>Zechariah Lea</td><td>Drone Investigation</td></tr>
+                    <tr><td class="order-num">14</td><td>Syleena Nixon</td><td>AI for Phishing Email Detection in Digital Forensics</td></tr>
+                    <tr><td class="order-num">16</td><td>Bruno Salles</td><td>Email Header Forensic Analysis</td></tr>
+                    <tr><td class="order-num">18</td><td>Nicholas Scarangelli</td><td>ForensicScan: Automated Detection of Malicious Network Traffic</td></tr>
+                    <tr><td class="order-num">20</td><td>Siri Siqveland</td><td>Steganography: Best Tools for Detecting Hidden Data</td></tr>
+                    <tr><td class="order-num">22</td><td>Justin Villa</td><td>AI Forensic Analysis of Phishing Emails (Machine Learning)</td></tr>
+                    <tr><td class="order-num">24</td><td>Emily Voce</td><td>Missing Proposal</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="day-column">
+            <h2 class="thursday-h">Thursday, April 23rd</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student(s)</th>
+                        <th>Project Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="order-num">2</td><td>Leonid Bogatinoski</td><td>Personal Phone Remains Found On Murder Case</td></tr>
+                    <tr><td class="order-num">4</td><td>Minjun Choi</td><td>Digital Forensic Investigation of Morris Worm (Controlled VM)</td></tr>
+                    <tr><td class="order-num">6</td><td>Emmett Gilbert, Nicholas Schultz</td><td>Criminal Profiling Using Web-Browser History and LLMs</td></tr>
+                    <tr><td class="order-num">8</td><td>Jocelynn Hubbert</td><td>Steganography Tools: Uncovering a Brazilian Kidnapping Mystery</td></tr>
+                    <tr><td class="order-num">10</td><td>Addison Junkins, Rosa Farinaccio</td><td>Steganography Tool Research</td></tr>
+                    <tr><td class="order-num">13</td><td>Nicholas Lin</td><td>AI-Based Phishing Detection (Python & Header Analysis)</td></tr>
+                    <tr><td class="order-num">15</td><td>Austin Rolfing</td><td>Attribution of Phishing Attacks via Email Header Analysis</td></tr>
+                    <tr><td class="order-num">17</td><td>Lucas Saunders</td><td>Comparative Forensic Analysis of Image Steganography Tools</td></tr>
+                    <tr><td class="order-num">19</td><td>Trevor Settembre</td><td>Using AI for Phishing Email Detection</td></tr>
+                    <tr><td class="order-num">21</td><td>Katrina Velazquez</td><td>Criminal Profiling using Web Browser History with LWS</td></tr>
+                    <tr><td class="order-num">23</td><td>Amanda Wills</td><td>Recovery and Analysis of iPhone SMS from Public Image</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
