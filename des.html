@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DES Homework Instructions</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        
+        /* AI Usage Policy Styling */
+        .ai-policy { 
+            background: #fff9e6; 
+            border: 2px solid #f1c40f; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .ai-policy h3 { color: #856404; margin-top: 0; display: flex; align-items: center; }
+        .ai-policy strong { color: #d35400; }
+
+        /* Point Badges */
+        .points-badge { float: right; background: #e67e22; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 1.1em; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+        
+        /* Sections */
+        .section { background: white; padding: 25px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 6px solid #3498db; position: relative; }
+        .grad-section { border-left-color: #9b59b6; background-color: #fcfaff; }
+        
+        h2 { color: #2c3e50; margin-top: 0; width: 80%; }
+        
+        /* Screenshot Alerts */
+        .screenshot-header { background: #ff7675; color: white; padding: 10px 15px; border-radius: 5px; font-weight: bold; margin-bottom: 15px; display: inline-block; width: 100%; box-sizing: border-box; }
+
+        .submission-checklist { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-bottom: 10px; color: white; }
+        .badge-428 { background: #27ae60; }
+        .badge-528 { background: #9b59b6; }
+        
+        footer { text-align: center; font-size: 0.8em; color: #7f8c8d; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>DES Homework </h1>
+    <p>Please follow the specific instructions for your course level (CS 428 vs CS 528).</p>
+</header>
+
+<div class="ai-policy" style="border-left: 10px solid #f1c40f; background: #fffdf5;">
+    <h3 style="color: #966911; font-size: 1.4em;">🚀 Level Up Your Learning: AI Usage Policy</h3>
+    <p>Think of AI as your <strong>personal tutor</strong>, not your ghostwriter! You are encouraged to use AI tools to clarify complex concepts or troubleshoot your code logic. However, <strong>AI must not be used to do the entire work for you.</strong></p>
+    
+    <div style="background: #ffffff; padding: 15px; border-radius: 5px; border: 1px dashed #f1c40f; margin: 10px 0;">
+        <p style="margin-top: 0;"><strong>The Expert Path:</strong> Once you master the material, I <em>encourage</em> you to use AI in your professional life. Why? Because then you’ll have the "Eye of the Expert." You’ll be able to spot when the AI hallucinates, critique its output, and refine its logic.</p>
+        <p style="margin-bottom: 0;"><strong>The Reality Check:</strong> If you let the AI drive before you know the map, you won't learn the material. Remember, <strong>exams are CLOSED BOOK.</strong></p>
+    </div>
+</div>
+
+<div class="submission-checklist">
+    <strong>📋 Final Submission Requirements:</strong>
+    <p style="margin: 5px 0;">Ensure your PDF report contains all required screenshots labeled correctly, your manual calculations, and your source code.</p>
+</div>
+
+<div class="section">
+    <div class="points-badge">2 Points</div>
+    <h2>1. Atomic Properties of Block Ciphers</h2>
+    <p>Identify and describe the <strong>two atomic properties</strong> of any block cipher as defined by Claude Shannon. You must provide a clear description of what each property accomplishes in the encryption process.</p>
+</div>
+
+<div class="section">
+    <div class="points-badge">7 Points</div>
+    <h2>2. Avalanche Effect Analysis</h2>
+    
+    <div class="screenshot-header">📸 REQUIRED: Screenshot of Setup (Bits 8, 12, 32) & Screenshot of Max Avalanche Round</div>
+    
+    <p><strong>Part A:</strong> Define the <strong>Avalanche Effect</strong> specifically regarding DES. What is the ideal bit-flip ratio? 👉[3 points]</p>
+    
+    <p><strong>Part B:</strong> Use <strong>CrypTool 2</strong>:</p>
+    <ol>
+        <li>Go to <code>Templates > Cryptanalysis > Modern > Avalanche (DES)</code>.</li>
+        <li>Ensure Plaintext is <code>ABCDEFGH</code>.</li>
+        <li>Hit <strong>Play</strong> and capture your first screenshot.</li>
+        <li>Select "Enable to change single bits" and flip <strong>bits 8, 12, and 32</strong> (red).📸[2 points]</li>
+        
+        <li>Step through the rounds to find and capture the <strong>Maximum Avalanche Round</strong>.📸[2 points]</li>
+    </ol>
+</div>
+
+<div class="section">
+    <div class="points-badge">5 Points</div>
+    <h2>3. Encryption Layer Observation</h2>
+    
+    <div class="screenshot-header">📸 REQUIRED: 5 Screenshots (Outputs for Rounds 1, 5, 8, 13, and 16)</div>
+    
+    <p>Utilize CrypTool 2 to open DES Visualization and set it up with the following parameters:</p>
+    <ul>
+        <li><strong>Message/Plaintext:</strong> <code>0x 11 3F 45 89 93 32 AB 0A</code></li>
+        <li><strong>Master Key:</strong> <code>0x 21 31 87 FF A9 20 38 90</code></li>
+    </ul>
+    <p>Process the encryption and observe the 16 encryption rounds to understand the internal operations of each layer. 📸Remember to take screenshots for Round 1, 5, 8, 13, and 16.</p>
+</div>
+
+<div class="section">
+    <div class="points-badge">10 Points</div>
+    <h2>4. Manual Feistel Function Calculation</h2>
+    <p>Calculate f(R_5, K_5) for the following values:</p>
+    <ul>
+        <li>R_5 = 0x 94e2d671</li>
+        <li>K_5 = 0x b57c809a743e</li>
+    </ul>
+    <p><strong>Required Steps:</strong> You must show the Expansion (E), the XOR with the key, the S-box substitutions, and the final Permutation (P). Refer to the textbook for tables for expansion, all S-boxes, and the final permutation table.</p>
+    
+</div>
+
+<div class="section">
+    <div class="points-badge">10 Points</div>
+    <span class="badge badge-428">CS 428 ENROLLED ONLY</span>
+    <h2>5. Python Coding: S-Boxes</h2>
+    <p>Write a Python script that implements the two S-boxes <strong>S1 and S8</strong> for DES. The code should take a 6-bit input and correctly output the 4-bit result based on row/column selection. List all references used. 📸 Submit a Google Colab link for your code!</p>
+</div>
+
+<div class="section grad-section">
+    <div class="points-badge">10 Points</div>
+    <span class="badge badge-528">CS 528 ENROLLED ONLY</span>
+    <h2>6. Differential Cryptanalysis and Key Schedule Algorithm</h2>
+    
+    <div class="screenshot-header">👉 REQUIRED: Answer the questions</div>
+    
+    <p><strong>Part A:</strong> Research <strong>Differential Cryptanalysis.</strong> [2 points] Based on your research, explain how it works. [1 point] Describe why it is a powerful tool against DES.</p>
+    
+    <p><strong>Part B:</strong> [4 points] Implement the DES Key Schedule in Python. Your script must take a 64-bit Hexadecimal master key 133457799BBCDFF1 and generate sixteen 48-bit subkeys (K_1 through K_16). [2 points] Compare the keys generated by your code with the keys generated by CrypTool 2. Submit: Google Colab code for the DES key generation algorithm + the screenshot showing all the keys generated by your code vs CrypTool 2.</p>
+</div>
+
+<footer>
+    <p>DES Homework - Cryptography Course 2026</p>
+</footer>
+
+</body>
+</html>
