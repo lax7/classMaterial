@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Inodes: The System's ID Card</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #27ae60;
+            --bg: #f4f7f9;
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 2rem;
+        }
+        .concept-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        code {
+            background: #eef2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #d63384;
+        }
+        .activity-box {
+            background: #eafaf1;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .pro-tip {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 8px;
+            font-style: italic;
+        }
+        ul li, ol li {
+            margin-bottom: 10px;
+        }
+        .diagram-placeholder {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🐧 Understanding Linux Inodes</h1>
+    <p>The "ID Card" of the Filesystem</p>
+</header>
+
+<section class="concept-card">
+    <p>Think of an <strong>inode</strong> (index node) as the "ID card" for a file in a Linux filesystem. While we humans like to identify files by their names (like <code>budget_2026.pdf</code>), the operating system doesn't really care about names. It cares about metadata and where the actual data is sitting on the disk.</p>
+    <p>The inode is the data structure that holds all that "behind-the-scenes" information.</p>
+</section>
+
+
+
+<h2>What’s Inside an Inode?</h2>
+<section class="concept-card">
+    <p>An inode contains almost everything about a file <strong>except</strong> for its name and the actual content. Specifically, it stores:</p>
+    <ul>
+        <li><strong>File Type:</strong> Is it a regular file, a directory, or a symbolic link?</li>
+        <li><strong>Permissions:</strong> Who can read, write, or execute it (<code>rwx</code>).</li>
+        <li><strong>Owner Info:</strong> The User ID (UID) and Group ID (GID).</li>
+        <li><strong>File Size:</strong> How big the file is in bytes.</li>
+        <li><strong>Timestamps:</strong> When it was last accessed (<code>atime</code>), modified (<code>mtime</code>), or changed (<code>ctime</code>).</li>
+        <li><strong>Links Count:</strong> How many hard links point to this inode.</li>
+        <li><strong>Data Block Pointers:</strong> The "map" that tells the system exactly which sectors on the hard drive hold the file's actual data.</li>
+    </ul>
+</section>
+
+<h2>How It Works in Practice</h2>
+<section class="concept-card">
+    <p>When you try to open a file, the process looks like this:</p>
+    <ol>
+        <li><strong>The Name Lookup:</strong> You ask for <code>photo.jpg</code>. The system looks at the <strong>directory</strong> (which is actually just a special file containing a list of names paired with inode numbers).</li>
+        <li><strong>The Inode ID:</strong> The system finds that <code>photo.jpg</code> corresponds to <strong>Inode #12345</strong>.</li>
+        <li><strong>The Metadata Check:</strong> The system checks Inode #12345 to see if you have permission to open it.</li>
+        <li><strong>The Data Grab:</strong> If permissions are clear, the system follows the <strong>pointers</strong> in the inode to find the physical blocks on the disk where the image data lives.</li>
+    </ol>
+</section>
+
+<h2>Why Should You Care?</h2>
+<section class="concept-card">
+    <h3>1. The "Disk Full" Mystery</h3>
+    <p>Sometimes, you’ll get a <em>"No space left on device"</em> error, but when you check <code>df -h</code>, it shows you still have gigabytes of space.</p>
+    <ul>
+        <li><strong>The Cause:</strong> Every filesystem has a fixed number of inodes created when it's formatted. If you have millions of tiny files, you can run out of inodes before you run out of actual disk space.</li>
+        <li><strong>The Check:</strong> Use <code>df -i</code> to see your inode usage.</li>
+    </ul>
+
+    <h3>2. Deleting Files</h3>
+    <p>When you "delete" a file, you’re usually just <strong>unlinking</strong> the name from the inode. The inode and the data blocks aren't immediately wiped; the system just marks them as "available" to be overwritten. This is why data recovery is possible if you act fast!</p>
+</section>
+
+<p class="pro-tip"><strong>Pro Tip:</strong> You can see the inode number of any file on your system right now by typing <code>ls -i</code> in your terminal.</p>
+
+<h2>🛠️ Hands-on Time: The Inode Detective Lab</h2>
+<p>Open your Linux terminal and complete these two activities to see inodes in action.</p>
+
+<div class="activity-box">
+    <h3>Activity 1: Tracking the "Identity" (Hard Links)</h3>
+    <p>This proves that a file's name is just a label, and the inode is the true identity.</p>
+    <ol>
+        <li><strong>Create a file:</strong> <code>echo "Learning Inodes 2026" > student_file.txt</code></li>
+        <li><strong>Find its Inode ID:</strong> <code>ls -i student_file.txt</code> (Note the number on the far left).</li>
+        <li><strong>Create a Hard Link:</strong> <code>ln student_file.txt clone_file.txt</code></li>
+        <li><strong>Compare IDs:</strong> <code>ls -i student_file.txt clone_file.txt</code>
+            <br><em>Question: Are the numbers different or the same?</em></li>
+        <li><strong>Delete the Original:</strong> <code>rm student_file.txt</code></li>
+        <li><strong>Read the link:</strong> <code>cat clone_file.txt</code> (The data is still there!)</li>
+    </ol>
+</div>
+
+
+
+<div class="activity-box">
+    <h3>Activity 2: The Metadata Inspection</h3>
+    <p>Let's look deep inside the "ID Card" using the <code>stat</code> command.</p>
+    <ol>
+        <li><strong>Run the command:</strong> <code>stat clone_file.txt</code></li>
+        <li><strong>Analyze the output:</strong> Locate the <strong>Inode number</strong>, the <strong>Links count</strong>, and the <strong>Access/Modify</strong> timestamps.</li>
+        <li><strong>Check overall health:</strong> Run <code>df -i</code> to see how many "ID cards" your entire computer has left.</li>
+    </ol>
+</div>
+
+</body>
+</html>
