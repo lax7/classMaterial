@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Filesystem Links</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f8f9fa;
+            --text: #333;
+            --code-bg: #272822;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        h2 { color: var(--primary); margin-top: 30px; display: flex; align-items: center; }
+        .inode-box {
+            background: #eef7ff;
+            border-left: 5px solid var(--accent);
+            padding: 15px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        th { background-color: var(--primary); color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        
+        .terminal {
+            background-color: var(--code-bg);
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+        }
+        .terminal code { color: #a6e22e; }
+        .highlight { font-weight: bold; color: var(--accent); }
+        .submission-box {
+            background: #fff3cd;
+            border: 2px dashed #e67e22;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Understanding Hard Links vs. Soft Links</h1>
+    
+    <p>To understand links, you first need to know about the <strong>Inode</strong>.</p>
+    
+    <div class="inode-box">
+        <strong>What is an Inode?</strong><br>
+        An inode is a data structure on a filesystem that stores everything about a file (size, owner, permissions) <em>except</em> its actual name and the actual data content.
+    </div>
+
+    <h2>🔗 What is a Hard Link?</h2>
+    <p>A hard link is an additional name for an existing file. It points directly to the <strong>inode</strong> of the original file.</p>
+    <ul>
+        <li>If you delete the original name, the data still exists as long as one hard link remains.</li>
+        <li>It’s like having two different doors that lead to the exact same room.</li>
+    </ul>
+
+    <h2>🔗 What is a Soft Link (Symbolic Link)?</h2>
+    <p>A soft link is a special type of file that points to the <strong>path</strong> of another file.</p>
+    <ul>
+        <li>It does not point to the inode; it points to a filename.</li>
+        <li>If the original file is moved or deleted, the soft link "breaks" because the path it’s looking for is gone.</li>
+        <li>It’s like a post-it note that says, "The files are in the other cabinet."</li>
+    </ul>
+
+    <h2>📊 The Comparison</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Hard Link</th>
+                <th>Soft Link (Symlink)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Points to</strong></td>
+                <td>Inode (Actual Data)</td>
+                <td>Path/Filename</td>
+            </tr>
+            <tr>
+                <td><strong>File Size</strong></td>
+                <td>Same as the original</td>
+                <td>Very small (just path string)</td>
+            </tr>
+            <tr>
+                <td><strong>Cross-Filesystem</strong></td>
+                <td>No (Limited to one disk)</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td><strong>If Original Deleted</strong></td>
+                <td>Data is preserved</td>
+                <td>Link breaks (Dangling link)</td>
+            </tr>
+            <tr>
+                <td><strong>Linking Directories</strong></td>
+                <td>Not allowed (usually)</td>
+                <td>Allowed</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>🔍 Significance for Digital Forensics (2 Points)</h2>
+    <p>For a forensic investigator, links are more than just shortcuts—they are breadcrumbs of user activity:</p>
+    <ul>
+        <li><strong>Evidence Recovery & Persistence:</strong> Hard links allow an investigator to recover the full content of a "deleted" file if a second link exists elsewhere. Identifying a "Link Count" greater than 1 tells an investigator that the user may have created "ghost" copies to bypass simple deletion.</li>
+        <li><strong>Intent & Attribution:</strong> Soft links point to specific paths, helping investigators reconstruct where files used to live (e.g., on a now-removed USB drive), while finding hard links to sensitive files in system directories can prove a user's attempt to hide malicious tools.</li>
+    </ul>
+
+    <h2>🛠 Hands-on Activity (Linux/Mac Terminal) - 12 Points</h2>
+    <p>Try this in your terminal to see the magic happen:</p>
+    <div class="terminal">
+        <code># 1. Create a file</code><br>
+        echo "Secret Data" > original.txt<br><br>
+        <code># 2. Create a hard link</code><br>
+        ln original.txt hard_link.txt<br><br>
+        <code># 3. Create a soft link</code><br>
+        ln -s original.txt soft_link.txt<br><br>
+        <code># 4. Check the inodes (The first number is the Inode)</code><br>
+        ls -li<br><br>
+        <code># 5. Delete original and test</code><br>
+        rm original.txt<br>
+        cat hard_link.txt <span style="color: #66d9ef;"># (This works!)</span><br>
+        cat soft_link.txt <span style="color: #f92672;"># (This fails!)</span><br><br>
+
+        <code># 6. Forensic Hunt: Create a new file with sensitive content</code><br>
+        echo "Sensitive Evidence" > evidence.txt<br><br>
+
+        <code># 7. Create a "hidden" hard link in another folder</code><br>
+        ln evidence.txt /tmp/boring_log.txt<br><br>
+
+        <code># 8. Check the Inode and Link Count</code><br>
+        ls -li evidence.txt<br>
+        <span style="color: #75715e;"># Note the first number (Inode) and the number '2' (Link Count)</span><br><br>
+
+        <code># 9. Find the hidden link by Inode number</code><br>
+        <span style="color: #75715e;"># Replace '12345' with the Inode number you saw in step 8</span><br>
+        find . -inum 12345 2>/dev/null<br><br>
+
+        <code># 10. Observe the result</code><br>
+        <span style="color: #66d9ef;"># The terminal will list BOTH evidence.txt and /tmp/boring_log.txt</span>
+    </div>
+
+    <div class="submission-box">
+        <strong>📤 Submission Requirements (12 points):</strong>
+        <ul>
+            <li><strong>[5 points] Screenshot 1:</strong> Your terminal after Step 5 (showing the result of the <code>cat</code> commands).</li>
+            <li><strong>[5 points] Screenshot 2:</strong> Your terminal after Step 9 (showing the <code>find</code> command outputting both file paths).</li><li><strong>[2 points] Question:</strong> What value does hard links and soft links provide to Digital Forensic investigator?.</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
