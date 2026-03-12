@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBR & FAT32 Analysis - Digital Forensics Lab</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* Scoring Header */
+        .score-header { display: flex; justify-content: space-between; align-items: center; background: #2c3e50; color: white; padding: 15px 25px; border-radius: 8px; margin-bottom: 30px; }
+        .score-header h1 { margin: 0; border: none; font-size: 1.5em; color: white; }
+        .total-box { border: 2px solid #3498db; padding: 10px 20px; border-radius: 5px; background: rgba(255,255,255,0.1); font-weight: bold; }
+
+        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 30px; border-left: 5px solid #3498db; padding-left: 10px; background: #f9f9f9; }
+        h3 { color: #d35400; font-size: 1.1em; margin-bottom: 5px; }
+        .points-badge { float: right; background: #27ae60; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9em; }
+        th, td { border: 1px solid #bdc3c7; padding: 12px; text-align: center; }
+        th { background-color: #34495e; color: white; }
+        .formula { background: #fff3e0; padding: 10px; border: 1px solid #ffe0b2; display: block; margin: 10px 0; font-style: italic; }
+        .file-box { background: #ecf0f1; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #bdc3c7; }
+        hr { border: 0; height: 1px; background: #ecf0f1; margin: 40px 0; }
+        .bonus-section { border: 2px dashed #8e44ad; padding: 20px; background: #f5eef8; margin-top: 30px; }
+        .summary-box { margin-top: 40px; padding: 20px; border: 2px solid #2c3e50; background: #f9f9f9; border-radius: 5px; }
+        .author-tag { margin-top: 15px; font-size: 0.9em; color: #7f8c8d; text-align: right; border-top: 1px solid #ddd; padding-top: 10px; font-style: italic; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; }
+            .score-header { -webkit-print-color-adjust: exact; background-color: #2c3e50 !important; color: white !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="score-header">
+        <h1>MBR & FAT32 Analysis</h1>
+        <div class="total-box">TOTAL SCORE: ______ / 68 PTS</div>
+    </div>
+
+    <div class="file-box">
+        <strong>Required Files:</strong> <code>mbr.dd</code>, <code>fat32.dd</code><br>
+        <strong>Tools:</strong> FTK Imager, HxD, or any Hex Editor.
+    </div>
+
+    <h2>Task 1: MBR Analysis</h2>
+    
+    <h3>Q1. Partition Table Completion <span class="points-badge">16 Points Total (1 per cell)</span></h3>
+    <p>Complete using values from <code>mbr.dd</code>. Reminder: LBA values are Little Endian.</p>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Bootable? (1pt)</th>
+            <th>Sys ID (1pt)</th>
+            <th>LBA Start (1pt)</th>
+            <th>LBA Size (1pt)</th>
+        </tr>
+        <tr><td>1</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>2</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>3</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>4</td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <h3>Q2. Disk Signature <span class="points-badge">1 Point</span></h3>
+    <p>What hex value is found for the disk signature?</p>
+    <div style="border-bottom: 1px solid #999; width: 200px; height: 25px;"></div>
+
+    <h3>Q3. Linux Swap Identification <span class="points-badge">2 Points</span></h3>
+    <p>Which partition is Linux Swap? Calculate byte offset of start: ______________________</p>
+
+    <h3>Q4. Origin Suggestion <span class="points-badge">2 Points</span></h3>
+    <p>What does the signature at <code>0x1B8-0x1BB</code> suggest about the disk origin?</p>
+    <div style="border-bottom: 1px solid #999; width: 100%; height: 40px;"></div>
+
+    <hr>
+
+    <h2>Task 2: FAT32 Analysis</h2>
+
+    <h3>Q5. Volume Label <span class="points-badge">1 Point</span></h3>
+    <p>Name found at byte offset <code>0x47</code>: ______________________</p>
+
+    <h3>Q6. BPB Field Recording <span class="points-badge">12 Points Total (1 per cell)</span></h3>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Raw Hex (1pt)</th>
+            <th>Decimal (1pt)</th>
+        </tr>
+        <tr><td>Bytes per sector (0x0B)</td><td></td><td></td></tr>
+        <tr><td>Sectors per cluster (0x0D)</td><td></td><td></td></tr>
+        <tr><td>Number of reserved sectors (0x0E)</td><td></td><td></td></tr>
+        <tr><td>Number of FATs (0x10)</td><td></td><td></td></tr>
+        <tr><td>Sectors per FAT (0x24)</td><td></td><td></td></tr>
+        <tr><td>Root cluster number (0x2C)</td><td></td><td></td></tr>
+    </table>
+
+    <h3>Q7. Data Region Start <span class="points-badge">2 Points</span></h3>
+    <span class="formula">Data start = Reserved Sectors + (Number of FATs * Sectors per FAT)</span>
+    <p>Resulting Sector: ______________________</p>
+
+    <h3>Q8. Data Region Byte Offset <span class="points-badge">1 Point</span></h3>
+    <span class="formula">Byte Offset = Sector number * Bytes per sector</span>
+    <p>Resulting Offset: ______________________</p>
+
+    <h3>Q9. Cluster Size <span class="points-badge">1 Point</span></h3>
+    <span class="formula">Cluster size = Sectors per cluster * Bytes per sector</span>
+    <p>Bytes: ______________________</p>
+
+    <h3>Q10. REPORT.TXT Directory Entry <span class="points-badge">7 Points (1 per cell)</span></h3>
+    <p>Full 32-byte Entry: __________________________________________________________________</p>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Raw Hex/Value (1pt)</th>
+        </tr>
+        <tr><td>Filename (8 Bytes)</td><td></td></tr>
+        <tr><td>Extension (3 Bytes)</td><td></td></tr>
+        <tr><td>Attribute Byte (1 Byte)</td><td></td></tr>
+        <tr><td>Starting Cluster (High)</td><td></td></tr>
+        <tr><td>Starting Cluster (Low)</td><td></td></tr>
+        <tr><td>Starting Cluster (Combined)</td><td></td></tr>
+        <tr><td>File Size (4 Bytes)</td><td></td></tr>
+    </table>
+
+    <h3>Q11. File Byte Offset <span class="points-badge">2 Points</span></h3>
+    <span class="formula">Byte Offset = (Data Start Sector + (Starting Cluster - 2) * Sectors per Cluster) * Bytes per Sector</span>
+    <p>Offset: ______________________</p>
+
+    <h3>Q12. FAT Entry Offset <span class="points-badge">1 Point</span></h3>
+    <p>FAT entry offset for starting cluster: ______________________</p>
+
+    <h3>Q13. FAT Chain Pointer <span class="points-badge">2 Points</span></h3>
+    <p>Hex Value: _________________ | Points to Cluster (Dec): _________________</p>
+
+    <h3>Q14. FAT Chain Table <span class="points-badge">9 Points Total (1 per cell)</span></h3>
+    <table>
+        <tr>
+            <th>Cluster (1pt)</th>
+            <th>FAT Entry Offset (1pt)</th>
+            <th>Next Cluster (1pt)</th>
+        </tr>
+        <tr><td>&nbsp;</td><td></td><td></td></tr>
+        <tr><td>&nbsp;</td><td></td><td></td></tr>
+        <tr><td>&nbsp;</td><td></td><td></td></tr>
+    </table>
+
+    <h3>Q15. End Marker <span class="points-badge">1 Point</span></h3>
+    <p>Value marking end of chain: ______________________</p>
+
+    <h3>Q16. Fragmentation Forensics <span class="points-badge">3 Points</span></h3>
+    <p>Are clusters used by REPORT.TXT contiguous? Forensic significance of fragmentation: ______________________</p>
+
+    <div class="bonus-section">
+        <h3>BONUS: Manual Recovery <span class="points-badge">5 Points</span></h3>
+        <p>Recover the full contents of <strong>REPORT.TXT</strong> using the offsets calculated above.</p>
+    </div>
+
+    <div class="summary-box">
+        <h3>Grading Summary</h3>
+        <p>Task 1 Total: ____ / 21 pts</p>
+        <p>Task 2 Total: ____ / 42 pts</p>
+        <p>Bonus Points: ____ / 5 pts</p>
+        <p><strong>Grand Total Score: ____ / 68 pts</strong></p>
+        <div class="author-tag">Created by Tyler Lofton</div>
+    </div>
+</div>
+
+</body>
+</html>
